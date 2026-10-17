@@ -19,20 +19,24 @@
     .pricing-new-hero-copy { max-width: 330px; margin: 0 0 4px; color: var(--mono-muted); font-size: 16px; line-height: 1.9; }
     .pricing-new-hero-copy strong { display: block; margin-top: 16px; color: var(--mono-text); font-family: var(--latin); font-size: 13px; letter-spacing: .06em; direction: ltr; }
     .pricing-new-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: clamp(52px, 8vw, 90px); background: transparent; border: 0; }
-    .pricing-new-card { position: relative; display: flex; min-height: 390px; flex-direction: column; padding: clamp(24px, 4vw, 42px); background: #11110f; border: 1px solid var(--mono-line); transition: background .2s ease, transform .2s ease; }
-    .pricing-new-card:hover { background: #171613; transform: translateY(-2px); }
-    .pricing-new-card.is-featured { background: linear-gradient(140deg, #17130e 0%, #11110f 64%); }
-    .pricing-new-card.is-featured::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--accent); }
-    .pricing-new-card-top { display: flex; align-items: start; justify-content: space-between; gap: 18px; margin-bottom: 42px; }
+    .pricing-new-card { position: relative; display: flex; min-height: 390px; flex-direction: column; padding: clamp(24px, 4vw, 42px); background: #11110f; border: 1px solid var(--mono-line); transition: background .2s ease, border-color .2s ease, transform .2s ease; }
+    .pricing-new-card:hover { background: #171613; border-color: rgba(201,121,63,.5); transform: translateY(-2px); }
+    .pricing-new-card.is-featured { background: linear-gradient(140deg, #17130e 0%, #11110f 64%); border-color: rgba(201,121,63,.5); }
+    .pricing-new-card.is-featured::before { content: ''; position: absolute; inset-block: 0; inset-inline-start: 0; width: 3px; background: var(--accent); }
+    .pricing-new-card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 28px; margin-bottom: 22px; }
+    .pricing-new-card-index { color: var(--mono-muted); direction: ltr; unicode-bidi: isolate; font-family: var(--code); font-size: 11px; letter-spacing: .08em; }
     .pricing-new-badge { padding: 5px 9px; border: 1px solid rgba(201,121,63,.5); color: var(--accent); font-family: var(--code); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
-    .pricing-new-card h3 { margin: 0 0 8px; color: var(--mono-text); font-family: var(--display); font-size: clamp(39px, 5vw, 58px); font-weight: 400; line-height: .95; }
-    .pricing-new-card-price { width: 100%; margin: 14px 0 0; color: #b8b4ac; direction: ltr; text-align: center; font-family: var(--latin); font-size: 20px; font-weight: 700; }
-    .pricing-new-card ul { display: grid; gap: 11px; margin: auto 0 0; padding: 0; list-style: none; color: #c6c1b9; line-height: 1.65; }
-    .pricing-new-card li { position: relative; padding-inline-start: 18px; }
-    .pricing-new-card li::before { content: ''; position: absolute; top: .75em; inset-inline-start: 0; width: 5px; height: 5px; border-radius: 50%; background: #77736d; }
-    .pricing-new-card.is-featured li::before { background: var(--accent); }
-    .pricing-package-cta { display: inline-flex; align-self: flex-start; align-items: center; justify-content: center; min-height: 44px; margin-top: 24px; padding: 0 18px; border: 1px solid var(--accent); color: var(--mono-text); font-size: 13px; font-weight: 700; text-decoration: none; transition: color .2s ease, background .2s ease; }
-    .pricing-package-cta:hover, .pricing-package-cta:focus-visible { background: var(--accent); color: #111; }
+    .pricing-new-card-intro { display: grid; gap: 12px; padding-bottom: 20px; border-bottom: 1px solid var(--mono-line); }
+    .pricing-new-card h3 { margin: 0; color: var(--mono-text); font-family: var(--display); font-size: clamp(36px, 4.5vw, 54px); font-weight: 400; line-height: 1; }
+    .pricing-new-card-price { width: max-content; max-width: 100%; margin: 0; color: var(--accent); direction: ltr; text-align: start; font-family: var(--latin); font-size: clamp(21px, 2.4vw, 25px); font-weight: 700; font-variant-numeric: tabular-nums; }
+    .pricing-new-card ul { display: grid; gap: 12px; margin: 22px 0 auto; padding: 0; list-style: none; color: #c6c1b9; line-height: 1.65; }
+    .pricing-new-card li { position: relative; padding-inline-start: 23px; }
+    .pricing-new-card li::before { content: ''; position: absolute; top: .3em; inset-inline-start: 0; width: 14px; height: 14px; border: 1px solid rgba(201,121,63,.62); border-radius: 50%; }
+    .pricing-new-card li::after { content: ''; position: absolute; top: .67em; inset-inline-start: 4px; width: 6px; height: 3px; border-inline-start: 1.5px solid var(--accent); border-bottom: 1.5px solid var(--accent); transform: rotate(-45deg); }
+    .pricing-package-cta { display: inline-flex; align-self: stretch; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; margin-top: 24px; padding: 0 16px; border: 1px solid rgba(201,121,63,.7); color: var(--mono-text); font-size: 13px; font-weight: 700; text-decoration: none; transition: color .2s ease, background .2s ease, border-color .2s ease; }
+    .pricing-package-cta::after { content: '↗'; color: var(--accent); font-size: 17px; transition: transform .2s ease; }
+    .pricing-package-cta:hover, .pricing-package-cta:focus-visible { background: var(--accent); border-color: var(--accent); color: #111; }
+    .pricing-package-cta:hover::after, .pricing-package-cta:focus-visible::after { color: #111; transform: translate(2px, -2px); }
     .pricing-new-details { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(30px, 6vw, 86px); padding-top: clamp(58px, 8vw, 96px); }
     .pricing-new-detail { padding-top: 18px; border-top: 1px solid var(--mono-line); }
     .pricing-new-detail h2 { margin: 0 0 26px; color: var(--mono-text); font-family: var(--display); font-size: clamp(42px, 5vw, 58px); font-weight: 400; line-height: .95; }
@@ -51,13 +55,16 @@
       .pricing-new-details { grid-template-columns: 1fr; gap: 48px; }
       .pricing-new-hero h1 { font-size: clamp(56px, 17vw, 96px); line-height: .98; overflow-wrap: anywhere; }
       .pricing-new-card { min-height: 0; }
-      .pricing-new-card-top { margin-bottom: 28px; }
-      .pricing-package-cta { width: 100%; min-height: 46px; }
+      .pricing-new-card-top { margin-bottom: 18px; }
+      .pricing-new-card-intro { gap: 10px; padding-bottom: 16px; }
+      .pricing-new-card h3 { font-size: clamp(34px, 10vw, 46px); }
+      .pricing-new-card ul { gap: 10px; margin-top: 18px; }
+      .pricing-package-cta { min-height: 48px; margin-top: 22px; }
     }
     @media (max-width: 430px) {
       .pricing-new-shell { width: min(100% - 24px, 620px); }
       .pricing-new-card { padding: 24px 20px; }
-      .pricing-new-card-top { margin-bottom: 34px; }
+      .pricing-new-card-top { margin-bottom: 16px; }
       .pricing-new-detail li { align-items: start; flex-direction: column; gap: 3px; }
     }
     @media (max-width: 760px) {
@@ -95,8 +102,8 @@
     </section>
     <section class="pricing-new-cards" aria-label="Photography packages">
       <article class="pricing-new-card">
-        <div class="pricing-new-card-top"></div>
-        <div>
+        <div class="pricing-new-card-top"><span class="pricing-new-card-index">01 / 04</span></div>
+        <div class="pricing-new-card-intro">
           <h3>Package One</h3>
           <p class="pricing-new-card-price">EGP 6,000</p>
         </div>
@@ -109,8 +116,8 @@
         <a class="pricing-package-cta" href="booking.html?package=standard">Book this package</a>
       </article>
       <article class="pricing-new-card">
-        <div class="pricing-new-card-top"></div>
-        <div>
+        <div class="pricing-new-card-top"><span class="pricing-new-card-index">02 / 04</span></div>
+        <div class="pricing-new-card-intro">
           <h3>Package Two</h3>
           <p class="pricing-new-card-price">EGP 7,500</p>
         </div>
@@ -125,8 +132,8 @@
         <a class="pricing-package-cta" href="booking.html?package=premium">Book this package</a>
       </article>
       <article class="pricing-new-card">
-        <div class="pricing-new-card-top"></div>
-        <div>
+        <div class="pricing-new-card-top"><span class="pricing-new-card-index">03 / 04</span></div>
+        <div class="pricing-new-card-intro">
           <h3>Package Three</h3>
           <p class="pricing-new-card-price">EGP 9,500</p>
         </div>
@@ -142,8 +149,8 @@
         <a class="pricing-package-cta" href="booking.html?package=luxury">Book this package</a>
       </article>
       <article class="pricing-new-card is-featured">
-        <div class="pricing-new-card-top"><span class="pricing-new-badge">Most popular</span></div>
-        <div>
+        <div class="pricing-new-card-top"><span class="pricing-new-card-index">04 / 04</span><span class="pricing-new-badge">Most popular</span></div>
+        <div class="pricing-new-card-intro">
           <h3>VIP Package</h3>
           <p class="pricing-new-card-price">EGP 11,500</p>
         </div>
