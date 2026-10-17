@@ -1062,11 +1062,7 @@
       }
       if (themeButton) {
         const desktopBar = ensureDesktopControlsBar();
-        if (drawer && isSmallViewport()) {
-          if (themeButton.parentElement !== drawer) drawer.appendChild(themeButton);
-        } else if (themeButton.parentElement !== desktopBar) {
-          desktopBar.appendChild(themeButton);
-        }
+        if (themeButton.parentElement !== desktopBar) desktopBar.appendChild(themeButton);
       }
       renderMobileMenu();
       renderThemeButton();
