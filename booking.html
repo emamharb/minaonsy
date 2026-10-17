@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>حجز تصوير زفاف | Mina Onsy Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bebas+Neue&family=Cairo:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css?v=theme8">
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+
+    body.booking-page {
+      color-scheme: dark;
+    }
+
+    .date-selector {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 0.5rem;
+      align-items: flex-end;
+      margin-top: 0.25rem;
+      background: rgba(242, 239, 233, 0.03);
+      padding: 0.75rem 1rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(242, 239, 233, 0.08);
+    }
+
+    .date-selector .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .date-selector .field-group label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+      color: #cbd5e1;
+      white-space: nowrap;
+    }
+
+    .date-selector .field-group label::after {
+      content: " *";
+      color: #c0392b;
+      font-weight: 700;
+    }
+
+    .date-selector .field-group select {
+      padding: 0.5rem 1.8rem 0.5rem 0.3rem;
+      border-radius: 0.6rem;
+      border: 1px solid rgba(242, 239, 233, 0.10);
+      background: rgba(242, 239, 233, 0.04);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #f2efe9;
+      cursor: pointer;
+      transition: border 0.2s, box-shadow 0.2s;
+      font-family: 'Cairo', 'Archivo', sans-serif;
+      width: 100%;
+      min-height: 44px;
+      -webkit-appearance: none;
+      appearance: none;
+      color-scheme: dark;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b6a66' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: left 0.5rem center;
+      background-size: 12px;
+      text-align: center;
+    }
+
+    .date-selector .field-group select:focus {
+      outline: none;
+      border-color: rgba(201, 121, 63, 0.42);
+      box-shadow: 0 0 0 3px rgba(201, 121, 63, 0.12);
+    }
+
+    .date-selector .field-group select option {
+      font-weight: 400;
+      text-align: center;
+      background: #141412;
+      color: #f2efe9;
+    }
+
+    .booking-page select option {
+      background: #141412;
+      color: #f2efe9;
+    }
+
+    .booking-page select {
+      color-scheme: dark;
+    }
+
+    .date-field {
+      display: none;
+    }
+
+    @media (max-width: 400px) {
+      .date-selector {
+        padding: 0.5rem 0.5rem;
+        gap: 0.3rem;
+      }
+      .date-selector .field-group select {
+        font-size: 0.75rem;
+        min-height: 38px;
+        padding: 0.3rem 1.4rem 0.3rem 0.2rem;
+        background-size: 10px;
+        background-position: left 0.3rem center;
+      }
+      .date-selector .field-group label {
+        font-size: 0.55rem;
+      }
+    }
+
+    @media (max-width: 340px) {
+      .date-selector {
+        gap: 0.15rem;
+        padding: 0.4rem 0.3rem;
+      }
+      .date-selector .field-group select {
+        font-size: 0.7rem;
+        min-height: 34px;
+        padding: 0.2rem 1.2rem 0.2rem 0.1rem;
+      }
+    }
+  </style>
+</head>
+<body class="booking-page">
+  <a class="skip-link" href="#booking-form">تخطي إلى نموذج الحجز</a>
+  <header class="site-header">
+    <a class="brand" href="index.html"><img class="brand-logo" src="assets/photos/LW.png" data-light-logo="assets/photos/LB.png" alt="Mina Onsy Studio"><small>PHOTOGRAPHY</small></a>
+  </header>
+
+  <main class="booking-shell">
+    <section class="booking-card booking-contract">
+      <div class="booking-head">
+        <p class="eyebrow">Wedding Booking</p>
+        <h1 id="main-title">نموذج حجز تصوير زفاف</h1>
+      </div>
+
+      <form id="booking-form">
+        <div class="date-check">
+          <label id="date-label" for="event-day">اختر يوم التصوير والمناسبة *</label>
+
+          <div class="date-selector" id="date-selector-wrapper">
+            <div class="field-group">
+              <label for="event-day">اليوم</label>
+              <select id="event-day" required aria-label="اليوم">
+                <option value="">--</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="event-month">الشهر</label>
+              <select id="event-month" required aria-label="الشهر">
+                <option value="">--</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="event-year">السنة</label>
+              <select id="event-year" required aria-label="السنة">
+                <option value="">--</option>
+              </select>
+            </div>
+            <input type="hidden" id="event-date" required>
+          </div>
+        </div>
+
+        <h2 class="booking-section-title" id="sec-destination">التكلفة والوجهة</h2>
+        <div class="form-grid">
+          <label class="input-group"><span id="lbl-city">المحافظة / المدينة: *</span>
+            <select id="city" required>
+              <option value="" id="opt-default">-- اختر وجهتك لتحديد السعر --</option>
+              <option value="qena" id="opt-qena">قنا</option>
+              <option value="luxor" id="opt-luxor">الأقصر</option>
+              <option value="nagaa_hammadi" id="opt-nagaa">نجع حمادي</option>
+              <option value="hurghada" id="opt-hurghada">الغردقة</option>
+            </select>
+          </label>
+        </div>
+
+        <h2 class="booking-section-title" id="sec-packages">اختر الباقات المطلوبة</h2>
+        <p class="package-section-title" id="title-photo-sec">أولاً: باقات التصوير الأساسية (Photo):</p>
+        <div class="packages-grid">
+          <button class="package-card photo-card" id="card-standard" type="button" data-photo="standard"><strong id="lbl-p1">الباقة 1</strong><span id="price-standard">-</span></button>
+          <button class="package-card photo-card" id="card-premium" type="button" data-photo="premium"><strong id="lbl-p2">الباقة 2</strong><span id="price-premium">-</span></button>
+          <button class="package-card photo-card" id="card-luxury" type="button" data-photo="luxury"><strong id="lbl-p3">الباقة 3</strong><span id="price-luxury">-</span></button>
+          <button class="package-card photo-card" id="card-vip" type="button" data-photo="vip"><em id="lbl-hot">الأكثر طلباً</em><strong id="lbl-pvip">الباقة VIP</strong><span id="price-vip">-</span></button>
+        </div>
+
+        <p class="package-section-title" id="title-promo-sec">ثانياً: عروض البرومو الإضافية (Promo):</p>
+        <div class="packages-grid promo-grid">
+          <button class="package-card promo-card" id="card-promo_standard" type="button" data-promo="promo_standard"><strong id="lbl-pr1">باكدج 1 (برومو)</strong><span id="price-promo-standard">-</span></button>
+          <button class="package-card promo-card" id="card-promo_premium" type="button" data-promo="promo_premium"><strong id="lbl-pr2">باكدج 2 (برومو)</strong><span id="price-promo-premium">-</span></button>
+        </div>
+
+        <input type="hidden" id="selected-photo-package" value="">
+        <input type="hidden" id="selected-promo-package" value="">
+
+        <h2 class="booking-section-title" id="sec-couple">بيانات العروسين والتواصل</h2>
+        <div class="form-grid">
+          <label class="input-group"><span id="lbl-groom">اسم العريس: *</span><input type="text" id="groom-name" placeholder="الاسم الكامل" required></label>
+          <label class="input-group"><span id="lbl-bride">اسم العروسة: *</span><input type="text" id="bride-name" placeholder="الاسم الكامل" required></label>
+          <label class="input-group"><span id="lbl-phone">رقم الهاتف الرئيسي (واتساب): *</span><input type="tel" id="main-phone" placeholder="01xxxxxxxxx" required></label>
+          <label class="input-group"><span id="lbl-extra-phone">رقم إضافي للضرورة:</span><input type="tel" id="extra-phone" placeholder="اختياري"></label>
+        </div>
+
+        <h2 class="booking-section-title" id="sec-details">تفاصيل يوم الزفاف</h2>
+        <div class="form-grid">
+          <label class="input-group"><span id="lbl-hall">مكان القاعة بالفرح:</span><input type="text" id="hall-name" placeholder="اسم وتفاصيل القاعة"></label>
+          <label class="input-group"><span id="lbl-location">مكان السيشن الخارجي:</span><input type="text" id="location" placeholder="المكان المقترح للسيشن"></label>
+          <label class="input-group"><span id="lbl-makeup">الميكب أرتيست:</span><input type="text" id="makeup-artist" placeholder="اسم الميكب أرتيست"></label>
+          <label class="input-group"><span id="lbl-hair">مصمم الشعر:</span><input type="text" id="hair-designer" placeholder="اسم هير ستايلست"></label>
+          <label class="input-group"><span id="lbl-down">العربون المدفوع لتثبيت الحجز (ج.م):</span><input type="number" id="down-payment" value="0" min="0"></label>
+          <label class="input-group"><span id="lbl-discount">قيمة الخصم إن وجد (ج.م):</span><input type="number" id="discount-amount" value="0" min="0"></label>
+          <label class="input-group full"><span id="lbl-notes">ملاحظات أو طقوس خاصة:</span><input type="text" id="extra-notes" placeholder="موعد الكنيسة / كتب الكتاب"></label>
+        </div>
+
+        <div class="total-summary-for-customer">
+          <h3 id="sum-title">الفاتورة وملخص الحساب المالي</h3>
+          <div class="customer-summary-item"><span id="sum-photo">سعر باقة التصوير (Photo)</span><strong id="photo-price-customer">0 ج.م</strong></div>
+          <div class="customer-summary-item"><span id="sum-promo">سعر باقة البرومو (Promo)</span><strong id="promo-price-customer">0 ج.م</strong></div>
+          <div class="customer-summary-item"><span id="sum-discount">قيمة الخصم الممنوح:</span><strong id="discount-amount-customer">0 ج.م</strong></div>
+          <div class="customer-summary-item"><span id="sum-trans">رسوم ومصاريف الانتقال للمحافظة:</span><strong id="trans-price-customer">0 ج.م</strong></div>
+          <div class="customer-summary-item"><span id="sum-down">المقدم المدفوع (العربون)</span><strong id="down-payment-customer">0 ج.م</strong></div>
+          <div class="customer-summary-item total"><span id="sum-remain">المبلغ المتبقي لتسويته يوم الفرح</span><strong id="remaining-amount-customer">0 ج.م</strong></div>
+        </div>
+
+        <div class="notes-section">
+          <h3 id="terms-title">ملاحظات وشروط التعاقد الهامة:</h3>
+          <ul id="terms-list"></ul>
+        </div>
+
+        <label class="checkbox-container" for="agree-terms">
+          <input type="checkbox" id="agree-terms">
+          <span id="lbl-agree">أوافق على تفاصيل الحجز والشروط المذكورة *</span>
+        </label>
+
+        <button type="button" id="final-submit-btn" class="submit-btn" disabled>
+          <span id="lbl-btn-submit">تأكيد الحجز وإرسال العقد عبر واتساب</span>
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-brand"><img class="brand-logo" src="assets/photos/LW.png" data-light-logo="assets/photos/LB.png" alt="Mina Onsy Studio"></div>
+    <div class="footer-links"><a href="https://wa.me/201061814314">واتساب</a><a href="mailto:hello@minaonsy.com">hello@minaonsy.com</a></div>
+  </footer>
+
+  <a class="floating-whatsapp" href="https://wa.me/201061814314" target="_blank" rel="noreferrer" aria-label="تواصل واتساب">
+    <img src="assets/photos/whatsapp.png" alt="WhatsApp">
+  </a>
+
+  <script src="assets/js/language.js?v=topbar1"></script>
+  <script>
+    (function initDateDropdowns() {
+      const daySelect = document.getElementById('event-day');
+      const monthSelect = document.getElementById('event-month');
+      const yearSelect = document.getElementById('event-year');
+      const hiddenDate = document.getElementById('event-date');
+
+      for (let d = 1; d <= 31; d++) {
+        const opt = document.createElement('option');
+        opt.value = String(d).padStart(2, '0');
+        opt.textContent = d;
+        daySelect.appendChild(opt);
+      }
+
+      const monthNames = [
+        'يناير', 'فبراير', 'مارس', 'أبريل',
+        'مايو', 'يونيو', 'يوليو', 'أغسطس',
+        'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+      ];
+      for (let m = 1; m <= 12; m++) {
+        const opt = document.createElement('option');
+        opt.value = String(m).padStart(2, '0');
+        opt.textContent = monthNames[m - 1];
+        monthSelect.appendChild(opt);
+      }
+
+      const currentYear = new Date().getFullYear();
+      for (let y = currentYear; y <= currentYear + 6; y++) {
+        const opt = document.createElement('option');
+        opt.value = String(y);
+        opt.textContent = y;
+        yearSelect.appendChild(opt);
+      }
+
+      function updateHiddenDate() {
+        const day = daySelect.value;
+        const month = monthSelect.value;
+        const year = yearSelect.value;
+
+        if (day && month && year) {
+          const d = parseInt(day, 10);
+          const m = parseInt(month, 10);
+          const y = parseInt(year, 10);
+          const daysInMonth = new Date(y, m, 0).getDate();
+          if (d > 0 && d <= daysInMonth) {
+            hiddenDate.value = year + '-' + month + '-' + day;
+            hiddenDate.setCustomValidity('');
+          } else {
+            hiddenDate.value = '';
+            hiddenDate.setCustomValidity('تاريخ غير صحيح (تحقق من اليوم)');
+          }
+        } else {
+          hiddenDate.value = '';
+          hiddenDate.setCustomValidity('يرجى اختيار اليوم والشهر والسنة');
+        }
+
+        hiddenDate.dispatchEvent(new Event('change', { bubbles: true }));
+        hiddenDate.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+
+      daySelect.addEventListener('change', updateHiddenDate);
+      monthSelect.addEventListener('change', updateHiddenDate);
+      yearSelect.addEventListener('change', updateHiddenDate);
+
+      updateHiddenDate();
+
+      const originalCheck = hiddenDate.checkValidity.bind(hiddenDate);
+      hiddenDate.checkValidity = function() {
+        if (!daySelect.value || !monthSelect.value || !yearSelect.value) {
+          return false;
+        }
+        return originalCheck();
+      };
+    })();
+  </script>
+
+  <script src="assets/js/scroll-effects.js"></script>
+  <script src="assets/js/booking.js"></script>
+</body>
+</html>

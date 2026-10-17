@@ -1,0 +1,1031 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>إدارة المعرض | Mina Onsy Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../assets/css/style.css?v=theme8">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body.admin-body {
+      font-family: 'Cairo', sans-serif;
+      background: #f4f6fa;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      text-align: right;
+    }
+
+    .admin-layout {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    .admin-sidebar {
+      width: 260px;
+      background: #0f172a;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      border-right: 1px solid #1e293b;
+      transition: transform 0.3s ease;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-mark {
+      background: #c89b3c;
+      color: #0f172a;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
+
+    .admin-sidebar nav {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .admin-sidebar nav a {
+      color: #cbd5e1;
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-sidebar nav a i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .admin-sidebar nav a:hover {
+      background: #1e293b;
+      color: #f8fafc;
+    }
+
+    .admin-sidebar nav a.active {
+      background: #c89b3c;
+      color: #0f172a;
+      box-shadow: 0 4px 12px rgba(200, 155, 60, 0.3);
+    }
+
+    .admin-sidebar nav button#logoutBtn {
+      margin-top: auto;
+      background: transparent;
+      border: 2px solid #ef4444;
+      color: #fca5a5;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Cairo', sans-serif;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .admin-sidebar nav button#logoutBtn:hover {
+      background: #ef4444;
+      color: #fff;
+      border-color: #ef4444;
+      box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
+    }
+
+    .admin-main {
+      flex: 1;
+      padding: 2rem 2.5rem;
+      background: #f4f6fa;
+      min-height: 100vh;
+    }
+
+    .admin-top {
+      margin-bottom: 2.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .admin-top .eyebrow {
+      color: #475569;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .admin-top h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    .admin-top .muted {
+      color: #475569;
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      font-family: 'Cairo', sans-serif;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0.7rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: 2px solid transparent;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .button.secondary {
+      background: transparent;
+      border-color: #c89b3c;
+      color: #c89b3c;
+    }
+
+    .button.secondary:hover {
+      background: #c89b3c;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(200, 155, 60, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, #d4af37, #c89b3c);
+      color: #0f172a;
+      border-color: #c89b3c;
+      box-shadow: 0 4px 14px rgba(200, 155, 60, 0.25);
+    }
+
+    .button.primary:hover {
+      background: linear-gradient(135deg, #c89b3c, #a87a2e);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(200, 155, 60, 0.4);
+    }
+
+    .button.small {
+      padding: 0.5rem 1.2rem;
+      font-size: 0.8rem;
+      height: 48px;
+    }
+
+    .button.danger {
+      background: transparent;
+      border-color: #dc2626;
+      color: #dc2626;
+    }
+
+    .button.danger:hover {
+      background: #dc2626;
+      color: #fff;
+    }
+
+    .button.danger:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .admin-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 1.8rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e9edf2;
+      transition: box-shadow 0.2s ease;
+      margin-bottom: 2rem;
+    }
+
+    .admin-card:hover {
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.07);
+    }
+
+    .admin-card h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-card h2 i {
+      color: #c89b3c;
+    }
+
+    .dropzone {
+      border: 3px dashed #d1d5db;
+      border-radius: 20px;
+      padding: 3.5rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: #fafbfc;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dropzone:hover {
+      border-color: #c89b3c;
+      background: #fcf8f0;
+    }
+
+    .dropzone.is-dragging {
+      border-color: #c89b3c;
+      background: #fcf8f0;
+      box-shadow: 0 0 0 8px rgba(200, 155, 60, 0.08);
+    }
+
+    .dropzone.is-busy {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .dropzone:focus-visible {
+      outline: 3px solid #c89b3c;
+      outline-offset: 4px;
+    }
+
+    .dropzone strong {
+      font-size: 1.2rem;
+      color: #0f172a;
+    }
+
+    .dropzone span {
+      color: #475569;
+      font-size: 0.95rem;
+    }
+
+    .dropzone i {
+      font-size: 3.5rem;
+      color: #c89b3c;
+      margin-bottom: 0.25rem;
+    }
+
+    .section-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-panel label {
+      font-weight: 600;
+      color: #334155;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-panel label i {
+      color: #c89b3c;
+    }
+
+    .section-panel .section-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .section-panel .section-row select,
+    .section-panel .section-row input {
+      font-family: 'Cairo', sans-serif;
+      padding: 0.75rem 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      background: #fafbfc;
+      transition: all 0.2s ease;
+      color: #0f172a;
+      height: 48px;
+    }
+
+    .section-panel .section-row select {
+      flex: 2;
+      min-width: 150px;
+    }
+
+    .section-panel .section-row input {
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .section-panel .section-row select:focus,
+    .section-panel .section-row input:focus {
+      outline: none;
+      border-color: #c89b3c;
+      box-shadow: 0 0 0 4px rgba(200, 155, 60, 0.12);
+      background: #fff;
+    }
+
+    .section-panel .section-row .button {
+      height: 48px;
+      flex-shrink: 0;
+      padding: 0 1.8rem;
+    }
+
+    .section-toolbar {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    #sectionsManage {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .section-badge {
+      background: #fef9f0;
+      border: 1px solid #f0e6d0;
+      border-radius: 14px;
+      padding: 0.9rem 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      transition: all 0.25s ease;
+    }
+
+    .section-badge:hover {
+      border-color: #c89b3c;
+      box-shadow: 0 4px 14px rgba(200, 155, 60, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .section-badge .info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .section-badge .info i {
+      color: #c89b3c;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .section-badge .info .name {
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .section-badge .info .count {
+      font-size: 0.7rem;
+      color: #475569;
+      background: #f1f5f9;
+      padding: 0 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .section-badge .actions button {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      padding: 4px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+    }
+
+    .section-badge .actions button:hover {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .section-badge .actions button.delete-section {
+      color: #dc2626;
+      opacity: 0.6;
+    }
+
+    .section-badge .actions button.delete-section:hover {
+      opacity: 1;
+      background: #fee2e2;
+    }
+
+    .progress-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .progress-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .progress-item span {
+      font-size: 0.85rem;
+      flex: 1;
+      color: #475569;
+      font-weight: 600;
+      min-width: 120px;
+    }
+
+    .progress-item span::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #c89b3c;
+      margin-left: 0.5rem;
+    }
+
+    .progress-item::after {
+      content: attr(data-progress);
+      font-size: 0.75rem;
+      color: #475569;
+      font-weight: 600;
+      min-width: 50px;
+      text-align: left;
+    }
+
+    .progress-item .bar {
+      height: 4px;
+      background: #e2e8f0;
+      border-radius: 30px;
+      flex: 2;
+      overflow: hidden;
+    }
+
+    .progress-item .bar span {
+      display: block;
+      height: 100%;
+      background: #c89b3c;
+      border-radius: 30px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-item.is-done small {
+      color: #15803d;
+      font-weight: 600;
+    }
+
+    .progress-item.is-error small {
+      color: #dc2626;
+      font-weight: 600;
+    }
+
+    .progress-item.is-error span::before {
+      background: #dc2626;
+    }
+
+    .progress-item.is-done span::before {
+      background: #15803d;
+    }
+
+    .thumb-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1.25rem;
+      margin-top: 0.5rem;
+    }
+
+    .thumb-card {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+      background: #f1f5f9;
+      border: 2px solid #e9edf2;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .thumb-card:hover {
+      border-color: #c89b3c;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      transform: scale(1.02);
+    }
+
+    .thumb-card img,
+    .thumb-card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      background: #f1f5f9;
+    }
+
+    .thumb-card video {
+      background: #000;
+    }
+
+    .thumb-card .thumb-actions {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      right: 8px;
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .thumb-card:hover .thumb-actions {
+      opacity: 1;
+    }
+
+    .thumb-card .thumb-actions a,
+    .thumb-card .thumb-actions button {
+      font-size: 0.7rem;
+      padding: 0.35rem 0.7rem;
+      background: rgba(15, 23, 42, 0.85);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+      transition: background 0.2s;
+    }
+
+    .thumb-card .thumb-actions a:hover,
+    .thumb-card .thumb-actions button:hover {
+      background: rgba(200, 155, 60, 0.9);
+    }
+
+    .thumb-card .thumb-actions a i,
+    .thumb-card .thumb-actions button i {
+      margin-left: 4px;
+    }
+
+    .thumb-card .card-status {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(15, 23, 42, 0.8);
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .access-code-section {
+      background: #fef9f0;
+      border: 2px solid #c89b3c;
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .access-code-section .code-label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .access-code-section .code-label small {
+      font-size: 0.75rem;
+      color: #475569;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .access-code-section .code-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #c89b3c;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 3px;
+      background: #fff;
+      padding: 0.25rem 1rem;
+      border-radius: 10px;
+      border: 1px solid #e9e0d0;
+      display: inline-block;
+    }
+
+    .access-code-section .button {
+      flex-shrink: 0;
+      padding: 0.75rem 2rem;
+    }
+
+    .hamburger-btn {
+      display: none;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.6rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+
+    .hamburger-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    @media (max-width: 1024px) {
+      .admin-sidebar {
+        width: 220px;
+        padding: 1.5rem 1rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .admin-layout {
+        flex-direction: column;
+      }
+
+      .admin-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 1rem 1.5rem;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        align-items: center;
+        border-right: none;
+        border-bottom: 1px solid #1e293b;
+        transform: none;
+      }
+
+      .admin-sidebar .brand {
+        flex: 1;
+      }
+
+      .hamburger-btn {
+        display: block;
+        order: 2;
+      }
+
+      .admin-sidebar nav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        order: 3;
+        gap: 6px;
+        padding-top: 0.5rem;
+        border-top: 1px solid #1e293b;
+        margin-top: 0.5rem;
+      }
+
+      .admin-sidebar nav.open {
+        display: flex;
+      }
+
+      .admin-sidebar nav a {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+      }
+
+      .admin-sidebar nav button#logoutBtn {
+        margin-top: 0;
+        width: 100%;
+      }
+
+      .admin-main {
+        padding: 1rem;
+      }
+
+      .admin-top {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+      }
+
+      .admin-top h1 {
+        font-size: 1.6rem;
+      }
+
+      .admin-actions {
+        width: 100%;
+      }
+
+      .admin-actions .button {
+        flex: 1;
+        justify-content: center;
+      }
+
+      .admin-card {
+        padding: 1.2rem;
+      }
+
+      .dropzone {
+        padding: 2rem 1.5rem;
+      }
+
+      .dropzone i {
+        font-size: 2.5rem;
+      }
+
+      .section-panel .section-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .section-panel .section-row select,
+      .section-panel .section-row input {
+        flex: unset;
+        width: 100%;
+        min-width: unset;
+      }
+
+      .section-panel .section-row .button {
+        width: 100%;
+        justify-content: center;
+        height: 48px;
+      }
+
+      .section-toolbar {
+        flex-direction: column;
+      }
+
+      .section-toolbar .button {
+        width: 100%;
+        justify-content: center;
+      }
+
+      #sectionsManage {
+        grid-template-columns: 1fr;
+      }
+
+      .thumb-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 0.75rem;
+      }
+
+      .access-code-section {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1.2rem;
+      }
+
+      .access-code-section .code-value {
+        font-size: 1.3rem;
+        text-align: center;
+      }
+
+      .access-code-section .button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .admin-sidebar nav a i {
+        width: 18px;
+      }
+
+      .thumb-grid {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        gap: 0.5rem;
+      }
+
+      .access-code-section .code-value {
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+      }
+
+      .button {
+        font-size: 0.8rem;
+        padding: 0.6rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body class="admin-body">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="brand">
+        <span class="brand-mark">MO</span>
+        <span>Mina Onsy</span>
+      </div>
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="فتح القائمة"><i class="fas fa-bars"></i></button>
+      <nav id="sidebarNav">
+        <a href="dashboard.html"><i class="fas fa-images"></i>المعارض</a>
+        <a href="portfolio.html"><i class="fas fa-th"></i>البورتفوليو</a>
+        <a href="trash.html"><i class="fas fa-trash"></i>سلة المهملات</a>
+        <button id="logoutBtn" type="button"><i class="fas fa-sign-out-alt"></i>خروج</button>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <div class="admin-top">
+        <div>
+          <p class="eyebrow"><i class="fas fa-cog" style="margin-left:6px;"></i>إدارة معرض</p>
+          <h1 id="manageTitle">المعرض</h1>
+          <p id="galleryLink" class="muted"><i class="fas fa-link" style="margin-left:6px;"></i>رابط المعرض سيظهر هنا</p>
+        </div>
+        <div class="admin-actions">
+          <button id="copyLinkBtn" class="button secondary" type="button"><i class="fas fa-copy"></i> نسخ الرابط</button>
+        </div>
+      </div>
+
+      <section class="access-code-section">
+        <div class="code-label">
+          <small><i class="fas fa-lock" style="margin-left:6px;"></i>كلمة السر</small>
+          <span class="code-value" id="accessCodeDisplay">••••••••</span>
+        </div>
+        <button id="copyAccessCodeBtn" class="button primary" type="button">
+          <i class="fas fa-copy"></i> نسخ كلمة السر
+        </button>
+      </section>
+
+      <section class="admin-card">
+        <h2><i class="fas fa-cloud-upload-alt"></i> رفع صور وفيديوهات</h2>
+
+        <div class="section-panel">
+          <label><i class="fas fa-folder-tree"></i> السكشن المطلوب</label>
+          <div class="section-row">
+            <select id="sectionSelect">
+              <option value="default" selected><i class="fas fa-home"></i> الرئيسية</option>
+            </select>
+            <input id="newSectionName" type="text" placeholder="اسم سكشن جديد...">
+            <button id="createSectionBtn" class="button primary small" type="button">
+              <i class="fas fa-plus"></i> إنشاء
+            </button>
+          </div>
+          <small style="color:#475569; font-size:0.75rem; margin-top:4px;">
+            <i class="fas fa-info-circle"></i> اختر من القائمة أو اكتب اسماً جديداً واضغط "إنشاء"
+          </small>
+        </div>
+
+        <div class="section-toolbar">
+          <button id="uploadFolderBtn" class="button secondary" type="button"><i class="fas fa-folder-open"></i> رفع مجلد</button>
+          <input id="folderFiles" type="file" multiple webkitdirectory hidden>
+        </div>
+
+        <div class="dropzone" id="galleryDropzone" role="button" tabindex="0">
+          <i class="fas fa-upload"></i>
+          <strong>اضغط للاختيار، اسحب الملفات هنا، أو الصقها داخل الصفحة</strong>
+          <span>يدعم الصور والفيديوهات</span>
+          <input id="galleryFiles" type="file" multiple accept="image/*,video/*" hidden>
+        </div>
+
+        <div id="uploadProgress" class="progress-list"></div>
+      </section>
+
+      <section class="admin-card">
+        <h2><i class="fas fa-photo-video"></i> ملفات المعرض</h2>
+        <div id="filesGrid" class="thumb-grid"></div>
+      </section>
+
+      <section class="admin-card">
+        <h2><i class="fas fa-layer-group"></i> جميع السكاشن</h2>
+        <div id="sectionsManage"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../assets/js/language.js?v=topbar2"></script>
+  <script>
+    (function() {
+      var hamburger = document.getElementById('hamburgerBtn');
+      var nav = document.getElementById('sidebarNav');
+      if (hamburger && nav) {
+        hamburger.addEventListener('click', function(e) {
+          e.stopPropagation();
+          nav.classList.toggle('open');
+        });
+        document.addEventListener('click', function(e) {
+          if (window.innerWidth <= 768) {
+            var sidebar = document.querySelector('.admin-sidebar');
+            if (sidebar && !sidebar.contains(e.target)) {
+              nav.classList.remove('open');
+            }
+          }
+        });
+        nav.querySelectorAll('a, button').forEach(function(el) {
+          el.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+              nav.classList.remove('open');
+            }
+          });
+        });
+      }
+    })();
+  </script>
+
+  <script>
+    (function() {
+      function ensureDefaultSection() {
+        var select = document.getElementById('sectionSelect');
+        if (!select) return;
+        if (select.options.length === 0) {
+          var opt = document.createElement('option');
+          opt.value = 'default';
+          opt.text = 'الرئيسية';
+          opt.selected = true;
+          select.appendChild(opt);
+          return;
+        }
+        var hasDefault = false;
+        for (var i = 0; i < select.options.length; i++) {
+          if (select.options[i].value === 'default' || select.options[i].text.includes('الرئيسية')) {
+            hasDefault = true;
+            break;
+          }
+        }
+        if (!hasDefault) {
+          var opt = document.createElement('option');
+          opt.value = 'default';
+          opt.text = 'الرئيسية';
+          opt.selected = true;
+          select.prepend(opt);
+        }
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', ensureDefaultSection);
+      } else {
+        ensureDefaultSection();
+      }
+      setTimeout(ensureDefaultSection, 1000);
+    })();
+  </script>
+
+  <script type="module" src="../assets/js/admin-upload.js"></script>
+</body>
+</html>
