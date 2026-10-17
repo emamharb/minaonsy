@@ -21,6 +21,8 @@
   const mapArEn = {
     "إدارة البورتفوليو | Mina Onsy Studio": "Portfolio Management | Mina Onsy Studio",
     "إدارة معرض | Mina Onsy Studio": "Gallery Management | Mina Onsy Studio",
+    "رفع الصور والفيديوهات | Mina Onsy Studio": "Upload Photos and Videos | Mina Onsy Studio",
+    "المساحة التخزينية | Mina Onsy Studio": "Storage | Mina Onsy Studio",
     "أعمال الفريق | Mina Onsy Studio": "Team Work | Mina Onsy Studio",
     "الأسعار | Mina Onsy Studio": "Pricing | Mina Onsy Studio",
     "المساحة | Mina Onsy Studio": "Storage | Mina Onsy Studio",
@@ -386,6 +388,57 @@
     "أنشئ كلمة مرور": "Create an access code",
     "إجمالي الصور": "Total photos",
     "كل المعارض": "All galleries",
+    "المعارض المحذوفة": "Deleted galleries",
+    "مساحة التخزين": "Storage usage",
+    "المساحة التخزينية": "Storage usage",
+    "رفع صور وفيديوهات جديدة": "Upload new photos and videos",
+    "الملفات الحالية": "Current files",
+    "إدارة التخزين": "Storage management",
+    "معرض الأعمال العام": "Public work portfolio",
+    "اسم العميل / المناسبة": "Client / event name",
+    "نوع المناسبة": "Event type",
+    "موعد الزفاف (اختياري)": "Wedding date (optional)",
+    "يظهر في صفحة العميل.": "Shown on the client gallery.",
+    "كلمة السر": "Access password",
+    "رابط مخصص": "Custom link",
+    "أي تفاصيل إضافية عن هذا المعرض...": "Any additional gallery details...",
+    "بحث بالاسم أو التاريخ...": "Search by name or date...",
+    "إنشاء المعرض": "Create gallery",
+    "إدارة المعرض": "Manage gallery",
+    "البورتفوليو": "Portfolio",
+    "المساحة": "Storage",
+    "سلة المهملات": "Trash",
+    "المعارض": "Galleries",
+    "رفع صور وفيديوهات جديدة": "Upload new photos and videos",
+    "جاري تحميل المعارض المحذوفة...": "Loading deleted galleries...",
+    "جاري تحميل المساحة...": "Loading storage...",
+    "جاري تحميل المساحة التخزينية...": "Loading storage...",
+    "المستخدم:": "Used:",
+    "المتاح:": "Available:",
+    "تحميل الصور...": "Loading photos...",
+    "المعرض تم إنشاؤه بنجاح": "Gallery created successfully",
+    "تاريخ المناسبة": "Event date",
+    "اختيار المناسبة": "Select an event",
+    "تاريخ الفرح (اختياري)": "Wedding date (optional)",
+    "اسم العميل": "Client name",
+    "اسم العميل / المناسبة": "Client / event name",
+    "اسم العميل / الحدث": "Client / event name",
+    "معارض العملاء": "Client galleries",
+    "إدارة المعرض | Mina Onsy Studio": "Gallery management | Mina Onsy Studio",
+    "رابط المعرض سيظهر هنا": "The gallery link will appear here",
+    "السكشن المطلوب": "Target section",
+    "اسم سكشن جديد...": "New section name...",
+    "اضغط للاختيار، اسحب الملفات هنا، أو الصقها داخل الصفحة": "Click to choose, drag files here, or paste them into the page",
+    "يدعم الصور والفيديوهات": "Supports photos and videos",
+    "رفع مجلد": "Upload folder",
+    "جميع السكاشن": "All sections",
+    "رفع صور وفيديوهات": "Upload photos and videos",
+    "إضافة صور وفيديوهات": "Add photos and videos",
+    "رفع ملفات البورتفوليو": "Upload portfolio files",
+    "رفع ملفات": "Upload files",
+    "إنشاء": "Create",
+    "المعارض المحذوفة": "Deleted galleries",
+    "سلة المهملات": "Trash",
     "لا توجد معارض حتى الآن": "No galleries yet",
     "إضافة قسم": "Add section",
     "إضافة سكشن": "Add section",
@@ -930,6 +983,21 @@
   }
 
   function renderThemeButton() {
+    if (document.body?.classList.contains("admin-body")) {
+      const adminButton = document.querySelector("[data-admin-theme-toggle]");
+      if (adminButton) {
+        const target = currentTheme === "dark" ? "light" : "dark";
+        adminButton.innerHTML = target === "light" ? '<i class="fas fa-sun" aria-hidden="true"></i>' : '<i class="fas fa-moon" aria-hidden="true"></i>';
+        adminButton.setAttribute("aria-label", target === "light" ? "Switch to light theme" : "Switch to dark theme");
+        adminButton.title = target === "light" ? "Switch to light theme" : "Switch to dark theme";
+        if (!adminButton.dataset.bound) {
+          adminButton.addEventListener("click", () => setTheme(currentTheme === "dark" ? "light" : "dark"));
+          adminButton.dataset.bound = "1";
+        }
+      }
+      removeAdminThemeControl();
+      return;
+    }
     if (isAdminThemeControlDisabled()) {
       removeAdminThemeControl();
       return;
@@ -979,6 +1047,17 @@
       if (button) button.remove();
       const controlsBar = document.querySelector("#siteDesktopControls");
       if (controlsBar && !controlsBar.children.length) controlsBar.remove();
+      const adminButton = document.querySelector("[data-admin-language-toggle]");
+      if (adminButton) {
+        const target = currentLanguage === "en" ? "ar" : "en";
+        adminButton.textContent = target === "ar" ? "العربية" : "English";
+        adminButton.setAttribute("aria-label", target === "ar" ? "Switch to Arabic" : "Switch to English");
+        adminButton.title = target === "ar" ? "Switch to Arabic" : "Switch to English";
+        if (!adminButton.dataset.bound) {
+          adminButton.addEventListener("click", () => setLanguage(currentLanguage === "en" ? "ar" : "en"));
+          adminButton.dataset.bound = "1";
+        }
+      }
       return;
     }
     const drawer = ensureMobileMenu();
