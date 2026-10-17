@@ -689,7 +689,7 @@
     if (!drawer || !toggle) return;
     const arabic = currentLanguage === "ar";
     const labels = arabic
-      ? { menu: "القائمة", close: "إغلاق القائمة", home: "الرئيسية", work: "الأعمال", team: "الفريق", pricing: "الباقات", book: "حجز" }
+      ? { menu: "القائمة", close: "إغلاق القائمة", home: "الرئيسية", work: "الأعمال", team: "الفريق", pricing: "الأسعار", book: "حجز" }
       : { menu: "Menu", close: "Close menu", home: "Home", work: "Work", team: "Team", pricing: "Pricing", book: "Book" };
     const setText = (selector, value) => {
       const element = drawer.querySelector(selector);

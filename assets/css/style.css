@@ -2574,18 +2574,30 @@ html[data-theme="light"] .theme-switcher-icon {
     transform: translateX(-105%) !important;
   }
   body.has-mobile-language-menu .mobile-menu-drawer.is-open { transform: translateX(0) !important; }
-  html[dir] body.has-mobile-language-menu .mobile-menu-toggle {
+  html:not([dir="rtl"]) body.has-mobile-language-menu .mobile-menu-toggle {
     left: 16px !important;
     right: auto !important;
     inset-inline-start: 16px !important;
     inset-inline-end: auto !important;
   }
-  html[dir] body.has-mobile-language-menu .mobile-menu-drawer {
+  html:not([dir="rtl"]) body.has-mobile-language-menu .mobile-menu-drawer {
     left: 0 !important;
     right: auto !important;
     transform: translateX(-105%) !important;
   }
-  html[dir] body.has-mobile-language-menu .mobile-menu-drawer.is-open { transform: translateX(0) !important; }
+  html:not([dir="rtl"]) body.has-mobile-language-menu .mobile-menu-drawer.is-open { transform: translateX(0) !important; }
+  html[dir="rtl"] body.has-mobile-language-menu .mobile-menu-toggle {
+    left: auto !important;
+    right: 16px !important;
+    inset-inline-start: auto !important;
+    inset-inline-end: 16px !important;
+  }
+  html[dir="rtl"] body.has-mobile-language-menu .mobile-menu-drawer {
+    left: auto !important;
+    right: 0 !important;
+    transform: translateX(105%) !important;
+  }
+  html[dir="rtl"] body.has-mobile-language-menu .mobile-menu-drawer.is-open { transform: translateX(0) !important; }
   #siteLanguageToggle.language-switcher {
     position: static !important;
     left: auto !important;
