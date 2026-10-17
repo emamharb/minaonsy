@@ -8,13 +8,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bebas+Neue&family=Cairo:wght@300;400;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=editorial2">
+  <link rel="stylesheet" href="assets/css/style.css?v=editorial3">
 </head>
 <body>
   <a class="skip-link" href="#portfolio">تخطي إلى المعرض</a>
   <header class="site-header">
     <a class="brand" href="index.html" aria-label="Mina Onsy Studio">
-      <img class="brand-logo" src="assets/photos/LW.png" data-light-logo="assets/photos/LB.png" alt="Mina Onsy Studio">
+      <img class="brand-logo" src="assets/photos/LW.png?v=optimized" data-light-logo="assets/photos/LB.png?v=optimized" alt="Mina Onsy Studio">
       <small>PHOTOGRAPHY</small>
     </a>
     <nav class="main-nav" aria-label="Main navigation">
@@ -54,6 +54,11 @@
 
     <section id="portfolio" class="portfolio-section" aria-label="معرض الأعمال">
       <h2 class="portfolio-title">Selected Work</h2>
+      <div class="portfolio-filters" role="group" aria-label="Filter portfolio">
+        <button class="portfolio-filter is-active" type="button" data-portfolio-filter="all" aria-pressed="true">All work</button>
+        <button class="portfolio-filter" type="button" data-portfolio-filter="portrait" aria-pressed="false">Portrait</button>
+        <button class="portfolio-filter" type="button" data-portfolio-filter="landscape" aria-pressed="false">Landscape</button>
+      </div>
       <div id="portfolioGrid" class="masonry-grid"></div>
       <div class="portfolio-more">
         <button id="loadMorePortfolio" class="button portfolio-more-button" type="button" hidden>عرض المزيد</button>
@@ -63,7 +68,7 @@
   </main>
 
   <footer class="site-footer">
-    <div class="footer-brand"><img class="brand-logo" src="assets/photos/LW.png" data-light-logo="assets/photos/LB.png" alt="Mina Onsy Studio"></div>
+    <div class="footer-brand"><img class="brand-logo" src="assets/photos/LW.png?v=optimized" data-light-logo="assets/photos/LB.png?v=optimized" alt="Mina Onsy Studio"></div>
     <div class="footer-links">
       <a href="https://wa.me/201061814314">واتساب</a>
       <a href="https://www.instagram.com/minaonsy_?igsh=MXBubDdhejl0bTJkMQ%3D%3D&utm_source=qr" target="_blank" rel="noreferrer">انستجرام</a>
@@ -72,10 +77,10 @@
   </footer>
 
   <a class="floating-whatsapp" href="https://wa.me/201061814314" target="_blank" rel="noreferrer" aria-label="تواصل واتساب">
-    <img src="assets/photos/whatsapp.png" alt="WhatsApp">
+    <img src="assets/photos/whatsapp.png?v=optimized" alt="WhatsApp">
   </a>
 
-  <div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" aria-hidden="true">
     <button class="lightbox-close" type="button" aria-label="إغلاق">×</button>
     <button class="lightbox-arrow prev" type="button" aria-label="الصورة السابقة">‹</button>
     <img id="lightboxImage" alt="">
@@ -85,7 +90,7 @@
   
   
   
-  <script src="assets/js/language.js?v=language12"></script>
+  <script src="assets/js/language.js?v=language13"></script>
   <script src="assets/photos/manifest.js"></script>
   
   
@@ -94,6 +99,6 @@
   
   
   
-  <script type="module" src="assets/js/portfolio.js"></script>
+  <script type="module" src="assets/js/portfolio.js?v=filters1"></script>
 </body>
 </html>

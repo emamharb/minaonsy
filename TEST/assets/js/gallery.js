@@ -1,5 +1,5 @@
 import app from "./firebase-config.js";
-import { createLightbox } from "./lightbox.js";
+import { createLightbox } from "./lightbox.js?v=a11y1";
 import { getFirestore, collection, getDocs, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const db = getFirestore(app);
@@ -110,6 +110,21 @@ function hideGate() {
   galleryGate.setAttribute("aria-hidden", "true");
   if (galleryGateStatus) { galleryGateStatus.textContent = ""; delete galleryGateStatus.dataset.messageKey; }
 }
+
+galleryGate?.addEventListener("keydown", (event) => {
+  if (event.key !== "Tab") return;
+  const controls = [...galleryGate.querySelectorAll("input:not([disabled]), button:not([disabled])")];
+  if (!controls.length) return;
+  const first = controls[0];
+  const last = controls.at(-1);
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+});
 
 function directDownload(file, index) {
   const link = document.createElement("a");

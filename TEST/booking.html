@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bebas+Neue&family=Cairo:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=editorial2">
+  <link rel="stylesheet" href="assets/css/style.css?v=editorial3">
   <style>
     :root {
       color-scheme: dark;
@@ -134,7 +134,7 @@
 <body class="booking-page">
   <a class="skip-link" href="#booking-form">تخطي إلى نموذج الحجز</a>
   <header class="site-header">
-    <a class="brand" href="index.html"><img class="brand-logo" src="assets/photos/LW.png" data-light-logo="assets/photos/LB.png" alt="Mina Onsy Studio"><small>PHOTOGRAPHY</small></a>
+    <a class="brand" href="index.html"><img class="brand-logo" src="assets/photos/LW.png?v=optimized" data-light-logo="assets/photos/LB.png?v=optimized" alt="Mina Onsy Studio"><small>PHOTOGRAPHY</small></a>
     <nav class="main-nav" aria-label="Main navigation">
       <a href="index.html" data-label-ar="الرئيسية" data-label-en="Home">Home</a>
       <a href="index.html#portfolio" data-label-ar="الأعمال" data-label-en="Work">Work</a>
@@ -256,15 +256,15 @@
   </main>
 
   <footer class="site-footer">
-    <div class="footer-brand"><img class="brand-logo" src="assets/photos/LW.png" data-light-logo="assets/photos/LB.png" alt="Mina Onsy Studio"></div>
+    <div class="footer-brand"><img class="brand-logo" src="assets/photos/LW.png?v=optimized" data-light-logo="assets/photos/LB.png?v=optimized" alt="Mina Onsy Studio"></div>
     <div class="footer-links"><a href="https://wa.me/201061814314">واتساب</a><a href="mailto:hello@minaonsy.com">hello@minaonsy.com</a></div>
   </footer>
 
   <a class="floating-whatsapp" href="https://wa.me/201061814314" target="_blank" rel="noreferrer" aria-label="تواصل واتساب">
-    <img src="assets/photos/whatsapp.png" alt="WhatsApp">
+    <img src="assets/photos/whatsapp.png?v=optimized" alt="WhatsApp">
   </a>
 
-  <script src="assets/js/language.js?v=language12"></script>
+  <script src="assets/js/language.js?v=language13"></script>
   <script>
     (function initDateDropdowns() {
       const daySelect = document.getElementById('event-day');
@@ -279,17 +279,23 @@
         daySelect.appendChild(opt);
       }
 
-      const monthNames = [
+      const monthNames = {
+        ar: [
         'يناير', 'فبراير', 'مارس', 'أبريل',
         'مايو', 'يونيو', 'يوليو', 'أغسطس',
         'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
-      ];
-      for (let m = 1; m <= 12; m++) {
-        const opt = document.createElement('option');
-        opt.value = String(m).padStart(2, '0');
-        opt.textContent = monthNames[m - 1];
-        monthSelect.appendChild(opt);
+        ],
+        en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+      };
+      function renderMonths(language = window.SITE_LANGUAGE || 'en') {
+        const selected = monthSelect.value;
+        monthSelect.replaceChildren(new Option('--', ''));
+        monthNames[language === 'ar' ? 'ar' : 'en'].forEach((name, index) => {
+          monthSelect.appendChild(new Option(name, String(index + 1).padStart(2, '0')));
+        });
+        monthSelect.value = selected;
       }
+      renderMonths();
 
       const currentYear = new Date().getFullYear();
       for (let y = currentYear; y <= currentYear + 6; y++) {
@@ -303,6 +309,20 @@
         const day = daySelect.value;
         const month = monthSelect.value;
         const year = yearSelect.value;
+
+        const language = window.SITE_LANGUAGE === 'ar' ? 'ar' : 'en';
+        const monthLength = month && year ? new Date(Number(year), Number(month), 0).getDate() : 31;
+        const selectedDay = daySelect.value;
+        if (daySelect.options.length !== monthLength + 1) {
+          daySelect.replaceChildren(new Option('--', ''));
+          for (let d = 1; d <= monthLength; d++) {
+            daySelect.appendChild(new Option(String(d), String(d).padStart(2, '0')));
+          }
+        }
+        daySelect.value = selectedDay;
+        daySelect.setAttribute('aria-label', language === 'ar' ? 'اليوم' : 'Day');
+        monthSelect.setAttribute('aria-label', language === 'ar' ? 'الشهر' : 'Month');
+        yearSelect.setAttribute('aria-label', language === 'ar' ? 'السنة' : 'Year');
 
         if (day && month && year) {
           const d = parseInt(day, 10);
@@ -328,6 +348,11 @@
       daySelect.addEventListener('change', updateHiddenDate);
       monthSelect.addEventListener('change', updateHiddenDate);
       yearSelect.addEventListener('change', updateHiddenDate);
+
+      window.addEventListener('site-language-change', (event) => {
+        renderMonths(event.detail?.lang || window.SITE_LANGUAGE || 'en');
+        updateHiddenDate();
+      });
 
       updateHiddenDate();
 
