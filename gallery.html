@@ -897,6 +897,9 @@
     }
     .site-header .hamburger { display: none; }
     #siteDesktopControls { grid-column: 3; justify-self: end; position: static; z-index: 120; }
+    @media (min-width: 769px) {
+      .site-header #siteDesktopControls { position: absolute; top: 50%; right: clamp(18px, 4vw, 56px); left: auto; inset-inline-end: clamp(18px, 4vw, 56px); transform: translateY(-50%); }
+    }
     #siteLanguageToggle.language-switcher {
       min-height: 40px;
       padding: 8px 14px;
@@ -954,11 +957,11 @@
     </button>
 
     <nav class="main-nav" id="mainNav">
-      <a href="index.html">Home</a>
-      <a href="index.html#portfolio">Work</a>
-      <a href="team.html">Team</a>
-      <a href="pricing.html">Pricing</a>
-      <a class="nav-cta" href="booking.html">Book</a>
+      <a href="index.html" data-label-ar="الرئيسية" data-label-en="Home">Home</a>
+      <a href="index.html#portfolio" data-label-ar="الأعمال" data-label-en="Work">Work</a>
+      <a href="team.html" data-label-ar="الفريق" data-label-en="Team">Team</a>
+      <a href="pricing.html" data-label-ar="الأسعار" data-label-en="Pricing">Pricing</a>
+      <a class="nav-cta" href="booking.html" data-label-ar="احجز" data-label-en="Book">Book</a>
     </nav>
   </header>
 
@@ -1080,7 +1083,7 @@
     })();
   </script>
 
-  <script src="assets/js/language.js?v=language3"></script>
+  <script src="assets/js/language.js?v=language4"></script>
   <!-- تم الاحتفاظ بملف gallery.js لتشغيل الوظائف (تحميل الصور، معرض الصور، تحميل الكل) -->
   <script type="module" src="assets/js/gallery.js?v=downloads1"></script>
 </body>

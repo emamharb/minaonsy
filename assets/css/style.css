@@ -2545,6 +2545,22 @@ html[data-theme="light"] .theme-switcher-icon {
 .site-header,
 .site-header > .main-nav,
 #siteDesktopControls { direction: ltr; }
+@media (min-width: 701px) {
+  .site-header #siteDesktopControls.desktop-controls-bar {
+    position: absolute;
+    top: 50%;
+    right: clamp(18px, 4vw, 56px);
+    left: auto;
+    inset-inline-end: clamp(18px, 4vw, 56px);
+    inset-inline-start: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    transform: translateY(-50%);
+    margin: 0;
+    z-index: 10;
+  }
+}
 @media (max-width: 700px) {
   body.has-mobile-language-menu .site-header .mobile-menu-toggle {
     left: 16px !important;

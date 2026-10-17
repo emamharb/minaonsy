@@ -650,6 +650,13 @@
     });
   }
 
+  function translateSiteNavigation() {
+    document.querySelectorAll(".site-header .main-nav a[data-label-ar][data-label-en]").forEach((link) => {
+      const label = currentLanguage === "ar" ? link.dataset.labelAr : link.dataset.labelEn;
+      if (label && link.textContent !== label) link.textContent = label;
+    });
+  }
+
   function isSmallViewport() {
     return typeof window.matchMedia === "function" && window.matchMedia("(max-width: 700px)").matches;
   }
@@ -923,6 +930,7 @@
     while (walker.nextNode()) nodes.push(walker.currentNode);
     nodes.forEach(translateTextNode);
     translateAttributes(document);
+    translateSiteNavigation();
     syncThemeLogos();
     renderLanguageButton();
     renderThemeButton();
