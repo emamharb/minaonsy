@@ -1140,20 +1140,25 @@
     translatePage();
     observer = new MutationObserver((mutations) => {
       if (translating) return;
-      for (const mutation of mutations) {
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === Node.TEXT_NODE) translateTextNode(node);
-          else if (node.nodeType === Node.ELEMENT_NODE) {
-            const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
-            const nodes = [];
-            while (walker.nextNode()) nodes.push(walker.currentNode);
-            nodes.forEach(translateTextNode);
-            translateAttributes(node);
-          }
-        });
+      observer.disconnect();
+      try {
+        for (const mutation of mutations) {
+          mutation.addedNodes.forEach((node) => {
+            if (node.nodeType === Node.TEXT_NODE) translateTextNode(node);
+            else if (node.nodeType === Node.ELEMENT_NODE) {
+              const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+              const nodes = [];
+              while (walker.nextNode()) nodes.push(walker.currentNode);
+              nodes.forEach(translateTextNode);
+              translateAttributes(node);
+            }
+          });
+        }
+        renderLanguageButton();
+        renderThemeButton();
+      } finally {
+        observer.observe(document.body, { childList: true, subtree: true, characterData: true });
       }
-      renderLanguageButton();
-      renderThemeButton();
     });
     observer.observe(document.body, { childList: true, subtree: true, characterData: true });
     window.addEventListener("resize", () => {
