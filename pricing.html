@@ -31,6 +31,8 @@
     .pricing-new-card li { position: relative; padding-inline-start: 18px; }
     .pricing-new-card li::before { content: ''; position: absolute; top: .75em; inset-inline-start: 0; width: 5px; height: 5px; border-radius: 50%; background: #77736d; }
     .pricing-new-card.is-featured li::before { background: var(--accent); }
+    .pricing-package-cta { display: inline-flex; align-self: flex-start; align-items: center; justify-content: center; min-height: 44px; margin-top: 24px; padding: 0 18px; border: 1px solid var(--accent); color: var(--mono-text); font-size: 13px; font-weight: 700; text-decoration: none; transition: color .2s ease, background .2s ease; }
+    .pricing-package-cta:hover, .pricing-package-cta:focus-visible { background: var(--accent); color: #111; }
     .pricing-new-details { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(30px, 6vw, 86px); padding-top: clamp(58px, 8vw, 96px); }
     .pricing-new-detail { padding-top: 18px; border-top: 1px solid var(--mono-line); }
     .pricing-new-detail h2 { margin: 0 0 26px; color: var(--mono-text); font-family: var(--display); font-size: clamp(42px, 5vw, 58px); font-weight: 400; line-height: .95; }
@@ -95,6 +97,7 @@
           <li>Venue coverage</li>
           <li>Unlimited photos delivered via link</li>
         </ul>
+        <a class="pricing-package-cta" href="booking.html?package=standard">Book this package</a>
       </article>
       <article class="pricing-new-card">
         <div class="pricing-new-card-top"></div>
@@ -110,6 +113,7 @@
           <li>Album (30×45)</li>
           <li>Portrait (50×70)</li>
         </ul>
+        <a class="pricing-package-cta" href="booking.html?package=premium">Book this package</a>
       </article>
       <article class="pricing-new-card">
         <div class="pricing-new-card-top"></div>
@@ -126,6 +130,7 @@
           <li>Album (30×80)</li>
           <li>Portrait (50×70)</li>
         </ul>
+        <a class="pricing-package-cta" href="booking.html?package=luxury">Book this package</a>
       </article>
       <article class="pricing-new-card is-featured">
         <div class="pricing-new-card-top"><span class="pricing-new-badge">Most popular</span></div>
@@ -144,6 +149,7 @@
           <li>Album (30×80)</li>
           <li>Portrait (50×70)</li>
         </ul>
+        <a class="pricing-package-cta" href="booking.html?package=vip">Book this package</a>
       </article>
     </section>
     <section class="pricing-new-details">

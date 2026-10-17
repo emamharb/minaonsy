@@ -564,7 +564,8 @@
     "Team": "الفريق",
     "Pricing": "الأسعار",
     "Book": "احجز",
-    "Packages": "الباقات"
+    "Packages": "الباقات",
+    "Book this package": "احجز هذه الباقة"
   });
 
   Object.assign(mapArEn, {

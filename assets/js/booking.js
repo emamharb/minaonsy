@@ -58,6 +58,7 @@ const i18n = {
     currency: "ج.م",
     transQena: "0 ج.م (داخل قنا)",
     photoNone: "لم يتم اختيار باقة تصوير",
+    cityRequired: "اختر المدينة لحساب السعر",
     promoNone: "لم يتم اختيار باقة برومو",
     wsTitle: "*حجز تصوير زفاف جديد 📸*",
     wsNone: "لم يحدد"
@@ -109,6 +110,7 @@ const i18n = {
     currency: "EGP",
     transQena: "0 EGP (Inside Qena)",
     photoNone: "No photo package selected",
+    cityRequired: "Choose a city to calculate the price",
     promoNone: "No promo package selected",
     wsTitle: "*New Wedding Photography Booking 📸*",
     wsNone: "Not Specified"
@@ -171,7 +173,7 @@ function updateBookingSummary() {
     if (promoPkg) promoCost = PROMO_PRICING[promoPkg];
     transCost = TRANS_FEES[city];
   }
-  setText("photo-price-customer", photoPkg ? money(photoCost) : i18n[currentLang].photoNone);
+  setText("photo-price-customer", photoPkg ? (city ? money(photoCost) : i18n[currentLang].cityRequired) : i18n[currentLang].photoNone);
   setText("promo-price-customer", promoPkg ? money(promoCost) : i18n[currentLang].promoNone);
   setText("discount-amount-customer", `-${money(discountAmount)}`);
   setText("trans-price-customer", city === "qena" ? i18n[currentLang].transQena : money(transCost));
@@ -263,6 +265,12 @@ $("agree-terms").addEventListener("change", () => {
 $("final-submit-btn").addEventListener("click", sendBookingToWhatsApp);
 document.querySelectorAll("[data-photo]").forEach((card) => card.addEventListener("click", () => selectPackage("photo", card.dataset.photo)));
 document.querySelectorAll("[data-promo]").forEach((card) => card.addEventListener("click", () => selectPackage("promo", card.dataset.promo)));
+
+const requestedPackage = new URLSearchParams(window.location.search).get("package");
+if (["standard", "premium", "luxury", "vip"].includes(requestedPackage)) {
+  $("selected-photo-package").value = requestedPackage;
+  $(`card-${requestedPackage}`).classList.add("selected");
+}
 
 window.addEventListener("site-language-change", (event) => {
   currentLang = event.detail?.lang || window.SITE_LANGUAGE || "en";
