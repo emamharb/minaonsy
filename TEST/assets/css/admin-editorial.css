@@ -477,6 +477,7 @@ body.admin-body .dropzone { min-height: 112px !important; padding: 1.1rem 1.3rem
 body.admin-body #filesGrid > .muted { padding: 2rem; border: 1px dashed #d8d0c4; border-radius: 9px; text-align: center; background: rgba(255,255,255,.45); }
 .section-heading h3 { font-size: clamp(1.05rem, 2vw, 1.3rem) !important; }
 .thumb-card .thumb-file-name { max-width: calc(100% - 20px); }
+.thumb-card .card-status:empty { display: none !important; }
 .thumb-card .thumb-actions a:focus-visible, .thumb-card .thumb-actions button:focus-visible { outline: 3px solid #f1d89d !important; outline-offset: 2px; }
 .thumb-card:focus-within { border-color: #a88645 !important; }
 body.admin-body #sectionsManage .trash-row { transition: border-color .18s ease, background .18s ease; }
