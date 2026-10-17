@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bebas+Neue&family=Cairo:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   
-  <!-- تم إزالة style.css و language.js لمنع تداخل الألوان القديمة -->
+  <!-- Keep the client gallery's standalone visual theme. -->
   <!-- تم الاحتفاظ فقط بملف gallery.js لتشغيل الوظائف -->
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
 
@@ -853,6 +853,22 @@
         padding: 20px 14px;
       }
     }
+    #siteDesktopControls {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 120;
+    }
+    #siteLanguageToggle.language-switcher {
+      min-height: 40px;
+      padding: 8px 14px;
+      border: 1px solid rgba(0, 0, 0, .15);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .94);
+      color: #222;
+      font: 700 13px "Cairo", sans-serif;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body class="client-album-page">
@@ -993,6 +1009,7 @@
     })();
   </script>
 
+  <script src="assets/js/language.js?v=language2"></script>
   <!-- تم الاحتفاظ بملف gallery.js لتشغيل الوظائف (تحميل الصور، معرض الصور، تحميل الكل) -->
   <script type="module" src="assets/js/gallery.js?v=downloads1"></script>
 </body>

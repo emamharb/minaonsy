@@ -498,7 +498,65 @@
     "الوقت المتبقي: --": "Time remaining: --",
     "مثال: أحمد ومريم": "Example: Ahmed and Mariam",
     "يوم/شهر/سنة": "Day/Month/Year",
-    "موعد الزفاف:": "Wedding date:"
+    "موعد الزفاف:": "Wedding date:",
+    "الفريق | Mina Onsy Studio": "Team | Mina Onsy Studio",
+    "الباقات | Mina Onsy Studio": "Packages | Mina Onsy Studio",
+    "التخطي إلى الباقات": "Skip to packages",
+    "PHOTOGRAPHY": "التصوير",
+    "WORKS": "الأعمال",
+    "Mina Onsy Studio Photography": "تصوير استوديو مينا أنسي",
+    "Clear packages to document your day, from the first details to the final image.": "باقات واضحة توثّق يومك، من أول التفاصيل حتى الصورة الأخيرة.",
+    "WEDDING & EVENT PHOTOGRAPHY": "تصوير الأفراح والمناسبات",
+    "Packages & Pricing": "الباقات والأسعار",
+    "Package One": "الباقة الأولى",
+    "Package Two": "الباقة الثانية",
+    "Package Three": "الباقة الثالثة",
+    "VIP Package": "باقة كبار الشخصيات",
+    "Getting-ready coverage": "تصوير التجهيزات",
+    "Wedding session photography": "تصوير جلسة الزفاف",
+    "Venue coverage": "تصوير القاعة",
+    "Unlimited photos delivered via link": "عدد غير محدود من الصور عبر رابط خاص",
+    "Casual session photography": "تصوير جلسة كاجوال",
+    "Venue coverage with 2 cameras": "تصوير القاعة بكاميرتين",
+    "Full-day coverage with 2 cameras": "تغطية اليوم كاملًا بكاميرتين",
+    "Additional Services": "خدمات إضافية",
+    "Important Notes": "ملاحظات مهمة",
+    "Next-day photo delivery": "تسليم الصور في اليوم التالي",
+    "Casual photoshoot": "جلسة تصوير كاجوال",
+    "Additional camera — full day": "كاميرا إضافية لليوم كاملًا",
+    "Additional camera — half day": "كاميرا إضافية لنصف اليوم",
+    "Full day is 12 hours; each additional hour is EGP 500": "مدة اليوم الكامل 12 ساعة، وتُحسب كل ساعة إضافية بـ500 جنيه",
+    "Travel outside Alexandria is charged when leaving the city": "تُحسب تكاليف الانتقال خارج الإسكندرية عند مغادرة المدينة",
+    "Location entry fees are not included in the package": "رسوم دخول مواقع التصوير غير مشمولة في الباقة",
+    "Booking is confirmed with an advance deposit": "يُؤكّد الحجز بدفع عربون مقدمًا",
+    "The remaining balance is settled immediately after the wedding": "يُسدّد المبلغ المتبقي مباشرة بعد الفرح",
+    "The deposit is non-refundable if the booking is cancelled": "العربون غير مسترد عند إلغاء الحجز",
+    "Photography packages": "باقات التصوير",
+    "Lead Photographer": "المصور الرئيسي",
+    "Creative Director": "المديرة الإبداعية",
+    "Wedding Storyteller": "راوي قصص الأفراح",
+    "Styling & Detail": "التنسيق والاهتمام بالتفاصيل",
+    "Gallery Editor": "محرر المعرض",
+    "The Team": "فريق العمل",
+    "Meet the team and explore each member's work.": "تعرّف على أعضاء الفريق واستكشف أعمال كل منهم.",
+    "Skip to packages": "تخطي إلى الباقات",
+    "Skip to work": "تخطي إلى الأعمال",
+    "Skip to the team": "تخطي إلى الفريق",
+    "Skip to booking form": "تخطي إلى نموذج الحجز",
+    "Mina Onsy Studio team members' work.": "أعمال أعضاء فريق استوديو مينا أنسي.",
+    "The Mina Onsy Studio team and their work galleries.": "فريق استوديو مينا أنسي ومعارض أعمالهم.",
+    "Mina Onsy, a wedding and event photographer.": "مينا أنسي، مصور أفراح ومناسبات.",
+    "Photography packages from Mina Onsy Studio.": "باقات التصوير من استوديو مينا أنسي.",
+    "Enter the gallery password to view photos.": "أدخل كلمة مرور المعرض لعرض الصور.",
+    "Private album delivery": "تسليم ألبوم خاص",
+    "PRIVATE ALBUM DELIVERY": "تسليم ألبوم خاص",
+    "Client Album": "ألبوم العميل",
+    "Enter the gallery password to view photos.": "أدخل كلمة مرور المعرض لعرض الصور.",
+    "Open gallery": "فتح المعرض",
+    "Team": "الفريق",
+    "Pricing": "الأسعار",
+    "Book": "احجز",
+    "Packages": "الباقات"
   });
 
   const mapEnAr = Object.fromEntries(Object.entries(mapArEn).map(([ar, en]) => [en, ar]));
@@ -578,10 +636,10 @@
   }
 
   function translateAttributes(root) {
-    root.querySelectorAll("[placeholder],[aria-label],[title],[alt]").forEach((element) => {
+    root.querySelectorAll("[placeholder],[aria-label],[title],[alt],meta[name='description']").forEach((element) => {
       if (element.closest && element.closest("#siteLanguageToggle, #mobileMenuDrawer, #mobileMenuToggle, #mobileMenuBackdrop")) return;
       const keys = attrKeys.get(element) || {};
-      ["placeholder", "aria-label", "title", "alt"].forEach((attribute) => {
+      ["placeholder", "aria-label", "title", "alt", ...(element.matches("meta[name='description']") ? ["content"] : [])].forEach((attribute) => {
         if (!element.hasAttribute(attribute)) return;
         const raw = keys[attribute] ?? element.getAttribute(attribute);
         const key = canonicalKey(raw);
@@ -636,7 +694,7 @@
 
   function ensureMobileMenu() {
     const header = document.querySelector(".site-header");
-    if (!header) return null;
+    if (!header || document.body.classList.contains("client-album-page")) return null;
     document.body.classList.add("has-mobile-language-menu");
     let toggle = document.querySelector("#mobileMenuToggle");
     let backdrop = document.querySelector("#mobileMenuBackdrop");
@@ -757,7 +815,7 @@
   }
 
   function isAdminThemeControlDisabled() {
-    return Boolean(document.body?.classList.contains("admin-body") || document.querySelector("body .auth-shell"));
+    return Boolean(document.body?.classList.contains("admin-body") || document.body?.classList.contains("client-album-page") || document.querySelector("body .auth-shell"));
   }
 
   function removeAdminThemeControl() {
