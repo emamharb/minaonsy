@@ -515,3 +515,94 @@ html[data-theme="dark"] body.admin-body #filesGrid > .muted { background: #19181
   body.admin-body .thumb-card, body.admin-body #sectionsManage .trash-row { transition: none !important; }
   body.admin-body .thumb-card:hover { transform: none !important; }
 }
+
+/* Admin brand rail and compact mobile header. */
+body.admin-body .admin-sidebar {
+  background: #211f1c !important;
+  border-inline-end: 1px solid rgba(255,255,255,.08) !important;
+  box-shadow: 12px 0 36px rgba(29,25,20,.045);
+}
+body.admin-body .admin-sidebar .brand {
+  min-height: 46px;
+  color: #f6f1e8 !important;
+  font: 600 1.04rem/1 Georgia, "Times New Roman", serif !important;
+  white-space: nowrap;
+}
+body.admin-body .admin-sidebar .brand-mark { box-shadow: 0 0 0 4px rgba(198,164,92,.12); }
+body.admin-body .admin-sidebar nav { gap: 6px !important; }
+body.admin-body .admin-sidebar nav a {
+  position: relative;
+  min-height: 46px;
+  padding: .7rem .9rem !important;
+  color: #d4cec4 !important;
+  transition: background .18s ease, color .18s ease, transform .18s ease;
+}
+body.admin-body .admin-sidebar nav a i { color: #b6a06f; }
+body.admin-body .admin-sidebar nav a:hover { color: #fff !important; transform: translateX(-2px); }
+body.admin-body .admin-sidebar nav a.active {
+  color: #f4dfae !important;
+  background: linear-gradient(100deg, rgba(198,164,92,.19), rgba(198,164,92,.06)) !important;
+  box-shadow: inset 3px 0 #c6a45c !important;
+}
+body.admin-body .admin-sidebar nav a.active i { color: #e1c37d; }
+body.admin-body .admin-sidebar nav button#logoutBtn { min-height: 44px; border-radius: 8px !important; }
+body.admin-body .admin-sidebar .admin-preferences { gap: 8px; }
+body.admin-body .admin-sidebar .admin-preferences button { box-shadow: inset 0 0 0 1px rgba(255,255,255,.025); }
+body.admin-body .hamburger-btn { border: 1px solid rgba(198,164,92,.36); border-radius: 10px; }
+body.admin-body .hamburger-btn:hover { background: rgba(198,164,92,.12); }
+
+@media (max-width: 768px) {
+  body.admin-body .admin-sidebar {
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) auto auto !important;
+    align-items: center !important;
+    min-height: 78px;
+    height: auto !important;
+    padding: .65rem 1rem !important;
+    gap: .45rem .65rem !important;
+    border-inline: 0 !important;
+    border-bottom: 1px solid rgba(198,164,92,.22) !important;
+    box-shadow: 0 8px 24px rgba(20,18,15,.13);
+  }
+  body.admin-body .admin-sidebar .brand { grid-column: 1; grid-row: 1; min-width: 0; font-size: 1rem !important; }
+  body.admin-body .admin-sidebar > .admin-preferences { grid-column: 2; grid-row: 1; margin: 0 !important; gap: 6px; }
+  body.admin-body .admin-sidebar .admin-language-toggle { min-width: 76px; min-height: 38px; padding-inline: 10px; font-size: .74rem !important; }
+  body.admin-body .admin-sidebar .admin-theme-toggle { width: 38px; min-height: 38px; }
+  body.admin-body .admin-sidebar .hamburger-btn {
+    display: grid !important;
+    place-items: center;
+    grid-column: 3;
+    grid-row: 1;
+    order: initial !important;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    color: #f4ead5;
+  }
+  body.admin-body .admin-sidebar nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    gap: 4px !important;
+    margin: .3rem 0 0 !important;
+    padding: .55rem !important;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 11px;
+    background: #292722 !important;
+    box-shadow: 0 16px 30px rgba(15,13,11,.2);
+  }
+  body.admin-body .admin-sidebar nav.open { display: flex !important; }
+  body.admin-body .admin-sidebar nav a { min-height: 44px; padding-inline: .85rem !important; }
+  body.admin-body .admin-sidebar nav a.active { box-shadow: inset 3px 0 #c6a45c !important; }
+  body.admin-body .admin-sidebar nav button#logoutBtn { margin-top: .35rem; }
+}
+@media (max-width: 380px) {
+  body.admin-body .admin-sidebar { grid-template-columns: minmax(0,1fr) auto auto !important; padding-inline: .75rem !important; }
+  body.admin-body .admin-sidebar .brand { font-size: .9rem !important; }
+  body.admin-body .admin-sidebar .brand-mark { width: 36px; height: 36px; }
+  body.admin-body .admin-sidebar .admin-language-toggle { min-width: 66px; padding-inline: 7px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.admin-body .admin-sidebar nav a { transition: none !important; }
+  body.admin-body .admin-sidebar nav a:hover { transform: none !important; }
+}
