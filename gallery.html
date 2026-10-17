@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>معرض العميل | Mina Onsy Studio</title>
+  <title>Client Gallery | Mina Onsy Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bebas+Neue&family=Cairo:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -944,7 +944,7 @@
   </style>
 </head>
 <body class="client-album-page">
-  <a class="skip-link" href="#clientGalleryGrid">تخطي إلى ملفات المعرض</a>
+  <a class="skip-link" href="#clientGalleryGrid">Skip to gallery files</a>
 
   <header class="site-header">
     <a class="brand" href="index.html">
@@ -952,7 +952,7 @@
       <small>PHOTOGRAPHY</small>
     </a>
 
-    <button class="hamburger" id="hamburgerBtn" aria-label="فتح القائمة">
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
       <i class="fas fa-bars"></i>
     </button>
 
@@ -976,7 +976,7 @@
       </div>
       <div class="album-actions">
         <button id="downloadAll" class="button primary" type="button">
-          <i class="fas fa-download"></i> تحميل الكل
+          <i class="fas fa-download"></i> Download all
         </button>
       </div>
     </section>
@@ -986,21 +986,21 @@
   </main>
 
   <div class="lightbox" id="lightbox" aria-hidden="true">
-    <button class="lightbox-close" type="button" aria-label="إغلاق"><i class="fas fa-times"></i></button>
-    <button class="lightbox-arrow prev" type="button" aria-label="السابق"><i class="fas fa-chevron-right"></i></button>
+    <button class="lightbox-close" type="button" aria-label="Close"><i class="fas fa-times"></i></button>
+    <button class="lightbox-arrow prev" type="button" aria-label="Previous image"><i class="fas fa-chevron-right"></i></button>
     <img id="lightboxImage" alt="">
-    <button class="lightbox-download" type="button" aria-label="تحميل" title="تحميل"><i class="fas fa-download" aria-hidden="true"></i><span class="download-label">تحميل</span></button>
-    <button class="lightbox-arrow next" type="button" aria-label="التالي"><i class="fas fa-chevron-left"></i></button>
+    <button class="lightbox-download" type="button" aria-label="Download" title="Download"><i class="fas fa-download" aria-hidden="true"></i><span class="download-label">Download</span></button>
+    <button class="lightbox-arrow next" type="button" aria-label="Next image"><i class="fas fa-chevron-left"></i></button>
   </div>
 
   <div class="gallery-gate" id="galleryGate" aria-hidden="true">
     <div class="gallery-gate-card">
       <p class="eyebrow">PRIVATE ALBUM DELIVERY</p>
       <h2>Mina Onsy</h2>
-      <p>أدخل كلمة السر الخاصة بالمعرض لعرض الصور.</p>
+      <p>Enter the gallery password to view your photos.</p>
       <form class="gallery-gate-form" id="galleryGateForm">
         <input id="galleryGateInput" inputmode="numeric" maxlength="8" placeholder="••••••••" autocomplete="one-time-code">
-        <button class="button primary" type="submit">فتح المعرض</button>
+        <button class="button primary" type="submit">Open gallery</button>
         <p id="galleryGateStatus" class="gallery-status"></p>
       </form>
     </div>
@@ -1024,7 +1024,7 @@
         for (let mutation of mutations) {
           if (mutation.type === 'characterData' || (mutation.type === 'childList' && mutation.addedNodes.length > 0)) {
             const currentText = titleEl.textContent.trim();
-            if (currentText && currentText !== 'Client Album' && currentText.length > 2) {
+            if (currentText && currentText !== 'Client Album' && currentText !== 'ألبوم العميل' && currentText.length > 2) {
               sessionStorage.setItem(STORAGE_KEY, currentText);
               if (loader) loader.classList.add('hidden');
               titleEl.classList.add('fade-in');
