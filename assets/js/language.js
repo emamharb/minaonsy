@@ -567,7 +567,69 @@
     "Packages": "الباقات"
   });
 
-  const mapEnAr = Object.fromEntries(Object.entries(mapArEn).map(([ar, en]) => [en, ar]));
+  Object.assign(mapArEn, {
+    "الباقة 1": "Package 1",
+    "الباقة 2": "Package 2",
+    "الباقة 3": "Package 3",
+    "الأكثر طلباً": "Most popular",
+    "الباقة VIP": "VIP Package",
+    "ثانياً: عروض البرومو الإضافية (Promo):": "Second: Additional Promo Offers (Promo):",
+    "باكدج 1 (برومو)": "Promo Package 1",
+    "باكدج 2 (برومو)": "Promo Package 2",
+    "بيانات العروسين والتواصل": "Couple Information & Contact",
+    "0 ج.م": "0 EGP",
+    "نوع المناسبة": "Event type",
+    "اختر المناسبة": "Select an event",
+    "تاريخ المناسبة": "Event date",
+    "موعد الزفاف (اختياري)": "Wedding date (optional)",
+    "يظهر في صفحة العميل.": "Shown on the client page.",
+    "رابط مخصص": "Custom link",
+    "ملاحظات": "Notes",
+    "إنشاء المعرض": "Create gallery",
+    "إدارة المعرض | Mina Onsy Studio": "Gallery Management | Mina Onsy Studio",
+    "دخول المشرف | Mina Onsy Studio": "Admin Login | Mina Onsy Studio",
+    "المساحة التخزينية | Mina Onsy Studio": "Storage | Mina Onsy Studio",
+    "إدارة التخزين": "Storage management",
+    "المساحة التخزينية": "Storage",
+    "جاري تحميل المساحة...": "Loading storage...",
+    "المستخدم: --": "Used: --",
+    "المتاح: --": "Available: --",
+    "المعارض المحذوفة": "Deleted galleries",
+    "تم نسخ الرابط وكلمة السر.": "Gallery link and password copied.",
+    "تعذر النسخ تلقائيًا. افتح المعرض وانسخ البيانات يدويًا.": "Could not copy automatically. Open the gallery and copy the details manually.",
+    "هل تريد حذف هذه الصورة نهائيًا؟": "Permanently delete this photo?",
+    "معرض غير صحيح": "Invalid gallery",
+    "معرض محذوف": "Deleted gallery",
+    "هذا المعرض موجود في سلة المهملات. استرجعه أولًا للمتابعة.": "This gallery is in the trash. Restore it before continuing.",
+    "لم يتم العثور على هذا المعرض.": "Gallery not found.",
+    "غير متاحة": "Unavailable",
+    "هل تريد حذف هذا الملف؟": "Delete this file?",
+    "تم النسخ!": "Copied!",
+    "نسخ كلمة السر": "Copy password",
+    "WORKS": "الأعمال",
+    "Wedding Booking": "حجز الزفاف",
+    "Book Now": "احجز الآن",
+    "Admin | Mina Onsy Studio": "الإدارة | Mina Onsy Studio",
+    "Mina Onsy Studio Photography": "تصوير Mina Onsy Studio"
+  });
+
+  // Entries have accumulated in both Arabic→English and English→Arabic order.
+  // Normalize them once so a key written in English can never be mistaken for
+  // an Arabic source key and left untranslated when Arabic is selected.
+  const hasArabic = (value) => /[\u0600-\u06ff]/.test(value);
+  const mapArabicToEnglish = Object.create(null);
+  const mapEnglishToArabic = Object.create(null);
+  Object.entries(mapArEn).forEach(([key, value]) => {
+    const keyIsArabic = hasArabic(key);
+    const valueIsArabic = hasArabic(value);
+    if (keyIsArabic && !valueIsArabic) {
+      mapArabicToEnglish[key] = value;
+      mapEnglishToArabic[value] = key;
+    } else if (!keyIsArabic && valueIsArabic) {
+      mapArabicToEnglish[value] = key;
+      mapEnglishToArabic[key] = value;
+    }
+  });
   const nodeKeys = new WeakMap();
   const attrKeys = new WeakMap();
   let currentLanguage = initialLanguage === "ar" ? "ar" : "en";
@@ -583,7 +645,7 @@
 
   function canonicalKey(value) {
     const text = splitWhitespace(value).core;
-    return Object.prototype.hasOwnProperty.call(mapArEn, text) ? text : (mapEnAr[text] || text);
+    return Object.prototype.hasOwnProperty.call(mapArabicToEnglish, text) ? text : (mapEnglishToArabic[text] || text);
   }
 
   function translateDynamicArabic(value) {
@@ -616,7 +678,7 @@
   function translateValue(value) {
     const parts = splitWhitespace(value);
     const key = canonicalKey(parts.core);
-    const translated = currentLanguage === "en" ? (mapArEn[key] || translateDynamicArabic(key)) : key;
+    const translated = currentLanguage === "en" ? (mapArabicToEnglish[key] || translateDynamicArabic(key)) : key;
     return `${parts.leading}${translated}${parts.trailing}`;
   }
 
@@ -638,7 +700,7 @@
     const key = canonicalKey(raw);
     nodeKeys.set(node, key);
     const parts = splitWhitespace(raw);
-    const translated = currentLanguage === "en" ? (mapArEn[key] || translateDynamicArabic(key)) : key;
+    const translated = currentLanguage === "en" ? (mapArabicToEnglish[key] || translateDynamicArabic(key)) : key;
     const next = `${parts.leading}${translated}${parts.trailing}`;
     if (node.nodeValue !== next) node.nodeValue = next;
   }
@@ -652,7 +714,7 @@
         const raw = keys[attribute] ?? element.getAttribute(attribute);
         const key = canonicalKey(raw);
         keys[attribute] = key;
-        element.setAttribute(attribute, currentLanguage === "en" ? (mapArEn[key] || key) : key);
+        element.setAttribute(attribute, currentLanguage === "en" ? (mapArabicToEnglish[key] || translateDynamicArabic(key)) : key);
       });
       attrKeys.set(element, keys);
     });
