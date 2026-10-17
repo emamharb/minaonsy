@@ -220,18 +220,32 @@ function renderSectionsManage() {
   }
   sectionsManage.innerHTML = "";
   editable.forEach((section) => {
+    const fileCount = currentFiles.filter((file) => normalizeSectionId(file.sectionId) === section.id).length;
     const row = document.createElement("div");
     row.className = "trash-row";
-    row.style.gridTemplateColumns = "1fr auto";
-    row.innerHTML = `
-      <div>
-        <h3>${section.name}</h3>
-        <small>عدد الملفات: ${(currentFiles.filter((file) => normalizeSectionId(file.sectionId) === section.id)).length}</small>
-      </div>
-      <div class="trash-actions">
-        <button class="button secondary" type="button" data-section-edit data-section-id="${section.id}">تعديل الاسم</button>
-        <button class="button danger" type="button" data-section-delete data-section-id="${section.id}">حذف السكشن</button>
-      </div>`;
+    const details = document.createElement("div");
+    details.className = "section-details";
+    const heading = document.createElement("h3");
+    heading.textContent = section.name;
+    const count = document.createElement("small");
+    count.textContent = `${window.SITE_LANGUAGE === "ar" ? "عدد الملفات" : "Files"}: ${fileCount}`;
+    details.append(heading, count);
+    const actions = document.createElement("div");
+    actions.className = "trash-actions";
+    const rename = document.createElement("button");
+    rename.className = "button secondary";
+    rename.type = "button";
+    rename.dataset.sectionEdit = "";
+    rename.dataset.sectionId = section.id;
+    rename.textContent = window.SITE_LANGUAGE === "ar" ? "تعديل الاسم" : "Rename";
+    const remove = document.createElement("button");
+    remove.className = "button danger";
+    remove.type = "button";
+    remove.dataset.sectionDelete = "";
+    remove.dataset.sectionId = section.id;
+    remove.textContent = window.SITE_LANGUAGE === "ar" ? "حذف السكشن" : "Delete section";
+    actions.append(rename, remove);
+    row.append(details, actions);
     sectionsManage.append(row);
   });
 }
@@ -319,9 +333,11 @@ async function loadFiles() {
     if (snap.empty) {
       currentFiles = [];
       grid.innerHTML = `<p class="muted">لا توجد ملفات في هذا المعرض بعد.</p>`;
+      renderSectionsManage();
       return;
     }
     currentFiles = snap.docs.map((fileDoc) => ({ id: fileDoc.id, ...fileDoc.data() }));
+    renderSectionsManage();
     const grouped = currentFiles.reduce((acc, item) => {
       const key = item.sectionId || "default";
       if (!acc[key]) acc[key] = [];
