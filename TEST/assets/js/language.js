@@ -987,7 +987,10 @@
       const adminButton = document.querySelector("[data-admin-theme-toggle]");
       if (adminButton) {
         const target = currentTheme === "dark" ? "light" : "dark";
-        adminButton.innerHTML = target === "light" ? '<i class="fas fa-sun" aria-hidden="true"></i>' : '<i class="fas fa-moon" aria-hidden="true"></i>';
+        if (adminButton.dataset.iconTheme !== target) {
+          adminButton.innerHTML = target === "light" ? '<i class="fas fa-sun" aria-hidden="true"></i>' : '<i class="fas fa-moon" aria-hidden="true"></i>';
+          adminButton.dataset.iconTheme = target;
+        }
         adminButton.setAttribute("aria-label", target === "light" ? "Switch to light theme" : "Switch to dark theme");
         adminButton.title = target === "light" ? "Switch to light theme" : "Switch to dark theme";
         if (!adminButton.dataset.bound) {
