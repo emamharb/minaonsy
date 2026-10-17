@@ -556,6 +556,7 @@
     "Enter the gallery password to view photos.": "أدخل كلمة مرور المعرض لعرض الصور.",
     "Private album delivery": "تسليم ألبوم خاص",
     "PRIVATE ALBUM DELIVERY": "تسليم ألبوم خاص",
+    "Private gallery": "معرض خاص",
     "Client Album": "ألبوم العميل",
     "Enter the gallery password to view photos.": "أدخل كلمة مرور المعرض لعرض الصور.",
     "Open gallery": "فتح المعرض",
