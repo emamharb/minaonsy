@@ -19,10 +19,16 @@ async function init() {
     gsap.ticker.lagSmoothing(0);
 
     const hero = document.querySelector(".compact-hero");
+    const editorialCopy = hero?.querySelector(".editorial-copy");
+    const editorialPhotos = hero?.querySelectorAll(".editorial-photo");
     const heroLogo = hero?.querySelector(".hero-logo");
-    const heroActions = hero?.querySelectorAll(".hero-actions .button");
-    if (heroLogo) gsap.fromTo(heroLogo, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.9, ease: "power2.out", delay: 0.08 });
-    if (heroActions?.length) gsap.fromTo(heroActions, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.55, stagger: 0.08, ease: "power2.out", delay: 0.3 });
+    const heroActions = hero?.querySelectorAll(".hero-actions .button, .hero-actions .editorial-text-link");
+    if (editorialCopy) gsap.fromTo(editorialCopy, { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: 0.85, ease: "power2.out", delay: 0.08 });
+    if (editorialPhotos?.length) gsap.fromTo(editorialPhotos, { autoAlpha: 0, y: 20, rotate: 0 }, { autoAlpha: 1, y: 0, rotate: (index) => index === 1 ? 2.5 : index === 2 ? -2 : 0, duration: 0.8, stagger: 0.12, ease: "power2.out", delay: 0.16 });
+    if (!editorialCopy && heroLogo) gsap.fromTo(heroLogo, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.9, ease: "power2.out", delay: 0.08 });
+    if (heroActions?.length) gsap.fromTo(heroActions, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.55, stagger: 0.08, ease: "power2.out", delay: editorialCopy ? 0.36 : 0.3 });
+    const statement = document.querySelector(".editorial-statement");
+    if (statement) gsap.fromTo(statement.children, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.65, stagger: 0.1, ease: "power2.out", scrollTrigger: { trigger: statement, start: "top 82%", once: true } });
 
     const title = document.querySelector(".portfolio-title");
     if (title) gsap.fromTo(title, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power2.out", scrollTrigger: { trigger: title, start: "top 88%", once: true } });

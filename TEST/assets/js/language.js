@@ -10,13 +10,14 @@
     storedLanguage = "en";
   }
   const initialLanguage = storedLanguage;
-  let storedTheme = "dark";
+  const defaultTheme = /(?:^|\/)admin(?:\/|\.html$)/i.test(window.location.pathname) ? "dark" : "light";
+  let storedTheme = defaultTheme;
   try {
-    storedTheme = localStorage.getItem(THEME_STORAGE_KEY) || "dark";
+    storedTheme = localStorage.getItem(THEME_STORAGE_KEY) || defaultTheme;
   } catch (_) {
-    storedTheme = "dark";
+    storedTheme = defaultTheme;
   }
-  const initialTheme = storedTheme === "light" ? "light" : "dark";
+  const initialTheme = storedTheme === "dark" ? "dark" : "light";
   const mapArEn = {
     "إدارة البورتفوليو | Mina Onsy Studio": "Portfolio Management | Mina Onsy Studio",
     "إدارة معرض | Mina Onsy Studio": "Gallery Management | Mina Onsy Studio",
@@ -611,7 +612,24 @@
     "Wedding Booking": "حجز الزفاف",
     "Book Now": "احجز الآن",
     "Admin | Mina Onsy Studio": "الإدارة | Mina Onsy Studio",
-    "Mina Onsy Studio Photography": "تصوير Mina Onsy Studio"
+    "Mina Onsy Studio Photography": "تصوير Mina Onsy Studio",
+    "WEDDING & EVENT PHOTOGRAPHY": "تصوير الأفراح والمناسبات",
+    "Wedding stories,": "حكايات زفاف،",
+    "held forever.": "تبقى للأبد.",
+    "Honest moments, artfully told — photographs that bring you back to how it felt.": "لحظات صادقة نحكيها بفن؛ صور تعيدك إلى إحساسها من جديد.",
+    "Explore the work": "استكشف الأعمال",
+    "Reserve your date": "احجز موعدك",
+    "Selected wedding photographs": "صور مختارة من حفلات الزفاف",
+    "Bride and groom together by the sea": "عروسان معًا بجوار البحر",
+    "A quiet wedding portrait with a bouquet": "صورة زفاف هادئة مع باقة ورد",
+    "Newlyweds among palm trees": "عروسان بين أشجار النخيل",
+    "ALEXANDRIA · EGYPT": "الإسكندرية · مصر",
+    "A DAY THAT FEELS LIKE YOU": "يوم يشبه حكايتكما",
+    "Less posing.": "وضعيات أقل.",
+    "More being there.": "وحضور أكبر.",
+    "From the first details to the last dance, we make space for the moments that matter — and turn them into photographs you can return to.": "من أول التفاصيل حتى الرقصة الأخيرة، نترك مساحة للحظات الأهم ونحفظها في صور تعودان إليها دائمًا.",
+    "Meet the people behind the camera": "تعرّف على فريق التصوير",
+    "Studio approach": "نهج الاستوديو"
   });
 
   // Entries have accumulated in both Arabic→English and English→Arabic order.
