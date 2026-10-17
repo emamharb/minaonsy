@@ -211,7 +211,7 @@ function groupFilesBySection(items) {
   }, {});
 }
 
-function renderSectionsManage() {
+function renderSectionsManage(groupedFiles = null) {
   if (!sectionsManage) return;
   const editable = sections.filter((section) => !section.isDefault);
   if (!editable.length) {
@@ -220,7 +220,9 @@ function renderSectionsManage() {
   }
   sectionsManage.innerHTML = "";
   editable.forEach((section) => {
-    const fileCount = currentFiles.filter((file) => normalizeSectionId(file.sectionId) === section.id).length;
+    const fileCount = groupedFiles
+      ? (groupedFiles[section.id] || []).length
+      : currentFiles.filter((file) => normalizeSectionId(file.sectionId) === section.id).length;
     const row = document.createElement("div");
     row.className = "trash-row";
     const details = document.createElement("div");
@@ -337,13 +339,13 @@ async function loadFiles() {
       return;
     }
     currentFiles = snap.docs.map((fileDoc) => ({ id: fileDoc.id, ...fileDoc.data() }));
-    renderSectionsManage();
     const grouped = currentFiles.reduce((acc, item) => {
       const key = item.sectionId || "default";
       if (!acc[key]) acc[key] = [];
       acc[key].push(item);
       return acc;
     }, {});
+    renderSectionsManage(grouped);
     const sectionOrder = sections.length ? sections : [defaultSection()];
     sectionOrder.forEach((section) => {
       const items = grouped[section.id] || [];
