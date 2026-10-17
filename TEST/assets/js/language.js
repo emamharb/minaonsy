@@ -714,6 +714,7 @@
   function translateTextNode(node) {
     if (!node || !node.parentElement || /^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE)$/.test(node.parentElement.tagName)) return;
     if (node.parentElement.closest && node.parentElement.closest("#siteLanguageToggle, #mobileMenuDrawer, #mobileMenuToggle, #mobileMenuBackdrop")) return;
+    if (node.parentElement.closest && node.parentElement.closest(".site-header .main-nav a[data-label-ar][data-label-en]")) return;
     const raw = nodeKeys.has(node) ? nodeKeys.get(node) : node.nodeValue;
     if (!raw || !splitWhitespace(raw).core) return;
     const key = canonicalKey(raw);
