@@ -853,12 +853,48 @@
         padding: 20px 14px;
       }
     }
-    #siteDesktopControls {
-      position: fixed;
-      top: 12px;
-      right: 12px;
-      z-index: 120;
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      min-height: 88px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      padding: 14px clamp(18px, 4vw, 56px);
+      background: #1d1c1a;
+      border-bottom: 1px solid rgba(242, 239, 233, .1);
+      box-shadow: none;
     }
+    .site-header .brand {
+      grid-column: 2;
+      justify-self: center;
+      display: grid;
+      gap: 2px;
+      color: #8a867e;
+      text-align: center;
+      direction: ltr;
+    }
+    .site-header .brand-logo { width: 144px; }
+    .site-header .brand small { font-size: 8px; }
+    .site-header .main-nav {
+      grid-column: 1;
+      justify-self: start;
+      align-items: center;
+      gap: clamp(12px, 2vw, 24px);
+      margin: 0;
+    }
+    .site-header .main-nav a { color: #8a867e; font-size: 12px; }
+    .site-header .main-nav a:hover { color: #f2efe9; }
+    .site-header .main-nav a.nav-cta {
+      padding: 9px 16px;
+      border: 1px solid rgba(242, 239, 233, .28);
+      border-radius: 0;
+      background: #f2efe9;
+      color: #111;
+    }
+    .site-header .hamburger { display: none; }
+    #siteDesktopControls { grid-column: 3; justify-self: end; position: static; z-index: 120; }
     #siteLanguageToggle.language-switcher {
       min-height: 40px;
       padding: 8px 14px;
@@ -868,6 +904,37 @@
       color: #222;
       font: 700 13px "Cairo", sans-serif;
       cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      .site-header { display: flex; justify-content: center; min-height: 76px; padding: 12px 62px; }
+      .site-header .brand { margin: 0 auto; }
+      .site-header .hamburger {
+        position: absolute;
+        inset-inline-start: 16px;
+        top: 50%;
+        display: grid;
+        width: 42px;
+        height: 42px;
+        place-items: center;
+        transform: translateY(-50%);
+        border: 1px solid rgba(201, 121, 63, .72);
+        border-radius: 50%;
+        background: #101613;
+        color: #f2efe9;
+      }
+      .site-header .main-nav {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+        width: 100%;
+        margin: 0;
+        padding: 12px 18px 18px;
+        border-top: 1px solid #262521;
+        background: #1d1c1a;
+      }
+      .site-header .main-nav a { color: #f2efe9; }
+      #siteDesktopControls { position: fixed; top: auto; right: auto; inset-inline-end: 12px; bottom: calc(5rem + env(safe-area-inset-bottom)); }
     }
   </style>
 </head>
@@ -885,9 +952,11 @@
     </button>
 
     <nav class="main-nav" id="mainNav">
-      <a href="index.html">الرئيسية</a>
-      <a href="pricing.html">الباقات</a>
-      <a href="booking.html">حجز</a>
+      <a href="index.html">Home</a>
+      <a href="index.html#portfolio">Work</a>
+      <a href="team.html">Team</a>
+      <a href="pricing.html">Pricing</a>
+      <a class="nav-cta" href="booking.html">Book</a>
     </nav>
   </header>
 
