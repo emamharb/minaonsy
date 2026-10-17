@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Packages | Mina Onsy Studio</title>
+  <meta name="description" content="Photography packages from Mina Onsy Studio.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bebas+Neue&family=Cairo:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css?v=theme18">
+  <style>
+    .pricing-new-page { background: var(--mono-dark); color: var(--mono-text); }
+    .pricing-new-shell { width: min(1220px, calc(100% - 36px)); margin: 0 auto; padding: clamp(46px, 7vw, 92px) 0 88px; }
+    .pricing-new-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, .42fr); gap: clamp(28px, 7vw, 100px); align-items: end; padding-bottom: clamp(54px, 8vw, 100px); border-bottom: 1px solid var(--mono-line); }
+    .pricing-new-kicker { display: flex; align-items: center; gap: 14px; margin: 0 0 20px; color: var(--accent); font-family: var(--code); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; }
+    .pricing-new-kicker::before { content: ''; width: 34px; height: 1px; background: var(--accent); }
+    .pricing-new-hero h1 { max-width: 760px; margin: 0; color: var(--mono-text); font-family: var(--display); font-size: clamp(70px, 12vw, 150px); font-weight: 400; line-height: .86; letter-spacing: .01em; }
+    .pricing-new-hero-copy { max-width: 330px; margin: 0 0 4px; color: var(--mono-muted); font-size: 16px; line-height: 1.9; }
+    .pricing-new-hero-copy strong { display: block; margin-top: 16px; color: var(--mono-text); font-family: var(--latin); font-size: 13px; letter-spacing: .06em; direction: ltr; }
+    .pricing-new-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: clamp(52px, 8vw, 90px); background: transparent; border: 0; }
+    .pricing-new-card { position: relative; display: flex; min-height: 390px; flex-direction: column; padding: clamp(24px, 4vw, 42px); background: #11110f; border: 1px solid var(--mono-line); transition: background .2s ease, border-color .2s ease, transform .2s ease; }
+    .pricing-new-card:hover { background: #171613; border-color: rgba(201,121,63,.5); transform: translateY(-2px); }
+    .pricing-new-card.is-featured { background: linear-gradient(140deg, #17130e 0%, #11110f 64%); border-color: rgba(201,121,63,.5); }
+    .pricing-new-card.is-featured::before { content: ''; position: absolute; inset-block: 0; inset-inline-start: 0; width: 3px; background: var(--accent); }
+    .pricing-new-card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 28px; margin-bottom: 22px; }
+    .pricing-new-card-index { color: var(--mono-muted); direction: ltr; unicode-bidi: isolate; font-family: var(--code); font-size: 11px; letter-spacing: .08em; }
+    .pricing-new-badge { padding: 5px 9px; border: 1px solid rgba(201,121,63,.5); color: var(--accent); font-family: var(--code); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .pricing-new-card-intro { display: grid; gap: 12px; padding-bottom: 20px; border-bottom: 1px solid var(--mono-line); }
+    .pricing-new-card h3 { margin: 0; color: var(--mono-text); font-family: var(--display); font-size: clamp(36px, 4.5vw, 54px); font-weight: 400; line-height: 1; }
+    .pricing-new-card-price { width: max-content; max-width: 100%; margin: 0; color: var(--accent); direction: ltr; text-align: start; font-family: var(--latin); font-size: clamp(21px, 2.4vw, 25px); font-weight: 700; font-variant-numeric: tabular-nums; }
+    .pricing-new-card ul { display: grid; gap: 12px; margin: 22px 0 auto; padding: 0; list-style: none; color: #c6c1b9; line-height: 1.65; }
+    .pricing-new-card li { position: relative; padding-inline-start: 23px; }
+    .pricing-new-card li::before { content: ''; position: absolute; top: .3em; inset-inline-start: 0; width: 14px; height: 14px; border: 1px solid rgba(201,121,63,.62); border-radius: 50%; }
+    .pricing-new-card li::after { content: ''; position: absolute; top: .67em; inset-inline-start: 4px; width: 6px; height: 3px; border-inline-start: 1.5px solid var(--accent); border-bottom: 1.5px solid var(--accent); transform: rotate(-45deg); }
+    .pricing-package-cta { display: inline-flex; align-self: stretch; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; margin-top: 24px; padding: 0 16px; border: 1px solid rgba(201,121,63,.7); color: var(--mono-text); font-size: 13px; font-weight: 700; text-decoration: none; transition: color .2s ease, background .2s ease, border-color .2s ease; }
+    .pricing-package-cta::after { content: '↗'; color: var(--accent); font-size: 17px; transition: transform .2s ease; }
+    .pricing-package-cta:hover, .pricing-package-cta:focus-visible { background: var(--accent); border-color: var(--accent); color: #111; }
+    .pricing-package-cta:hover::after, .pricing-package-cta:focus-visible::after { color: #111; transform: translate(2px, -2px); }
+    .pricing-new-details { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(30px, 6vw, 86px); padding-top: clamp(58px, 8vw, 96px); }
+    .pricing-new-detail { padding-top: 18px; border-top: 1px solid var(--mono-line); }
+    .pricing-new-detail h2 { margin: 0 0 26px; color: var(--mono-text); font-family: var(--display); font-size: clamp(42px, 5vw, 58px); font-weight: 400; line-height: .95; }
+    .pricing-new-detail ul { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+    .pricing-new-detail li { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; padding: 13px 0; border-bottom: 1px solid #242321; color: #c7c1b8; line-height: 1.65; }
+    .pricing-new-detail li:last-child { border-bottom: 0; }
+    .pricing-new-detail li strong { color: var(--mono-text); direction: ltr; font-family: var(--latin); font-size: 14px; white-space: nowrap; }
+    .pricing-new-detail.notes li { display: block; }
+    @media (max-width: 760px) {
+      .pricing-new-shell { width: min(100% - 28px, 620px); padding-top: 44px; }
+      .pricing-new-hero { grid-template-columns: 1fr; gap: 30px; align-items: start; padding-bottom: 58px; }
+      .pricing-new-hero h1 { font-size: clamp(68px, 20vw, 108px); }
+      .pricing-new-hero-copy { max-width: 100%; }
+      .pricing-new-cards { grid-template-columns: 1fr; }
+      .pricing-new-card { min-height: 340px; }
+      .pricing-new-details { grid-template-columns: 1fr; gap: 48px; }
+      .pricing-new-hero h1 { font-size: clamp(56px, 17vw, 96px); line-height: .98; overflow-wrap: anywhere; }
+      .pricing-new-card { min-height: 0; }
+      .pricing-new-card-top { margin-bottom: 18px; }
+      .pricing-new-card-intro { gap: 10px; padding-bottom: 16px; }
+      .pricing-new-card h3 { font-size: clamp(34px, 10vw, 46px); }
+      .pricing-new-card ul { gap: 10px; margin-top: 18px; }
+      .pricing-package-cta { min-height: 48px; margin-top: 22px; }
+    }
+    @media (max-width: 430px) {
+      .pricing-new-shell { width: min(100% - 24px, 620px); }
+      .pricing-new-card { padding: 24px 20px; }
+      .pricing-new-card-top { margin-bottom: 16px; }
+      .pricing-new-detail li { align-items: start; flex-direction: column; gap: 3px; }
+    }
+    @media (max-width: 760px) {
+      html[dir="rtl"] .pricing-new-hero h1 { font-size: clamp(44px, 13vw, 76px); line-height: 1.2; }
+      .pricing-new-hero-copy { font-size: 15px; line-height: 1.75; text-wrap: pretty; }
+      .pricing-new-detail li { line-height: 1.6; }
+    }
+  </style>
+</head>
+<body class="pricing-new-page">
+  <a class="skip-link" href="#pricingContent">Skip to packages</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Mina Onsy Studio">
+      <img class="brand-logo" src="assets/photos/LW.png" data-light-logo="assets/photos/LB.png" alt="Mina Onsy Studio">
+      <small>PHOTOGRAPHY</small>
+    </a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="index.html" data-label-ar="الرئيسية" data-label-en="Home">Home</a>
+      <a href="index.html#portfolio" data-label-ar="الأعمال" data-label-en="Work">Work</a>
+      <a href="team.html" data-label-ar="الفريق" data-label-en="Team">Team</a>
+      <a href="pricing.html" aria-current="page" data-label-ar="الأسعار" data-label-en="Pricing">Pricing</a>
+      <a class="nav-cta" href="booking.html" data-label-ar="احجز" data-label-en="Book">Book</a>
+    </nav>
+  </header>
+  <main class="pricing-new-shell" id="pricingContent">
+    <section class="pricing-new-hero">
+      <div>
+        <p class="pricing-new-kicker">Mina Onsy Studio Photography</p>
+        <h1>Packages</h1>
+      </div>
+      <div class="pricing-new-hero-copy">
+        Clear packages to document your day, from the first details to the final image.
+        <strong>WEDDING &amp; EVENT PHOTOGRAPHY</strong>
+      </div>
+    </section>
+    <section class="pricing-new-cards" aria-label="Photography packages">
+      <article class="pricing-new-card">
+        <div class="pricing-new-card-top"><span class="pricing-new-card-index">01 / 04</span></div>
+        <div class="pricing-new-card-intro">
+          <h3>Package One</h3>
+          <p class="pricing-new-card-price">EGP 6,000</p>
+        </div>
+        <ul>
+          <li>Getting-ready coverage</li>
+          <li>Wedding session photography</li>
+          <li>Venue coverage</li>
+          <li>Unlimited photos delivered via link</li>
+        </ul>
+        <a class="pricing-package-cta" href="booking.html?package=standard">Book this package</a>
+      </article>
+      <article class="pricing-new-card">
+        <div class="pricing-new-card-top"><span class="pricing-new-card-index">02 / 04</span></div>
+        <div class="pricing-new-card-intro">
+          <h3>Package Two</h3>
+          <p class="pricing-new-card-price">EGP 7,500</p>
+        </div>
+        <ul>
+          <li>Getting-ready coverage</li>
+          <li>Wedding session photography</li>
+          <li>Venue coverage</li>
+          <li>Unlimited photos delivered via link</li>
+          <li>Album (30×45)</li>
+          <li>Portrait (50×70)</li>
+        </ul>
+        <a class="pricing-package-cta" href="booking.html?package=premium">Book this package</a>
+      </article>
+      <article class="pricing-new-card">
+        <div class="pricing-new-card-top"><span class="pricing-new-card-index">03 / 04</span></div>
+        <div class="pricing-new-card-intro">
+          <h3>Package Three</h3>
+          <p class="pricing-new-card-price">EGP 9,500</p>
+        </div>
+        <ul>
+          <li>Casual session photography</li>
+          <li>Getting-ready coverage</li>
+          <li>Wedding session photography</li>
+          <li>Venue coverage with 2 cameras</li>
+          <li>Unlimited photos delivered via link</li>
+          <li>Album (30×80)</li>
+          <li>Portrait (50×70)</li>
+        </ul>
+        <a class="pricing-package-cta" href="booking.html?package=luxury">Book this package</a>
+      </article>
+      <article class="pricing-new-card is-featured">
+        <div class="pricing-new-card-top"><span class="pricing-new-card-index">04 / 04</span><span class="pricing-new-badge">Most popular</span></div>
+        <div class="pricing-new-card-intro">
+          <h3>VIP Package</h3>
+          <p class="pricing-new-card-price">EGP 11,500</p>
+        </div>
+        <ul>
+          <li>Casual session photography</li>
+          <li>Getting-ready coverage</li>
+          <li>Wedding session photography</li>
+          <li>Venue coverage</li>
+          <li>Full-day coverage with 2 cameras</li>
+          <li>Unlimited photos delivered via link</li>
+          <li>Mobile reel video (full day)</li>
+          <li>Album (30×80)</li>
+          <li>Portrait (50×70)</li>
+        </ul>
+        <a class="pricing-package-cta" href="booking.html?package=vip">Book this package</a>
+      </article>
+    </section>
+    <section class="pricing-new-details">
+      <article class="pricing-new-detail">
+        <h2>Additional Services</h2>
+        <ul>
+          <li><span>Next-day photo delivery</span><strong>EGP 500</strong></li>
+          <li><span>Casual photoshoot</span><strong>EGP 2,500</strong></li>
+          <li><span>Mobile reel video (full day)</span><strong>EGP 2,000</strong></li>
+          <li><span>Additional camera — full day</span><strong>EGP 2,000</strong></li>
+          <li><span>Additional camera — half day</span><strong>EGP 1,500</strong></li>
+        </ul>
+      </article>
+      <article class="pricing-new-detail notes">
+        <h2>Important Notes</h2>
+        <ul>
+          <li>Full day is 12 hours; each additional hour is EGP 500</li>
+          <li>Travel outside Alexandria is charged when leaving the city</li>
+          <li>Location entry fees are not included in the package</li>
+          <li>Booking is confirmed with an advance deposit</li>
+          <li>The remaining balance is settled immediately after the wedding</li>
+          <li>The deposit is non-refundable if the booking is cancelled</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-brand"><img class="brand-logo" src="assets/photos/LW.png" data-light-logo="assets/photos/LB.png" alt="Mina Onsy Studio"></div>
+    <div class="footer-links">
+      <a href="https://wa.me/201061814314">WhatsApp</a>
+      <a href="booking.html">Book Now</a>
+    </div>
+  </footer>
+  <a class="floating-whatsapp" href="https://wa.me/201061814314" target="_blank" rel="noreferrer" aria-label="Contact us on WhatsApp">
+    <img src="assets/photos/whatsapp.png" alt="WhatsApp">
+  </a>
+  <script src="assets/js/language.js?v=language9"></script>
+  <script type="module" src="assets/js/scroll-effects.js"></script>
+</body>
+</html>

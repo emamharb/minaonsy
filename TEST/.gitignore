@@ -1,0 +1,14 @@
+# Firebase deployment configuration and access rules (keep local)
+firebase.json
+firestore.rules
+storage.rules
+cors.json
+.firebaserc
+
+# Local credentials and generated state
+.env
+.env.*
+!.env.example
+service-account*.json
+*-service-account*.json
+.firebase/

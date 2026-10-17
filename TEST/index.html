@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mina Onsy Studio</title>
+  <meta name="description" content="Mina Onsy, a wedding and event photographer.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bebas+Neue&family=Cairo:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css?v=theme18">
+</head>
+<body>
+  <a class="skip-link" href="#portfolio">تخطي إلى المعرض</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Mina Onsy Studio">
+      <img class="brand-logo" src="assets/photos/LW.png" data-light-logo="assets/photos/LB.png" alt="Mina Onsy Studio">
+      <small>PHOTOGRAPHY</small>
+    </a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="index.html" data-label-ar="الرئيسية" data-label-en="Home">Home</a>
+      <a href="index.html#portfolio" aria-current="page" data-label-ar="الأعمال" data-label-en="Work">Work</a>
+      <a href="team.html" data-label-ar="الفريق" data-label-en="Team">Team</a>
+      <a href="pricing.html" data-label-ar="الأسعار" data-label-en="Pricing">Pricing</a>
+      <a class="nav-cta" href="booking.html" data-label-ar="احجز" data-label-en="Book">Book</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero compact-hero">
+      <div class="hero-content">
+        <img class="hero-logo" src="assets/photos/LW.png" data-light-logo="assets/photos/LB.png" alt="Mina Onsy Studio">
+        <div class="hero-actions">
+          <a class="button ghost" href="team.html">Team</a>
+          <a class="button ghost" href="pricing.html">Pricing</a>
+          <a class="button primary" href="booking.html">Book</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="portfolio" class="portfolio-section" aria-label="معرض الأعمال">
+      <h2 class="portfolio-title">Selected Work</h2>
+      <div id="portfolioGrid" class="masonry-grid"></div>
+      <div class="portfolio-more">
+        <button id="loadMorePortfolio" class="button portfolio-more-button" type="button" hidden>عرض المزيد</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-brand"><img class="brand-logo" src="assets/photos/LW.png" data-light-logo="assets/photos/LB.png" alt="Mina Onsy Studio"></div>
+    <div class="footer-links">
+      <a href="https://wa.me/201061814314">واتساب</a>
+      <a href="https://www.instagram.com/minaonsy_?igsh=MXBubDdhejl0bTJkMQ%3D%3D&utm_source=qr" target="_blank" rel="noreferrer">انستجرام</a>
+      <a href="mailto:hello@minaonsy.com">hello@minaonsy.com</a>
+    </div>
+  </footer>
+
+  <a class="floating-whatsapp" href="https://wa.me/201061814314" target="_blank" rel="noreferrer" aria-label="تواصل واتساب">
+    <img src="assets/photos/whatsapp.png" alt="WhatsApp">
+  </a>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" type="button" aria-label="إغلاق">×</button>
+    <button class="lightbox-arrow prev" type="button" aria-label="الصورة السابقة">‹</button>
+    <img id="lightboxImage" alt="">
+    <button class="lightbox-arrow next" type="button" aria-label="الصورة التالية">›</button>
+  </div>
+
+  
+  
+  
+  <script src="assets/js/language.js?v=language9"></script>
+  <script src="assets/photos/manifest.js"></script>
+  
+  
+  
+  <script type="module" src="assets/js/scroll-effects.js"></script>
+  
+  
+  
+  <script type="module" src="assets/js/portfolio.js"></script>
+</body>
+</html>
