@@ -1,6 +1,6 @@
 import app from "./firebase-config.js";
 import { requireAdmin } from "./admin-auth.js";
-import { getFirestore, collection, setDoc, serverTimestamp, Timestamp, getDocs, getDoc, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { getFirestore, collection, setDoc, serverTimestamp, Timestamp, getDocs, getDoc, query, orderBy, deleteDoc, doc, where, limit } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
 
 requireAdmin();
@@ -17,6 +17,9 @@ const regenAccessCodeBtn = document.getElementById("regenAccessCodeBtn");
 let galleries = [];
 let slugManual = false;
 let slugPreviewToken = 0;
+let renderGeneration = 0;
+const galleryCoverCache = new Map();
+const galleryCoverRequests = new Map();
 
 function generateAccessCode() {
   return String(Math.floor(10000000 + Math.random() * 90000000));
@@ -96,7 +99,7 @@ function isExpired(item) {
 
 function formatDate(ts) {
   const date = dateValue(ts);
-  return date ? date.toLocaleDateString("ar-EG") : "بدون تاريخ";
+  return date ? date.toLocaleDateString(window.SITE_LANGUAGE === "ar" ? "ar-EG" : "en-US") : "بدون تاريخ";
 }
 
 function publicLink(slug) {
@@ -125,23 +128,98 @@ async function moveGalleryToTrash(item) {
   }
 }
 
+function getGalleryCover(item) {
+  if (galleryCoverCache.has(item.id)) return Promise.resolve(galleryCoverCache.get(item.id));
+  if (galleryCoverRequests.has(item.id)) return galleryCoverRequests.get(item.id);
+  const request = getDocs(query(
+    collection(db, "galleries", item.id, "files"),
+    where("type", "==", "image"),
+    limit(1)
+  )).then((snap) => {
+    const file = snap.docs[0]?.data();
+    const url = file?.previewUrl || file?.url || "";
+    if (url) galleryCoverCache.set(item.id, url);
+    return url;
+  }).catch(() => "").finally(() => galleryCoverRequests.delete(item.id));
+  galleryCoverRequests.set(item.id, request);
+  return request;
+}
+
+async function loadGalleryCover(item, cover, generation) {
+  const url = await getGalleryCover(item);
+  if (!url || generation !== renderGeneration || !cover.isConnected) return;
+  const image = document.createElement("img");
+  image.alt = "";
+  image.loading = "lazy";
+  image.decoding = "async";
+  image.addEventListener("error", () => {
+    image.remove();
+    cover.classList.add("is-empty");
+  }, { once: true });
+  image.src = url;
+  cover.replaceChildren(image);
+  cover.classList.remove("is-empty");
+}
+
 function render() {
   const term = search.value.trim().toLowerCase();
   const rows = galleries.filter((item) => `${item.clientName} ${formatDate(item.eventDate)}`.toLowerCase().includes(term));
+  const generation = ++renderGeneration;
   list.innerHTML = "";
   rows.forEach((item) => {
     const row = document.createElement("div");
     row.className = `gallery-row${isExpired(item) ? " expired" : ""}`;
-    row.innerHTML = `
-      <div><strong>${item.clientName}</strong><div class="muted">${isExpired(item) ? "منذ أكثر من 3 أشهر" : item.eventType || ""}</div></div>
-      <div>${formatDate(item.eventDate)}</div>
-      <div>${item.fileCount || 0} ملف</div>
-      <div class="thumb-actions">
-        <a class="button secondary" href="gallery-manage.html?id=${item.id}">إدارة</a>
-        <button class="button secondary" type="button" data-copy="${item.slug}">نسخ</button>
-        <button class="button danger" type="button" data-delete="${item.id}">سلة المهملات</button>
-      </div>
-      ${item.notes ? `<div class="gallery-notes-row">${item.notes}</div>` : ""}`;
+    const cover = document.createElement("div");
+    cover.className = "gallery-cover is-empty";
+    cover.setAttribute("aria-hidden", "true");
+    const coverIcon = document.createElement("i");
+    coverIcon.className = `fas ${item.fileCount ? "fa-images" : "fa-camera"}`;
+    cover.append(coverIcon);
+
+    const identity = document.createElement("div");
+    identity.className = "gallery-identity";
+    const name = document.createElement("strong");
+    name.textContent = item.clientName || "بدون اسم";
+    const detail = document.createElement("div");
+    detail.className = "muted";
+    detail.textContent = isExpired(item) ? "منذ أكثر من 3 أشهر" : item.eventType || "";
+    identity.append(name, detail);
+
+    const meta = document.createElement("div");
+    meta.className = "gallery-row-meta";
+    const date = document.createElement("span");
+    date.innerHTML = '<i class="far fa-calendar" aria-hidden="true"></i>';
+    date.append(document.createTextNode(formatDate(item.eventDate)));
+    const count = document.createElement("span");
+    count.innerHTML = '<i class="far fa-images" aria-hidden="true"></i>';
+    count.append(document.createTextNode(`${item.fileCount || 0} ملف`));
+    meta.append(date, count);
+
+    const actions = document.createElement("div");
+    actions.className = "thumb-actions";
+    const manage = document.createElement("a");
+    manage.className = "button secondary";
+    manage.href = `gallery-manage.html?id=${encodeURIComponent(item.id)}`;
+    manage.textContent = "إدارة";
+    const copy = document.createElement("button");
+    copy.className = "button secondary";
+    copy.type = "button";
+    copy.dataset.copy = item.slug || item.id;
+    copy.textContent = "نسخ";
+    const trash = document.createElement("button");
+    trash.className = "button danger";
+    trash.type = "button";
+    trash.dataset.delete = item.id;
+    trash.textContent = "سلة المهملات";
+    actions.append(manage, copy, trash);
+
+    row.append(cover, identity, meta, actions);
+    if (item.notes) {
+      const notes = document.createElement("div");
+      notes.className = "gallery-notes-row";
+      notes.textContent = item.notes;
+      row.append(notes);
+    }
     row.querySelector("[data-copy]")?.addEventListener("click", async () => {
       try {
         const message = `link : ${publicLink(item.id)}\npassword : ${item.accessCode || ""}`;
@@ -153,6 +231,7 @@ function render() {
     });
     row.querySelector("[data-delete]")?.addEventListener("click", () => moveGalleryToTrash(item));
     list.append(row);
+    loadGalleryCover(item, cover, generation);
   });
 }
 
@@ -218,6 +297,7 @@ form.addEventListener("submit", async (event) => {
 });
 
 search.addEventListener("input", render);
+window.addEventListener("site-language-change", render);
 form.querySelector("[name='clientName']")?.addEventListener("input", syncSlugPreview);
 regenAccessCodeBtn?.addEventListener("click", () => {
   if (accessCodeInput) accessCodeInput.value = generateAccessCode();
