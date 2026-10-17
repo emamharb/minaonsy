@@ -865,6 +865,7 @@
       background: #1d1c1a;
       border-bottom: 1px solid rgba(242, 239, 233, .1);
       box-shadow: none;
+      direction: ltr;
     }
     .site-header .brand {
       grid-column: 2;
@@ -883,6 +884,7 @@
       align-items: center;
       gap: clamp(12px, 2vw, 24px);
       margin: 0;
+      direction: ltr;
     }
     .site-header .main-nav a { color: #8a867e; font-size: 12px; }
     .site-header .main-nav a:hover { color: #f2efe9; }
@@ -934,7 +936,7 @@
         background: #1d1c1a;
       }
       .site-header .main-nav a { color: #f2efe9; }
-      #siteDesktopControls { position: fixed; top: auto; right: auto; inset-inline-end: 12px; bottom: calc(5rem + env(safe-area-inset-bottom)); }
+      #siteDesktopControls { position: fixed; top: auto; right: 12px; left: auto; inset-inline-end: 12px; bottom: calc(5rem + env(safe-area-inset-bottom)); direction: ltr; }
     }
   </style>
 </head>

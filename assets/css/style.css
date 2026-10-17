@@ -2542,3 +2542,40 @@ html[data-theme="light"] .theme-switcher-icon {
     margin-inline: 0;
   }
 }
+
+/* Keep header controls in the same physical positions in both languages. */
+.site-header,
+.site-header > .main-nav,
+#siteDesktopControls { direction: ltr; }
+@media (max-width: 700px) {
+  body.has-mobile-language-menu .site-header .mobile-menu-toggle {
+    left: 16px !important;
+    right: auto !important;
+    inset-inline-start: 16px !important;
+    inset-inline-end: auto !important;
+  }
+  body.has-mobile-language-menu .mobile-menu-drawer {
+    left: 0 !important;
+    right: auto !important;
+    transform: translateX(-105%) !important;
+  }
+  body.has-mobile-language-menu .mobile-menu-drawer.is-open { transform: translateX(0) !important; }
+  html[dir] body.has-mobile-language-menu .mobile-menu-toggle {
+    left: 16px !important;
+    right: auto !important;
+    inset-inline-start: 16px !important;
+    inset-inline-end: auto !important;
+  }
+  html[dir] body.has-mobile-language-menu .mobile-menu-drawer {
+    left: 0 !important;
+    right: auto !important;
+    transform: translateX(-105%) !important;
+  }
+  html[dir] body.has-mobile-language-menu .mobile-menu-drawer.is-open { transform: translateX(0) !important; }
+  #siteLanguageToggle.language-switcher {
+    left: auto !important;
+    right: .85rem !important;
+    inset-inline-start: auto !important;
+    inset-inline-end: .85rem !important;
+  }
+}
