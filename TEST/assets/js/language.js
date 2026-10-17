@@ -10,7 +10,7 @@
     storedLanguage = "en";
   }
   const initialLanguage = storedLanguage;
-  const defaultTheme = /(?:^|\/)admin(?:\/|\.html$)/i.test(window.location.pathname) ? "dark" : "light";
+  const defaultTheme = "light";
   let storedTheme = defaultTheme;
   try {
     storedTheme = localStorage.getItem(THEME_STORAGE_KEY) || defaultTheme;

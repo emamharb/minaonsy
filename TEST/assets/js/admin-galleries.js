@@ -171,7 +171,8 @@ function render() {
     row.className = `gallery-row${isExpired(item) ? " expired" : ""}`;
     const cover = document.createElement("div");
     cover.className = "gallery-cover is-empty";
-    cover.setAttribute("aria-hidden", "true");
+    cover.setAttribute("role", "img");
+    cover.setAttribute("aria-label", `${item.clientName || "بدون اسم"} — غلاف المعرض`);
     const coverIcon = document.createElement("i");
     coverIcon.className = `fas ${item.fileCount ? "fa-images" : "fa-camera"}`;
     cover.append(coverIcon);

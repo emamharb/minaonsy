@@ -333,7 +333,14 @@ async function loadFiles() {
       const items = grouped[section.id] || [];
       const block = document.createElement("div");
       block.className = "section-block";
-      block.innerHTML = `<h3>${section.name}</h3>`;
+      const heading = document.createElement("div");
+      heading.className = "section-heading";
+      const headingTitle = document.createElement("h3");
+      headingTitle.textContent = section.name;
+      const sectionCount = document.createElement("span");
+      sectionCount.className = "section-count";
+      sectionCount.textContent = `${items.length} ${window.SITE_LANGUAGE === "ar" ? "ملفات" : "files"}`;
+      heading.append(headingTitle, sectionCount);
       const gridWrap = document.createElement("div");
       gridWrap.className = "thumb-grid";
       if (!items.length) {
@@ -342,11 +349,32 @@ async function loadFiles() {
       items.forEach((item) => {
       const card = document.createElement("div");
       card.className = "thumb-card";
-      card.innerHTML = `${item.type === "video" ? `<video src="${item.url}" controls></video>` : `<img src="${item.previewUrl || item.url}" alt="">`}
-        <div class="thumb-actions"><a class="button secondary" href="${item.url}" download>تحميل</a><button class="button danger" type="button">حذف</button></div>
-        <p class="card-status muted"></p>`;
-      const deleteButton = card.querySelector("button");
-      const cardStatus = card.querySelector(".card-status");
+      const media = document.createElement(item.type === "video" ? "video" : "img");
+      media.src = item.type === "video" ? item.url : (item.previewUrl || item.url);
+      if (item.type === "video") media.controls = true;
+      else media.alt = item.name || "صورة داخل المعرض";
+      media.className = "thumb-media";
+      const fileName = document.createElement("span");
+      fileName.className = "thumb-file-name";
+      fileName.title = item.name || "";
+      fileName.textContent = item.name || (item.type === "video" ? "فيديو" : "صورة");
+      const actions = document.createElement("div");
+      actions.className = "thumb-actions";
+      const download = document.createElement("a");
+      download.className = "button secondary";
+      download.href = item.url;
+      download.download = "";
+      download.textContent = "تحميل";
+      const remove = document.createElement("button");
+      remove.className = "button danger";
+      remove.type = "button";
+      remove.textContent = "حذف";
+      actions.append(download, remove);
+      const cardStatusNode = document.createElement("p");
+      cardStatusNode.className = "card-status muted";
+      card.append(media, fileName, actions, cardStatusNode);
+      const deleteButton = remove;
+      const cardStatus = cardStatusNode;
       deleteButton.addEventListener("click", async () => {
         if (!confirm("هل تريد حذف هذا الملف؟")) return;
         deleteButton.disabled = true;
@@ -369,7 +397,7 @@ async function loadFiles() {
       });
         gridWrap.append(card);
       });
-      block.append(gridWrap);
+      block.append(heading, gridWrap);
       grid.append(block);
     });
   } catch (error) {
