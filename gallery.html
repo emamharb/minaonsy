@@ -936,7 +936,7 @@
         background: #1d1c1a;
       }
       .site-header .main-nav a { color: #f2efe9; }
-      #siteDesktopControls { position: fixed; top: auto; right: 12px; left: auto; inset-inline-end: 12px; bottom: calc(5rem + env(safe-area-inset-bottom)); direction: ltr; }
+      #siteDesktopControls { position: absolute; top: 50%; right: 12px; left: auto; inset-inline-end: 12px; bottom: auto; transform: translateY(-50%); direction: ltr; }
     }
   </style>
 </head>
@@ -1080,7 +1080,7 @@
     })();
   </script>
 
-  <script src="assets/js/language.js?v=language2"></script>
+  <script src="assets/js/language.js?v=language3"></script>
   <!-- تم الاحتفاظ بملف gallery.js لتشغيل الوظائف (تحميل الصور، معرض الصور، تحميل الكل) -->
   <script type="module" src="assets/js/gallery.js?v=downloads1"></script>
 </body>

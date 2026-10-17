@@ -864,11 +864,7 @@
       }, { passive: false });
       button.dataset.bound = "1";
     }
-    if (drawer && isSmallViewport()) {
-      if (button.parentElement !== drawer) drawer.appendChild(button);
-    } else if (button.parentElement !== desktopBar) {
-      desktopBar.appendChild(button);
-    }
+    if (button.parentElement !== desktopBar) desktopBar.appendChild(button);
   }
 
   function renderLanguageButton() {
