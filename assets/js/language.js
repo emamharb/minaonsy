@@ -965,7 +965,7 @@
       document.body.appendChild(button);
     }
     const target = currentLanguage === "en" ? "ar" : "en";
-    const label = currentLanguage === "ar" ? "العربية" : "English";
+    const label = target === "ar" ? "العربية" : "English";
     const ariaLabel = currentLanguage === "ar"
       ? (target === "ar" ? "التبديل إلى العربية" : "التبديل إلى الإنجليزية")
       : (target === "ar" ? "Switch language to Arabic" : "Switch language to English");
