@@ -743,6 +743,7 @@
     backdrop.setAttribute("aria-hidden", String(!open));
     toggle.setAttribute("aria-expanded", String(open));
     document.body.classList.toggle("mobile-menu-open", open);
+    renderMobileMenu();
     if (!open) toggle.focus({ preventScroll: true });
   }
 

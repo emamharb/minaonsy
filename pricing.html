@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bebas+Neue&family=Cairo:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=theme17">
+  <link rel="stylesheet" href="assets/css/style.css?v=theme18">
   <style>
     .pricing-new-page { background: var(--mono-dark); color: var(--mono-text); }
     .pricing-new-shell { width: min(1220px, calc(100% - 36px)); margin: 0 auto; padding: clamp(46px, 7vw, 92px) 0 88px; }
@@ -49,12 +49,21 @@
       .pricing-new-cards { grid-template-columns: 1fr; }
       .pricing-new-card { min-height: 340px; }
       .pricing-new-details { grid-template-columns: 1fr; gap: 48px; }
+      .pricing-new-hero h1 { font-size: clamp(56px, 17vw, 96px); line-height: .98; overflow-wrap: anywhere; }
+      .pricing-new-card { min-height: 0; }
+      .pricing-new-card-top { margin-bottom: 28px; }
+      .pricing-package-cta { width: 100%; min-height: 46px; }
     }
     @media (max-width: 430px) {
       .pricing-new-shell { width: min(100% - 24px, 620px); }
       .pricing-new-card { padding: 24px 20px; }
       .pricing-new-card-top { margin-bottom: 34px; }
       .pricing-new-detail li { align-items: start; flex-direction: column; gap: 3px; }
+    }
+    @media (max-width: 760px) {
+      html[dir="rtl"] .pricing-new-hero h1 { font-size: clamp(44px, 13vw, 76px); line-height: 1.2; }
+      .pricing-new-hero-copy { font-size: 15px; line-height: 1.75; text-wrap: pretty; }
+      .pricing-new-detail li { line-height: 1.6; }
     }
   </style>
 </head>
@@ -186,7 +195,7 @@
   <a class="floating-whatsapp" href="https://wa.me/201061814314" target="_blank" rel="noreferrer" aria-label="Contact us on WhatsApp">
     <img src="assets/photos/whatsapp.png" alt="WhatsApp">
   </a>
-  <script src="assets/js/language.js?v=language8"></script>
+  <script src="assets/js/language.js?v=language9"></script>
   <script type="module" src="assets/js/scroll-effects.js"></script>
 </body>
 </html>

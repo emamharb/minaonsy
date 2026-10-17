@@ -1828,6 +1828,10 @@ textarea:hover {
 html[dir="rtl"] body {
   text-align: right;
 }
+html[dir="ltr"] body {
+  direction: ltr;
+  text-align: left;
+}
 html[dir="rtl"] .language-switcher {
   font-family: "Cairo", sans-serif;
   letter-spacing: 0;
@@ -2398,6 +2402,72 @@ html[data-theme="light"] .theme-switcher-icon {
     width: 1.2rem;
     height: 1.2rem;
   }
+}
+
+/* Mobile typography and spacing pass */
+@media (max-width: 700px) {
+  body { line-height: 1.65; }
+  p, li { line-height: 1.7; }
+  h1, h2, h3 { text-wrap: balance; overflow-wrap: break-word; }
+  .site-header { padding-block: 12px; }
+  .hero { min-height: 0; padding: 36px 16px; }
+  .hero-logo { width: min(360px, 78vw); }
+  .hero h1 {
+    max-width: 100%;
+    font-size: clamp(50px, 17vw, 84px);
+    line-height: .98;
+    white-space: normal;
+    text-wrap: balance;
+  }
+  .hero-actions { gap: 8px; }
+  .hero-actions .button { min-height: 44px; padding-inline: 12px; }
+  .portfolio-title { padding: 28px 16px 24px; font-size: clamp(30px, 8vw, 42px); line-height: 1.15; }
+  .masonry-grid { width: calc(100% - 16px); column-gap: 4px; }
+  .content-band { padding: 44px 16px; }
+  .section-inner { width: 100%; }
+  .team-page-shell { width: min(100% - 28px, 620px); margin-inline: auto; }
+  .team-hero h1 { font-size: clamp(44px, 12vw, 72px); line-height: 1.12; }
+  .team-hero-copy { font-size: 15px; line-height: 1.75; text-wrap: pretty; }
+  .team-card-body { gap: 9px; padding: 16px; }
+  .team-role { font-size: 10px; letter-spacing: .12em; line-height: 1.5; overflow-wrap: anywhere; }
+  .team-card h2 { font-size: clamp(25px, 7vw, 30px); line-height: 1.15; }
+  .team-card p { font-size: 14px; line-height: 1.7; }
+  .team-work-btn { width: 100%; min-height: 44px; }
+  .booking-page .booking-shell { padding: 18px 12px; }
+  .booking-page .booking-head { margin-bottom: 20px; }
+  .booking-page .booking-head h1 { font-size: clamp(26px, 7vw, 36px); line-height: 1.25; }
+  .booking-page .booking-section-title { font-size: clamp(18px, 5.2vw, 22px); line-height: 1.4; }
+  .booking-page .date-selector { flex-wrap: wrap; align-items: stretch; padding: 10px; }
+  .booking-page .date-selector .field-group { flex: 1 1 28%; }
+  .booking-page .date-selector .field-group label { white-space: normal; line-height: 1.35; }
+  .booking-page .date-selector .field-group label { font-size: .72rem; }
+  .booking-page .date-selector .field-group select { min-height: 44px; font-size: 14px; }
+  .booking-page input,
+  .booking-page select,
+  .booking-page textarea { font-size: 16px; }
+  .booking-page .packages-grid,
+  .booking-page .promo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .booking-page .package-card { min-height: 96px; padding: 12px 9px; gap: 7px; }
+  .booking-page .package-card strong,
+  .booking-page .package-card span { line-height: 1.4; text-align: center; }
+  .booking-page .submit-btn { width: 100%; min-height: 48px; line-height: 1.5; white-space: normal; }
+  .booking-page .floating-whatsapp { display: none; }
+  .site-footer { gap: 16px; padding: 24px 16px calc(84px + env(safe-area-inset-bottom)); }
+  .footer-links { display: flex; flex-wrap: wrap; gap: 12px 18px; overflow-wrap: anywhere; }
+  .floating-whatsapp { right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); width: 48px; height: 48px; }
+}
+
+@media (min-width: 480px) and (max-width: 700px) {
+  .team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+}
+
+@media (max-width: 380px) {
+  .hero-actions { grid-template-columns: 1fr; width: min(260px, 100%); }
+  .hero-actions .button { width: 100%; }
+  .booking-page .packages-grid,
+  .booking-page .promo-grid { grid-template-columns: 1fr; }
+  .booking-page .date-selector .field-group { flex-basis: 30%; }
+  .portfolio-title { font-size: 30px; }
 }
 
 @media (max-width: 340px) {
