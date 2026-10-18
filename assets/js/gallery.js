@@ -31,6 +31,7 @@ const galleryGateMessage = document.getElementById("galleryGateMessage");
 const galleryGateBrandCaption = document.getElementById("galleryGateBrandCaption");
 const galleryGateSeal = document.getElementById("galleryGateSeal");
 const galleryGateSealPhoto = document.getElementById("galleryGateSealPhoto");
+const galleryBootCopy = document.getElementById("galleryBootCopy");
 const galleryGatePasswordLabel = document.getElementById("galleryGatePasswordLabel");
 const galleryGateHint = document.getElementById("galleryGateHint");
 const galleryGatePrivacy = document.getElementById("galleryGatePrivacy");
@@ -200,15 +201,26 @@ function syncGalleryGatePasswordLabel() {
   if (galleryGatePasswordLabel) galleryGatePasswordLabel.textContent = window.SITE_LANGUAGE === "ar" ? "كلمة مرور المعرض" : "Gallery password";
 }
 
+function syncGalleryBootCopy() {
+  if (galleryBootCopy) galleryBootCopy.textContent = window.SITE_LANGUAGE === "ar" ? "نجهّز معرضكم للحظات" : "Preparing your gallery";
+}
+
+function finishGalleryBoot() {
+  document.body.classList.remove("gallery-booting");
+  document.getElementById("galleryBootScreen")?.setAttribute("aria-hidden", "true");
+}
+
 galleryGateLanguageToggle?.addEventListener("click", () => {
   window.setSiteLanguage?.(window.SITE_LANGUAGE === "ar" ? "en" : "ar");
 });
 syncGalleryGateLanguageToggle();
 syncGalleryGatePasswordLabel();
+syncGalleryBootCopy();
 
 window.addEventListener("site-language-change", () => {
   syncGalleryGateLanguageToggle();
   syncGalleryGatePasswordLabel();
+  syncGalleryBootCopy();
   if (document.body.classList.contains("gallery-locked")) {
     syncGalleryGateCopy();
     return;
@@ -331,6 +343,7 @@ async function downloadFile(file, index, button) {
 
 async function loadGallery() {
   if (!galleryId) {
+    finishGalleryBoot();
     document.body.classList.add("gallery-invalid-link");
     if (deliveryEyebrow) deliveryEyebrow.textContent = window.SITE_LANGUAGE === "ar" ? "رابط المعرض" : "GALLERY LINK";
     if (deliveryMessage) deliveryMessage.textContent = "";
@@ -388,6 +401,8 @@ async function loadGallery() {
     renderFiles();
   } catch (error) {
     status.textContent = friendlyError(error);
+  } finally {
+    finishGalleryBoot();
   }
 }
 

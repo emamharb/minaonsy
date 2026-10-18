@@ -31,6 +31,42 @@
       min-height: 100vh;
     }
 
+    body.gallery-booting { overflow: hidden; }
+    body.gallery-booting .site-header,
+    body.gallery-booting .gallery-public { visibility: hidden; }
+    .gallery-boot-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 800;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      background: radial-gradient(ellipse at 50% 42%, #fffdf9 0%, #f6f2e9 72%);
+    }
+    body.gallery-booting .gallery-boot-screen { display: grid; }
+    .gallery-boot-content { display: grid; justify-items: center; gap: 17px; text-align: center; }
+    .gallery-boot-logo {
+      display: grid;
+      width: 68px;
+      height: 68px;
+      place-items: center;
+      border-radius: 50%;
+      background: #211f1a;
+      box-shadow: 0 0 0 7px rgba(184, 148, 62, .1);
+    }
+    .gallery-boot-logo img { width: 78%; height: auto; }
+    .gallery-boot-copy { color: #5d574b; font: 600 14px/1.6 "DM Sans", "Tajawal", sans-serif; }
+    html[dir="rtl"] .gallery-boot-copy { font-family: "Tajawal", sans-serif; font-size: 15px; }
+    .gallery-boot-spinner {
+      width: 26px;
+      height: 26px;
+      border: 2px solid rgba(159, 121, 55, .2);
+      border-top-color: #9f7937;
+      border-radius: 50%;
+      animation: galleryBootSpin .8s linear infinite;
+    }
+    @keyframes galleryBootSpin { to { transform: rotate(360deg); } }
+
     html[dir="rtl"] body {
       font-family: "Tajawal", "Cairo", Arial, sans-serif;
       direction: rtl;
@@ -1456,7 +1492,8 @@
       position: absolute;
       top: 22px;
       inset-inline-end: auto;
-      right: 22px;
+      left: 22px;
+      right: auto;
       display: inline-flex;
       width: 122px;
       min-height: 42px;
@@ -1475,6 +1512,8 @@
       box-shadow: 0 5px 16px rgba(39, 33, 23, .12);
       transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
     }
+
+    html[dir="rtl"] .gallery-gate-language-toggle { left: auto; right: 22px; }
 
     .gallery-gate-language-toggle:hover { border-color: #d5b56e; background: #111; color: #fff; transform: translateY(-1px); }
     .gallery-gate-language-icon {
@@ -1682,7 +1721,8 @@
       html[dir="rtl"] .gallery-gate-brand-caption { font-size: 17px; }
 
       .gallery-gate-card { justify-content: center; padding: 46px clamp(22px, 7vw, 38px) 28px; }
-      .gallery-gate-language-toggle { top: 12px; right: 14px; width: 110px; min-height: 38px; padding: 4px 11px 4px 5px; gap: 8px; }
+      .gallery-gate-language-toggle { top: 12px; left: 14px; right: auto; width: 110px; min-height: 38px; padding: 4px 11px 4px 5px; gap: 8px; }
+      html[dir="rtl"] .gallery-gate-language-toggle { left: auto; right: 14px; }
       .gallery-gate-lockmark { width: 42px; height: 42px; margin-bottom: 15px; }
       .gallery-gate-card .eyebrow { margin-bottom: 7px; }
       .gallery-gate-card h2 { font-size: clamp(34px, 9vw, 42px); }
@@ -1719,6 +1759,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+      .gallery-boot-spinner { animation: none; border-top-color: #9f7937; }
       .gallery-gate-shell { animation: none; }
       .gallery-gate-language-toggle,
       .gallery-gate-form input,
@@ -1726,8 +1767,16 @@
     }
   </style>
 </head>
-<body class="client-album-page">
+<body class="client-album-page gallery-booting">
   <a class="skip-link" href="#clientGalleryGrid">Skip to gallery files</a>
+
+  <div class="gallery-boot-screen" id="galleryBootScreen" role="status" aria-live="polite">
+    <div class="gallery-boot-content">
+      <div class="gallery-boot-logo" aria-hidden="true"><img src="assets/photos/LW.png?v=optimized" alt=""></div>
+      <span class="gallery-boot-copy" id="galleryBootCopy">Preparing your gallery</span>
+      <span class="gallery-boot-spinner" aria-hidden="true"></span>
+    </div>
+  </div>
 
   <header class="site-header">
     <a class="brand" href="index.html">
@@ -1892,6 +1941,6 @@
 
   <script src="assets/js/language.js?v=final6"></script>
   <!-- تم الاحتفاظ بملف gallery.js لتشغيل الوظائف (تحميل الصور، معرض الصور، تحميل الكل) -->
-  <script type="module" src="assets/js/gallery.js?v=final9"></script>
+  <script type="module" src="assets/js/gallery.js?v=final10"></script>
 </body>
 </html>
