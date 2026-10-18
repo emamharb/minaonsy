@@ -641,6 +641,17 @@ body.admin-body .hamburger-btn:hover { background: rgba(198,164,92,.12); }
   body.admin-body .admin-layout:has(#manageTitle) .access-code-section > .button { width: auto !important; flex: 0 0 auto; min-height: 40px; padding: .45rem .7rem !important; font-size: .67rem !important; }
   body.admin-body .admin-layout:has(#manageTitle) .admin-card { padding: 1rem !important; }
   body.admin-body .admin-layout:has(#manageTitle) .admin-card h2 { margin-bottom: .85rem !important; }
+  body.admin-body .admin-layout:has(#manageTitle) .section-panel .section-row {
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) 104px;
+    align-items: center;
+    gap: .5rem !important;
+  }
+  body.admin-body .admin-layout:has(#manageTitle) .section-panel .section-row select { grid-column: 1 / -1; width: 100% !important; }
+  body.admin-body .admin-layout:has(#manageTitle) .section-panel .section-row input { grid-column: 1; width: 100% !important; min-width: 0 !important; }
+  body.admin-body .admin-layout:has(#manageTitle) .section-panel .section-row .button { grid-column: 2; width: 100% !important; min-height: 46px; padding-inline: .45rem !important; }
+  body.admin-body .admin-layout:has(#manageTitle) .section-toolbar { display: flex; justify-content: flex-start; }
+  body.admin-body .admin-layout:has(#manageTitle) .section-toolbar .button { width: auto !important; min-height: 42px; padding-inline: .85rem !important; }
 }
 @media (max-width: 440px) {
   body.admin-body .admin-layout:has(#manageTitle) .admin-top { grid-template-columns: minmax(0,1fr) !important; }
