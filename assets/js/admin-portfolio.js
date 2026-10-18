@@ -1,6 +1,7 @@
 import app from "./firebase-config.js";
 import { requireAdmin } from "./admin-auth.js";
-import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, serverTimestamp, query, orderBy, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { prepareImageForUpload, MAX_UPLOAD_IMAGE_BYTES } from "./image-optimization.js";
+import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, serverTimestamp, query, orderBy, getDoc, setDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
 
 requireAdmin();
@@ -12,11 +13,17 @@ const progress = document.getElementById("portfolioProgress");
 const grid = document.getElementById("portfolioGridAdmin");
 const storageQuota = document.getElementById("storageQuotaPortfolio");
 const STORAGE_LIMIT_BYTES = 100 * 1024 * 1024 * 1024;
-const PREVIEW_MAX_BYTES = 500 * 1024;
-const PREVIEW_MAX_SIDE = 1600;
+const UPLOAD_IMAGE_LIMIT_LABEL = `${Math.round(MAX_UPLOAD_IMAGE_BYTES / 1024)} KB`;
+
+function uploadText(ar, en) {
+  return window.SITE_LANGUAGE === "ar" ? ar : en;
+}
 
 function friendlyError(error) {
   if (!navigator.onLine) return "لا يوجد اتصال بالإنترنت.";
+  if (error?.message === "image-format-limit") return uploadText("صيغة الصورة المتحركة أو المتجهة لا يمكن ضغطها دون تغييرها. احفظها كصورة ثابتة لا تتجاوز 300 KB.", "Animated or vector images cannot be compressed without changing them. Save a still image under 300 KB.");
+  if (error?.message === "image-compression-unavailable") return uploadText("تعذر تجهيز الصورة. جرّب حفظها بصيغة JPG أو WebP ثم أعد المحاولة.", "The image could not be prepared. Save it as JPG or WebP and try again.");
+  if (error?.message === "image-too-large-after-compression") return uploadText("تعذر ضغط الصورة إلى أقل من 300 KB مع الحفاظ على وضوح مناسب.", "The image could not be reduced below 300 KB while retaining usable clarity.");
   if (error?.code === "permission-denied" || error?.code === "storage/unauthorized") return "ليست لديك صلاحية لتنفيذ هذه العملية.";
   if (error?.code === "storage/unknown") return "فشل الرفع. تأكد من قواعد Storage وأن حساب الأدمن مسجل دخول.";
   if (error?.code === "storage/retry-limit-exceeded") return "الاتصال ضعيف. حاول رفع الصورة مرة أخرى.";
@@ -32,38 +39,17 @@ function setDropzoneBusy(isBusy) {
 function imageOrientation(file) {
   return new Promise((resolve) => {
     const img = new Image();
-    img.onload = () => resolve(img.naturalWidth >= img.naturalHeight ? "landscape" : "portrait");
-    img.onerror = () => resolve("landscape");
-    img.src = URL.createObjectURL(file);
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(img.naturalWidth >= img.naturalHeight ? "landscape" : "portrait");
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      resolve("landscape");
+    };
+    img.src = url;
   });
-}
-
-async function createImagePreviewBlob(file) {
-  if (!file.type.startsWith("image/")) return null;
-  const bitmap = await createImageBitmap(file);
-  const scale = Math.min(1, PREVIEW_MAX_SIDE / Math.max(bitmap.width, bitmap.height));
-  const width = Math.max(1, Math.round(bitmap.width * scale));
-  const height = Math.max(1, Math.round(bitmap.height * scale));
-  const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext("2d");
-  ctx.drawImage(bitmap, 0, 0, width, height);
-  bitmap.close?.();
-
-  const targetTypes = ["image/webp", "image/jpeg", file.type];
-  for (const type of targetTypes) {
-    if (!type) continue;
-    for (const quality of [0.82, 0.72, 0.62, 0.52]) {
-      const blob = await new Promise((resolve) => canvas.toBlob(resolve, type, quality));
-      if (blob && blob.size <= PREVIEW_MAX_BYTES) {
-        return { blob, type };
-      }
-    }
-    const fallback = await new Promise((resolve) => canvas.toBlob(resolve, type, 0.45));
-    if (fallback) return { blob: fallback, type };
-  }
-  return null;
 }
 
 function formatBytes(bytes) {
@@ -89,6 +75,10 @@ async function getStorageUsageDoc() {
 
 async function updateStorageUsage(deltaBytes) {
   const refDoc = doc(db, "stats", "storage");
+  if (deltaBytes >= 0) {
+    await setDoc(refDoc, { usedBytes: increment(deltaBytes), updatedAt: serverTimestamp() }, { merge: true });
+    return;
+  }
   const snap = await getDoc(refDoc);
   const current = snap.exists() ? Number(snap.data().usedBytes || 0) : 0;
   const next = Math.max(0, current + deltaBytes);
@@ -119,74 +109,84 @@ function progressRow(name) {
   label.textContent = name;
   const bar = document.createElement("span");
   bar.textContent = "0%";
+  bar.setAttribute("role", "progressbar");
+  bar.setAttribute("aria-label", `${name} ${uploadText("تقدم الرفع", "upload progress")}`);
+  bar.setAttribute("aria-valuemin", "0");
+  bar.setAttribute("aria-valuemax", "100");
+  bar.setAttribute("aria-valuenow", "0");
+  bar.style.setProperty("--progress", "0%");
   const message = document.createElement("small");
-  message.textContent = "جاري الرفع";
+  message.textContent = uploadText("في قائمة الرفع", "In upload queue");
   row.append(label, bar, message);
   progress.append(row);
   return { row, bar, message };
 }
 
-async function uploadImage(file) {
-  const usage = await getStorageUsageDoc();
-  const preview = await createImagePreviewBlob(file);
-  const previewBytes = preview?.blob?.size || 0;
-  if ((usage.usedBytes || 0) + file.size + previewBytes > STORAGE_LIMIT_BYTES) {
-    throw new Error("storage-limit");
+async function uploadImage(file, index, total) {
+  const ui = progressRow(file.name);
+  const isImage = file.type.startsWith("image/");
+  const itemPosition = `(${index + 1}/${total})`;
+  ui.message.textContent = isImage
+    ? `${uploadText("جارٍ تجهيز الصورة بحد أقصى", "Preparing image up to")} ${UPLOAD_IMAGE_LIMIT_LABEL} ${itemPosition}`
+    : `${uploadText("جارٍ تجهيز الملف", "Preparing file")} ${itemPosition}`;
+  let preparedFile;
+  try {
+    preparedFile = await prepareImageForUpload(file);
+    ui.message.textContent = `${uploadText("تم تجهيز الصورة", "Image prepared")}: ${formatBytes(preparedFile.size)} / ${UPLOAD_IMAGE_LIMIT_LABEL} · ${uploadText("جارٍ التحقق من المساحة", "checking storage")}`;
+    const usage = await getStorageUsageDoc();
+    if ((usage.usedBytes || 0) + preparedFile.size > STORAGE_LIMIT_BYTES) {
+      throw new Error("storage-limit");
+    }
+  } catch (error) {
+    ui.row.classList.add("is-error");
+    ui.message.textContent = friendlyError(error);
+    throw error;
   }
   const imageId = crypto.randomUUID();
-  const storagePath = `portfolio/${imageId}-${file.name}`;
-  const previewPath = preview ? `portfolio/previews/${imageId}-${file.name.replace(/\.[^.]+$/, "")}.${preview.type === "image/webp" ? "webp" : preview.type === "image/jpeg" ? "jpg" : file.name.split(".").pop()}` : null;
-  const orientation = await imageOrientation(file);
-  const task = uploadBytesResumable(ref(storage, storagePath), file);
-  const ui = progressRow(file.name);
-  return new Promise((resolve, reject) => {
-    task.on("state_changed", (snap) => {
-      const percent = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
-      ui.bar.style.width = `${percent}%`;
-      ui.bar.textContent = `${percent}%`;
-    }, (error) => {
-      ui.row.classList.add("is-error");
-      ui.message.textContent = friendlyError(error);
-      reject(error);
-    }, async () => {
-      try {
-        ui.message.textContent = "جاري حفظ البيانات";
-        const imageUrl = await getDownloadURL(task.snapshot.ref);
-        let previewUrl = imageUrl;
-        let previewStoragePath = null;
-        let previewSizeBytes = 0;
-        if (preview && previewPath) {
-          const previewTask = uploadBytesResumable(ref(storage, previewPath), preview.blob, { contentType: preview.type });
-          await new Promise((resolvePreview, rejectPreview) => {
-            previewTask.on("state_changed", null, rejectPreview, resolvePreview);
-          });
-          previewUrl = await getDownloadURL(previewTask.snapshot.ref);
-          previewStoragePath = previewPath;
-          previewSizeBytes = preview.blob.size;
-        }
-        await addDoc(collection(db, "portfolio"), {
-          imageUrl,
-          previewUrl,
-          storagePath,
-          previewStoragePath,
-          orientation,
-          order: Date.now(),
-          uploadedAt: serverTimestamp(),
-          isVisible: true,
-          sizeBytes: file.size,
-          previewSizeBytes
-        });
-        await updateStorageUsage(file.size + previewSizeBytes);
-        ui.row.classList.add("is-done");
-        ui.message.textContent = "تم الرفع";
-        resolve();
-      } catch (error) {
-        ui.row.classList.add("is-error");
-        ui.message.textContent = friendlyError(error);
-        reject(error);
-      }
-    });
+  const storagePath = `portfolio/${imageId}-${preparedFile.name}`;
+  const orientation = await imageOrientation(preparedFile);
+  ui.message.textContent = uploadText("جارٍ رفع الصورة", "Uploading image");
+  const task = uploadBytesResumable(ref(storage, storagePath), preparedFile, {
+    contentType: preparedFile.type,
+    contentDisposition: `attachment; filename*=UTF-8''${encodeURIComponent(preparedFile.name)}`
   });
+  try {
+    const imageUrl = await new Promise((resolve, reject) => {
+      task.on("state_changed", (snap) => {
+        const percent = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+        ui.bar.style.setProperty("--progress", `${percent}%`);
+        ui.bar.textContent = `${percent}%`;
+        ui.bar.setAttribute("aria-valuenow", String(percent));
+      }, reject, async () => {
+        try { resolve(await getDownloadURL(task.snapshot.ref)); }
+        catch (error) { reject(error); }
+      });
+    });
+    ui.message.textContent = uploadText("جارٍ حفظ البيانات", "Saving image details");
+    await addDoc(collection(db, "portfolio"), {
+      imageUrl,
+      previewUrl: imageUrl,
+      storagePath,
+      previewStoragePath: null,
+      orientation,
+      order: Date.now(),
+      uploadedAt: serverTimestamp(),
+      isVisible: true,
+      sizeBytes: preparedFile.size,
+      originalSizeBytes: file.size,
+      previewSizeBytes: 0
+    });
+    await updateStorageUsage(preparedFile.size);
+    ui.row.classList.add("is-done");
+    ui.bar.style.setProperty("--progress", "100%");
+    ui.bar.textContent = "100%";
+    ui.bar.setAttribute("aria-valuenow", "100");
+    ui.message.textContent = uploadText("تم الرفع", "Uploaded");
+  } catch (error) {
+    ui.row.classList.add("is-error");
+    ui.message.textContent = friendlyError(error);
+    throw error;
+  }
 }
 
 async function loadPortfolio() {
@@ -246,18 +246,27 @@ async function loadPortfolio() {
 }
 
 async function handleImages(fileList) {
+  if (input.disabled) return;
   const files = [...fileList].filter((file) => file.type.startsWith("image/"));
   if (!files.length) {
     progress.innerHTML = `<p class="muted status-message error">اختر صورًا فقط.</p>`;
     return;
   }
   setDropzoneBusy(true);
-  const results = await Promise.allSettled(files.map(uploadImage));
+  const results = [];
+  for (const [index, file] of files.entries()) {
+    try {
+      await uploadImage(file, index, files.length);
+      results.push({ status: "fulfilled" });
+    } catch (_) {
+      results.push({ status: "rejected" });
+    }
+  }
   setDropzoneBusy(false);
   input.value = "";
   const failed = results.filter((result) => result.status === "rejected").length;
-  if (failed) progress.insertAdjacentHTML("beforeend", `<p class="muted status-message error">تم الرفع مع فشل ${failed} صورة.</p>`);
-  else progress.insertAdjacentHTML("beforeend", `<p class="muted status-message success">تم رفع الصور بنجاح.</p>`);
+  if (failed) progress.insertAdjacentHTML("beforeend", `<p class="muted status-message error">${uploadText(`تم الرفع مع فشل ${failed} صورة.`, `Upload finished with ${failed} failed image${failed === 1 ? "" : "s"}.`)}</p>`);
+  else progress.insertAdjacentHTML("beforeend", `<p class="muted status-message success">${uploadText("تم رفع الصور بنجاح.", "Photos uploaded successfully.")}</p>`);
   await loadPortfolio();
 }
 

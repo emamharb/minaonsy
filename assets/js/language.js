@@ -199,6 +199,8 @@
     "جاري تحميل بيانات المعرض...": "Loading gallery data...",
     "جاري إنشاء المعرض...": "Creating gallery...",
     "جاري الرفع": "Uploading",
+    "الصور تُضغط تلقائيًا حتى 300 KB قبل الرفع، والفيديوهات تُرفع كما هي": "Photos are automatically compressed to 300 KB max before upload; videos are uploaded as-is.",
+    "الصور تُضغط تلقائيًا حتى 300 KB قبل الرفع": "Photos are automatically compressed to 300 KB max before upload.",
     "جاري نقل المعرض": "Moving gallery",
     "جاري التحقق...": "Verifying...",
     "تم رفع الصور بنجاح.": "Photos uploaded successfully.",

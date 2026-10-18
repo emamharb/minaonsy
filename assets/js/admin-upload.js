@@ -1,5 +1,6 @@
 import app from "./firebase-config.js";
 import { requireAdmin } from "./admin-auth.js";
+import { prepareImageForUpload, MAX_UPLOAD_IMAGE_BYTES } from "./image-optimization.js";
 import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, deleteDoc, updateDoc, increment, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
 
@@ -30,8 +31,7 @@ let sectionUploadMap = new Map();
 let sectionPendingQueue = [];
 let uploadSummary = null;
 const STORAGE_LIMIT_BYTES = 100 * 1024 * 1024 * 1024;
-const PREVIEW_MAX_BYTES = 500 * 1024;
-const PREVIEW_MAX_SIDE = 1600;
+const UPLOAD_IMAGE_LIMIT_LABEL = `${Math.round(MAX_UPLOAD_IMAGE_BYTES / 1024)} KB`;
 filesInput.disabled = true;
 
 function showPageMessage(message, type = "info") {
@@ -41,6 +41,9 @@ function showPageMessage(message, type = "info") {
 
 function friendlyError(error) {
   if (!navigator.onLine) return "لا يوجد اتصال بالإنترنت.";
+  if (error?.message === "image-format-limit") return uploadText("صيغة الصورة المتحركة أو المتجهة لا يمكن ضغطها دون تغييرها. احفظها كصورة ثابتة لا تتجاوز 300 KB.", "Animated or vector images cannot be compressed without changing them. Save a still image under 300 KB.");
+  if (error?.message === "image-compression-unavailable") return uploadText("تعذر تجهيز الصورة. جرّب حفظها بصيغة JPG أو WebP ثم أعد المحاولة.", "The image could not be prepared. Save it as JPG or WebP and try again.");
+  if (error?.message === "image-too-large-after-compression") return uploadText("تعذر ضغط الصورة إلى أقل من 300 KB مع الحفاظ على وضوح مناسب.", "The image could not be reduced below 300 KB while retaining usable clarity.");
   if (error?.code === "permission-denied" || error?.code === "storage/unauthorized") return "ليست لديك صلاحية لتنفيذ هذه العملية.";
   if (error?.code === "storage/unknown") return "فشل الرفع. تأكد من قواعد Storage وأن حساب الأدمن مسجل دخول.";
   if (error?.code === "storage/canceled") return "تم إلغاء الرفع.";
@@ -54,25 +57,30 @@ function setDropzoneBusy(isBusy) {
   filesInput.disabled = isBusy;
 }
 
+function uploadText(ar, en) {
+  return window.SITE_LANGUAGE === "ar" ? ar : en;
+}
+
 function ensureUploadSummary(totalFiles) {
   if (uploadSummary) return uploadSummary;
   progress.innerHTML = `
     <div class="upload-summary">
       <div class="upload-summary-head">
-        <strong>جاري رفع الملفات</strong>
+        <strong>${uploadText("تجهيز ورفع الملفات", "Preparing and uploading files")}</strong>
         <span id="uploadSummaryMeta">0 / ${totalFiles}</span>
       </div>
-      <div class="upload-summary-bar" aria-hidden="true">
+      <div class="upload-summary-bar" role="progressbar" aria-label="${uploadText("تقدم الرفع", "Upload progress")}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
         <span id="uploadSummaryFill"></span>
       </div>
       <div class="upload-summary-foot">
-        <small id="uploadSummaryStatus">بدء الرفع...</small>
-        <small id="uploadSummaryEta">الوقت المتبقي: --</small>
+        <small id="uploadSummaryStatus">${uploadText("بدء التجهيز...", "Getting ready...")}</small>
+        <small id="uploadSummaryEta">${uploadText("الوقت المتبقي: --", "Time remaining: --")}</small>
       </div>
     </div>`;
   uploadSummary = {
     meta: document.getElementById("uploadSummaryMeta"),
     fill: document.getElementById("uploadSummaryFill"),
+    bar: progress.querySelector(".upload-summary-bar"),
     status: document.getElementById("uploadSummaryStatus"),
     eta: document.getElementById("uploadSummaryEta")
   };
@@ -111,6 +119,10 @@ async function getStorageUsageDoc() {
 
 async function updateStorageUsage(deltaBytes) {
   const refDoc = doc(db, "stats", "storage");
+  if (deltaBytes >= 0) {
+    await setDoc(refDoc, { usedBytes: increment(deltaBytes), updatedAt: serverTimestamp() }, { merge: true });
+    return;
+  }
   const snap = await getDoc(refDoc);
   const current = snap.exists() ? Number(snap.data().usedBytes || 0) : 0;
   const next = Math.max(0, current + deltaBytes);
@@ -250,34 +262,6 @@ function renderSectionsManage(groupedFiles = null) {
     row.append(details, actions);
     sectionsManage.append(row);
   });
-}
-
-async function createImagePreviewBlob(file) {
-  if (!file.type.startsWith("image/")) return null;
-  const bitmap = await createImageBitmap(file);
-  const scale = Math.min(1, PREVIEW_MAX_SIDE / Math.max(bitmap.width, bitmap.height));
-  const width = Math.max(1, Math.round(bitmap.width * scale));
-  const height = Math.max(1, Math.round(bitmap.height * scale));
-  const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext("2d");
-  ctx.drawImage(bitmap, 0, 0, width, height);
-  bitmap.close?.();
-
-  const targetTypes = ["image/webp", "image/jpeg", file.type];
-  for (const type of targetTypes) {
-    if (!type) continue;
-    for (const quality of [0.82, 0.72, 0.62, 0.52]) {
-      const blob = await new Promise((resolve) => canvas.toBlob(resolve, type, quality));
-      if (blob && blob.size <= PREVIEW_MAX_BYTES) {
-        return { blob, type };
-      }
-    }
-    const fallback = await new Promise((resolve) => canvas.toBlob(resolve, type, 0.45));
-    if (fallback) return { blob: fallback, type };
-  }
-  return null;
 }
 
 function publicLink() {
@@ -443,61 +427,67 @@ function updateGalleryLanguage() {
       ? "لا توجد ملفات داخل هذا القسم بعد."
       : "There are no files in this section yet.";
   });
+  if (uploadSummary) {
+    const heading = progress.querySelector(".upload-summary-head strong");
+    if (heading) heading.textContent = uploadText("تجهيز ورفع الملفات", "Preparing and uploading files");
+    uploadSummary.bar?.setAttribute("aria-label", uploadText("تقدم الرفع", "Upload progress"));
+  }
 }
 
 function isAllowedFile(file) {
   return file.type.startsWith("image/") || file.type.startsWith("video/");
 }
 
-async function uploadFile(file) {
+async function uploadFile(file, chosenSection, onStatus) {
+  const isImage = file.type.startsWith("image/");
+  onStatus?.(isImage
+    ? `${uploadText("جارٍ تجهيز الصورة بحد أقصى", "Preparing image up to")} ${UPLOAD_IMAGE_LIMIT_LABEL}`
+    : uploadText("جارٍ تجهيز الملف", "Preparing file"), 0);
+  const preparedFile = await prepareImageForUpload(file);
+  onStatus?.(isImage
+    ? `${uploadText("تم تجهيز الصورة", "Image prepared")}: ${formatBytes(preparedFile.size)} / ${UPLOAD_IMAGE_LIMIT_LABEL} · ${uploadText("جارٍ التحقق من المساحة", "checking storage")}`
+    : uploadText("الملف جاهز، جارٍ التحقق من المساحة", "File ready, checking storage"), 0);
   const usage = await getStorageUsageDoc();
-  const preview = await createImagePreviewBlob(file);
-  const previewBytes = preview?.blob?.size || 0;
-  if ((usage.usedBytes || 0) + file.size + previewBytes > STORAGE_LIMIT_BYTES) {
+  if ((usage.usedBytes || 0) + preparedFile.size > STORAGE_LIMIT_BYTES) {
     throw new Error("storage-limit");
   }
-  const chosenSection = await ensureSectionExists(sectionSelect?.value || "default");
-  const storagePath = `galleries/${galleryId}/${crypto.randomUUID()}-${file.name}`;
-  const imageId = crypto.randomUUID();
-  const previewPath = preview ? `galleries/${galleryId}/previews/${imageId}-${file.name.replace(/\.[^.]+$/, "")}.${preview.type === "image/webp" ? "webp" : preview.type === "image/jpeg" ? "jpg" : file.name.split(".").pop()}` : null;
+  chosenSection ||= await ensureSectionExists(sectionSelect?.value || "default");
+  const storagePath = `galleries/${galleryId}/${crypto.randomUUID()}-${preparedFile.name}`;
   const metadata = {
-    contentType: file.type || "application/octet-stream",
-    contentDisposition: `attachment; filename*=UTF-8''${encodeURIComponent(file.name)}`
+    contentType: preparedFile.type || "application/octet-stream",
+    contentDisposition: `attachment; filename*=UTF-8''${encodeURIComponent(preparedFile.name)}`
   };
-  const task = uploadBytesResumable(ref(storage, storagePath), file, metadata);
+  const task = uploadBytesResumable(ref(storage, storagePath), preparedFile, metadata);
   return new Promise((resolve, reject) => {
-    task.on("state_changed", null, (error) => {
+    task.on("state_changed", (snapshot) => {
+      const percent = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+      onStatus?.(isImage
+        ? uploadText("جارٍ رفع الصورة", "Uploading image")
+        : uploadText("جارٍ رفع الملف", "Uploading file"), percent);
+    }, (error) => {
       reject(error);
     }, async () => {
       try {
         const url = await getDownloadURL(task.snapshot.ref);
-        let previewUrl = url;
-        let previewStoragePath = null;
-        let previewSizeBytes = 0;
-        if (preview && previewPath) {
-          const previewTask = uploadBytesResumable(ref(storage, previewPath), preview.blob, { contentType: preview.type });
-          await new Promise((resolvePreview, rejectPreview) => {
-            previewTask.on("state_changed", null, rejectPreview, resolvePreview);
-          });
-          previewUrl = await getDownloadURL(previewTask.snapshot.ref);
-          previewStoragePath = previewPath;
-          previewSizeBytes = preview.blob.size;
-        }
+        onStatus?.(isImage
+          ? uploadText("جارٍ حفظ بيانات الصورة", "Saving image details")
+          : uploadText("جارٍ حفظ بيانات الملف", "Saving file details"), 100);
         await addDoc(collection(db, "galleries", galleryId, "files"), {
           name: file.name,
           type: fileType(file),
           url,
-          previewUrl,
+          previewUrl: url,
           storagePath,
-          previewStoragePath,
+          previewStoragePath: null,
           sectionId: chosenSection.id,
           sectionName: chosenSection.name,
-          sizeBytes: file.size,
-          previewSizeBytes,
+          sizeBytes: preparedFile.size,
+          previewSizeBytes: 0,
+          originalSizeBytes: file.size,
           uploadedAt: serverTimestamp()
         });
         await updateDoc(doc(db, "galleries", galleryId), { fileCount: increment(1) });
-        await updateStorageUsage(file.size + previewSizeBytes);
+        await updateStorageUsage(preparedFile.size);
         resolve();
       } catch (error) {
         reject(error);
@@ -507,6 +497,7 @@ async function uploadFile(file) {
 }
 
 async function handleFiles(fileList, options = {}) {
+  if (dropzone.classList.contains("is-busy")) return;
   if (!gallery) {
     showPageMessage("انتظر تحميل بيانات المعرض أولًا.", "error");
     return;
@@ -522,48 +513,58 @@ async function handleFiles(fileList, options = {}) {
   const startedAt = performance.now();
   let completed = 0;
   let failed = 0;
+  let lastFailure = "";
   const plan = options.plan || new Map();
 
-  const updateSummary = () => {
+  const updateSummary = (status = null, activePercent = 0) => {
     const total = files.length;
-    const percent = Math.round(((completed + failed) / total) * 100);
+    const percent = Math.round(((completed + failed + activePercent / 100) / total) * 100);
     const elapsedSeconds = Math.max(0.001, (performance.now() - startedAt) / 1000);
     const avgSecondsPerFile = elapsedSeconds / Math.max(1, completed + failed);
     const remainingFiles = Math.max(0, total - (completed + failed));
     const etaSeconds = remainingFiles * avgSecondsPerFile;
     summary.fill.style.width = `${percent}%`;
+    summary.bar?.setAttribute("aria-valuenow", String(percent));
     summary.meta.textContent = `${completed + failed} / ${total}`;
-    summary.status.textContent = `تم رفع ${completed} من ${total} ملف${failed ? `، فشل ${failed}` : ""}`;
-    summary.eta.textContent = `الوقت المتبقي: ${formatSeconds(etaSeconds)}`;
+    summary.status.textContent = status || (window.SITE_LANGUAGE === "ar"
+      ? `تم رفع ${completed} من ${total} ملف${failed ? `، فشل ${failed}` : ""}`
+      : `${completed} of ${total} files uploaded${failed ? `, ${failed} failed` : ""}`);
+    summary.eta.textContent = window.SITE_LANGUAGE === "ar"
+      ? `الوقت المتبقي: ${formatSeconds(etaSeconds)}`
+      : `Time remaining: ${formatSeconds(etaSeconds)}`;
   };
 
   updateSummary();
-
-  const settled = await Promise.allSettled(
-    files.map(async (file) => {
-      try {
-        await uploadFile(file, plan.get(file) || null);
-        completed += 1;
-      } catch (error) {
-        failed += 1;
-        throw error;
-      } finally {
-        updateSummary();
-      }
-    })
-  );
+  for (const [index, file] of files.entries()) {
+    const onStatus = (stage, percent = 0) => {
+      updateSummary(`${stage} (${index + 1}/${files.length}) · ${file.name}`, percent);
+    };
+    try {
+      await uploadFile(file, plan.get(file) || null, onStatus);
+      completed += 1;
+      updateSummary();
+    } catch (error) {
+      failed += 1;
+      lastFailure = `${file.name}: ${friendlyError(error)}`;
+      updateSummary(`${uploadText("تعذر رفع", "Could not upload")} ${lastFailure}`);
+    }
+  }
 
   setDropzoneBusy(false);
   filesInput.value = "";
-  const failedCount = settled.filter((result) => result.status === "rejected").length;
-  summary.status.textContent = failedCount ? `تم الرفع مع فشل ${failedCount} ملف.` : "تم رفع الملفات بنجاح.";
-  summary.eta.textContent = "الوقت المتبقي: 0 ث";
-  showPageMessage(failedCount ? `تم الرفع مع فشل ${failedCount} ملف.` : "تم رفع الملفات بنجاح.", failedCount ? "error" : "success");
+  const failedCount = failed;
+  const finalMessage = failedCount
+    ? `${window.SITE_LANGUAGE === "ar" ? `تم الرفع مع فشل ${failedCount} ملف.` : `Upload finished with ${failedCount} failed file${failedCount === 1 ? "" : "s"}.`} ${lastFailure}`
+    : uploadText("تم رفع الملفات بنجاح.", "Files uploaded successfully.");
+  summary.status.textContent = finalMessage;
+  summary.eta.textContent = uploadText("الوقت المتبقي: 0 ث", "Time remaining: 0 sec");
+  showPageMessage(finalMessage, failedCount ? "error" : "success");
   renderStorageQuota((await getStorageUsageDoc()).usedBytes || 0);
   await loadFiles();
 }
 
 async function handleFolderFiles(fileList) {
+  if (dropzone.classList.contains("is-busy")) return;
   if (!gallery) {
     showPageMessage("انتظر تحميل بيانات المعرض أولًا.", "error");
     return;
@@ -583,9 +584,12 @@ async function handleFolderFiles(fileList) {
   }
 
   const plan = new Map();
+  let preparedGroups = 0;
   for (const [folderName, folderFilesList] of folderGroups.entries()) {
+    showPageMessage(`${uploadText("جارٍ تجهيز أقسام المجلد", "Preparing folder sections")} (${preparedGroups + 1}/${folderGroups.size})`);
     const section = await ensureSectionByName(folderName);
     folderFilesList.forEach((file) => plan.set(file, section));
+    preparedGroups += 1;
   }
   await handleFiles(files, { plan });
 }

@@ -570,10 +570,10 @@
         <div class="dropzone" id="portfolioDropzone" role="button" tabindex="0">
           <i class="fas fa-upload" aria-hidden="true"></i>
           <strong>اضغط للاختيار، اسحب الملفات هنا، أو الصقها داخل الصفحة</strong>
-          <span>يدعم الصور والفيديوهات</span>
-          <input id="portfolioFiles" type="file" multiple accept="image/*,video/*" hidden>
+          <span>الصور تُضغط تلقائيًا حتى 300 KB قبل الرفع</span>
+          <input id="portfolioFiles" type="file" multiple accept="image/*" hidden>
         </div>
-        <div id="portfolioProgress" class="progress-list"></div>
+        <div id="portfolioProgress" class="progress-list" role="status" aria-live="polite"></div>
       </section>
       <section class="admin-card">
         <div class="admin-card-heading">
@@ -585,7 +585,7 @@
     </main>
   </div>
 
-  <script src="../assets/js/language.js?v=final7"></script>
+  <script src="../assets/js/language.js?v=final8"></script>
   <script>
     (function() {
       var hamburger = document.getElementById('hamburgerBtn');
@@ -615,6 +615,6 @@
   </script>
 
   <script src="../assets/js/admin-shell.js?v=final2"></script>
-  <script type="module" src="../assets/js/admin-portfolio.js?v=final2"></script>
+  <script type="module" src="../assets/js/admin-portfolio.js?v=final3"></script>
 </body>
 </html>
