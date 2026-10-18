@@ -4,6 +4,7 @@ firestore.rules
 storage.rules
 cors.json
 .firebaserc
+TEST/
 
 # Local credentials and generated state
 .env

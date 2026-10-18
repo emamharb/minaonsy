@@ -1,14 +1,15 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>إدارة البورتفوليو | Mina Onsy Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="../assets/css/style.css?v=theme18">
+  <link rel="stylesheet" href="../assets/css/style.css?v=final2">
+  <link rel="stylesheet" href="../assets/css/admin-editorial.css?v=final2">
   <style>
     * {
       box-sizing: border-box;
@@ -530,10 +531,14 @@
         <span class="brand-mark">MO</span>
         <span>Mina Onsy</span>
       </div>
-      <button class="hamburger-btn" id="hamburgerBtn" aria-label="فتح القائمة"><i class="fas fa-bars"></i></button>
+      <div class="admin-preferences" aria-label="إعدادات العرض">
+        <button class="admin-language-toggle" type="button" data-admin-language-toggle aria-label="Switch to Arabic">العربية</button>
+        <button class="admin-theme-toggle" type="button" data-admin-theme-toggle aria-label="Switch to light theme"><i class="fas fa-sun" aria-hidden="true"></i></button>
+      </div>
+      <button class="hamburger-btn" id="hamburgerBtn" aria-controls="sidebarNav" aria-expanded="false" aria-label="فتح القائمة"><i class="fas fa-bars"></i></button>
       <nav id="sidebarNav">
         <a href="dashboard.html"><i class="fas fa-images"></i>المعارض</a>
-        <a class="active" href="portfolio.html"><i class="fas fa-th"></i>البورتفوليو</a>
+        <a class="active" aria-current="page" href="portfolio.html"><i class="fas fa-th"></i>البورتفوليو</a>
         <a href="storage.html"><i class="fas fa-database"></i>المساحة</a>
         <a href="trash.html"><i class="fas fa-trash"></i>سلة المهملات</a>
         <button id="logoutBtn" type="button"><i class="fas fa-sign-out-alt"></i>خروج</button>
@@ -544,10 +549,14 @@
         <div>
           <p class="eyebrow">معرض الأعمال العام</p>
           <h1>البورتفوليو</h1>
+          <p class="admin-page-intro">أضف الصور التي تظهر في معرض الأعمال العام، ثم راجع الملفات الحالية أسفل الصفحة.</p>
         </div>
       </div>
       <section class="admin-card">
-        <h2><i class="fas fa-cloud-upload-alt"></i> رفع صور وفيديوهات جديدة</h2>
+        <div class="admin-card-heading">
+          <span class="admin-step-number" aria-hidden="true">01</span>
+          <div><h2><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i> رفع صور وفيديوهات جديدة</h2><p class="admin-card-intro">اسحب الملفات إلى المساحة أو اخترها من جهازك.</p></div>
+        </div>
         <div class="dropzone" id="portfolioDropzone" role="button" tabindex="0">
           <i class="fas fa-upload"></i>
           <strong>اضغط للاختيار، اسحب الملفات هنا، أو الصقها داخل الصفحة</strong>
@@ -557,13 +566,16 @@
         <div id="portfolioProgress" class="progress-list"></div>
       </section>
       <section class="admin-card">
-        <h2><i class="fas fa-photo-video"></i> الملفات الحالية</h2>
+        <div class="admin-card-heading">
+          <span class="admin-step-number" aria-hidden="true">02</span>
+          <div><h2><i class="fas fa-photo-video" aria-hidden="true"></i> الملفات الحالية</h2><p class="admin-card-intro">يمكنك مراجعة الأعمال المنشورة وإزالة الملفات التي لم تعد مطلوبة.</p></div>
+        </div>
         <div id="portfolioGridAdmin" class="thumb-grid"></div>
       </section>
     </main>
   </div>
 
-  <script src="../assets/js/language.js?v=language9"></script>
+  <script src="../assets/js/language.js?v=final2"></script>
   <script>
     (function() {
       var hamburger = document.getElementById('hamburgerBtn');
@@ -589,33 +601,10 @@
           });
         });
       }
-      var dropzone = document.getElementById('portfolioDropzone');
-      var fileInput = document.getElementById('portfolioFiles');
-      if (dropzone && fileInput) {
-        dropzone.addEventListener('dragover', function(e) {
-          e.preventDefault();
-          dropzone.style.borderColor = '#c89b3c';
-          dropzone.style.background = '#fcf8f0';
-        });
-        dropzone.addEventListener('dragleave', function(e) {
-          e.preventDefault();
-          dropzone.style.borderColor = '#d1d5db';
-          dropzone.style.background = '#fafbfc';
-        });
-        dropzone.addEventListener('drop', function(e) {
-          e.preventDefault();
-          dropzone.style.borderColor = '#d1d5db';
-          dropzone.style.background = '#fafbfc';
-          if (e.dataTransfer.files.length) {
-            fileInput.files = e.dataTransfer.files;
-            var event = new Event('change', { bubbles: true });
-            fileInput.dispatchEvent(event);
-          }
-        });
-      }
     })();
   </script>
 
-  <script type="module" src="../assets/js/admin-portfolio.js"></script>
+  <script src="../assets/js/admin-shell.js?v=final2"></script>
+  <script type="module" src="../assets/js/admin-portfolio.js?v=final2"></script>
 </body>
 </html>

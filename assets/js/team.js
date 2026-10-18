@@ -57,6 +57,7 @@ const galleryBack = document.getElementById("teamBack");
 const galleryGrid = document.getElementById("teamGalleryGrid");
 const memberTitle = document.getElementById("teamMemberTitle");
 const memberBio = document.getElementById("teamMemberBio");
+const teamIntro = document.getElementById("teamIntro");
 const lightboxItems = [];
 const lightbox = createLightbox(lightboxItems);
 
@@ -83,6 +84,7 @@ function renderGallery(member) {
   if (!galleryView || !galleryGrid || !galleryTitle || !galleryBio) return;
   if (memberTitle) memberTitle.textContent = member.name;
   if (memberBio) memberBio.textContent = member.bio;
+  if (teamIntro) teamIntro.hidden = true;
   overview && (overview.hidden = true);
   galleryView.hidden = false;
   galleryTitle.textContent = member.name;

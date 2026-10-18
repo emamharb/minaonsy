@@ -1,5 +1,5 @@
 import app from "./firebase-config.js";
-import { createLightbox } from "./lightbox.js";
+import { createLightbox } from "./lightbox.js?v=final2";
 import { getFirestore, collection, getDocs, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const db = getFirestore(app);
@@ -10,6 +10,8 @@ const grid = document.getElementById("clientGalleryGrid");
 const status = document.getElementById("galleryStatus");
 const downloadAll = document.getElementById("downloadAll");
 const weddingDateEl = document.getElementById("galleryWeddingDate");
+const galleryCover = document.getElementById("galleryCover");
+const galleryPhotoCount = document.getElementById("galleryPhotoCount");
 const galleryGate = document.getElementById("galleryGate");
 const galleryGateForm = document.getElementById("galleryGateForm");
 const galleryGateInput = document.getElementById("galleryGateInput");
@@ -59,8 +61,34 @@ function updateWeddingDate() {
   const dateLabel = window.SITE_LANGUAGE === "ar" ? "موعد الزفاف:" : "Wedding date:";
   weddingDateEl.textContent = currentGallery?.weddingDate ? `${dateLabel} ${formatDate(currentGallery.weddingDate)}` : "";
 }
+
+function updateAlbumDeliveryDetails() {
+  if (galleryPhotoCount) {
+    const label = galleryPhotoCount.querySelector("span");
+    galleryPhotoCount.hidden = !files.length;
+    if (label) label.textContent = window.SITE_LANGUAGE === "ar"
+      ? `${files.length.toLocaleString("ar-EG")} ${files.length === 1 ? "ملف" : "ملفات"}`
+      : `${files.length.toLocaleString("en-US")} ${files.length === 1 ? "item" : "items"}`;
+  }
+  if (downloadAll) downloadAll.disabled = !files.length;
+}
+
+function renderGalleryCover() {
+  if (!galleryCover) return;
+  galleryCover.replaceChildren();
+  const coverFile = files.find((file) => file.type !== "video" && (file.previewUrl || file.url));
+  if (!coverFile) return;
+  const image = document.createElement("img");
+  image.src = coverFile.previewUrl || coverFile.url;
+  image.alt = "";
+  image.loading = "eager";
+  image.fetchPriority = "high";
+  galleryCover.append(image);
+}
+
 window.addEventListener("site-language-change", () => {
   updateWeddingDate();
+  updateAlbumDeliveryDetails();
   if (status?.dataset.messageKey) setStatus(status.dataset.messageKey);
   if (galleryGateStatus?.dataset.messageKey) galleryGateStatus.textContent = galleryMessage(galleryGateStatus.dataset.messageKey);
   const label = window.SITE_LANGUAGE === "ar" ? "تحميل" : "Download";
@@ -110,6 +138,21 @@ function hideGate() {
   galleryGate.setAttribute("aria-hidden", "true");
   if (galleryGateStatus) { galleryGateStatus.textContent = ""; delete galleryGateStatus.dataset.messageKey; }
 }
+
+galleryGate?.addEventListener("keydown", (event) => {
+  if (event.key !== "Tab") return;
+  const controls = [...galleryGate.querySelectorAll("input:not([disabled]), button:not([disabled])")];
+  if (!controls.length) return;
+  const first = controls[0];
+  const last = controls.at(-1);
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+});
 
 function directDownload(file, index) {
   const link = document.createElement("a");
@@ -187,6 +230,8 @@ async function loadGallery() {
     ]);
     sections = [defaultSection(), ...sectionsSnap.docs.map((d) => ({ id: d.id, ...d.data() }))];
     files = filesSnap.docs.map((d) => d.data());
+    renderGalleryCover();
+    updateAlbumDeliveryDetails();
     renderFiles();
   } catch (error) {
     status.textContent = friendlyError(error);

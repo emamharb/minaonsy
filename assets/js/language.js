@@ -10,16 +10,19 @@
     storedLanguage = "en";
   }
   const initialLanguage = storedLanguage;
-  let storedTheme = "dark";
+  const defaultTheme = "light";
+  let storedTheme = defaultTheme;
   try {
-    storedTheme = localStorage.getItem(THEME_STORAGE_KEY) || "dark";
+    storedTheme = localStorage.getItem(THEME_STORAGE_KEY) || defaultTheme;
   } catch (_) {
-    storedTheme = "dark";
+    storedTheme = defaultTheme;
   }
-  const initialTheme = storedTheme === "light" ? "light" : "dark";
+  const initialTheme = storedTheme === "dark" ? "dark" : "light";
   const mapArEn = {
     "إدارة البورتفوليو | Mina Onsy Studio": "Portfolio Management | Mina Onsy Studio",
     "إدارة معرض | Mina Onsy Studio": "Gallery Management | Mina Onsy Studio",
+    "رفع الصور والفيديوهات | Mina Onsy Studio": "Upload Photos and Videos | Mina Onsy Studio",
+    "المساحة التخزينية | Mina Onsy Studio": "Storage | Mina Onsy Studio",
     "أعمال الفريق | Mina Onsy Studio": "Team Work | Mina Onsy Studio",
     "الأسعار | Mina Onsy Studio": "Pricing | Mina Onsy Studio",
     "المساحة | Mina Onsy Studio": "Storage | Mina Onsy Studio",
@@ -91,6 +94,11 @@
     "تخطي إلى ملفات المعرض": "Skip to gallery files",
     "معرض الأعمال": "Portfolio",
     "الأعمال المختارة": "Selected Work",
+    "All work": "كل الأعمال",
+    "Portrait": "طولي",
+    "Landscape": "عرضي",
+    "Image viewer": "عارض الصور",
+    "Filter portfolio": "تصفية الأعمال",
     "عرض المزيد": "Load more",
     "الفريق": "Team",
     "أعضاء الفريق": "Our Team",
@@ -380,6 +388,57 @@
     "أنشئ كلمة مرور": "Create an access code",
     "إجمالي الصور": "Total photos",
     "كل المعارض": "All galleries",
+    "المعارض المحذوفة": "Deleted galleries",
+    "مساحة التخزين": "Storage usage",
+    "المساحة التخزينية": "Storage usage",
+    "رفع صور وفيديوهات جديدة": "Upload new photos and videos",
+    "الملفات الحالية": "Current files",
+    "إدارة التخزين": "Storage management",
+    "معرض الأعمال العام": "Public work portfolio",
+    "اسم العميل / المناسبة": "Client / event name",
+    "نوع المناسبة": "Event type",
+    "موعد الزفاف (اختياري)": "Wedding date (optional)",
+    "يظهر في صفحة العميل.": "Shown on the client gallery.",
+    "كلمة السر": "Access password",
+    "رابط مخصص": "Custom link",
+    "أي تفاصيل إضافية عن هذا المعرض...": "Any additional gallery details...",
+    "بحث بالاسم أو التاريخ...": "Search by name or date...",
+    "إنشاء المعرض": "Create gallery",
+    "إدارة المعرض": "Manage gallery",
+    "البورتفوليو": "Portfolio",
+    "المساحة": "Storage",
+    "سلة المهملات": "Trash",
+    "المعارض": "Galleries",
+    "رفع صور وفيديوهات جديدة": "Upload new photos and videos",
+    "جاري تحميل المعارض المحذوفة...": "Loading deleted galleries...",
+    "جاري تحميل المساحة...": "Loading storage...",
+    "جاري تحميل المساحة التخزينية...": "Loading storage...",
+    "المستخدم:": "Used:",
+    "المتاح:": "Available:",
+    "تحميل الصور...": "Loading photos...",
+    "المعرض تم إنشاؤه بنجاح": "Gallery created successfully",
+    "تاريخ المناسبة": "Event date",
+    "اختيار المناسبة": "Select an event",
+    "تاريخ الفرح (اختياري)": "Wedding date (optional)",
+    "اسم العميل": "Client name",
+    "اسم العميل / المناسبة": "Client / event name",
+    "اسم العميل / الحدث": "Client / event name",
+    "معارض العملاء": "Client galleries",
+    "إدارة المعرض | Mina Onsy Studio": "Gallery management | Mina Onsy Studio",
+    "رابط المعرض سيظهر هنا": "The gallery link will appear here",
+    "السكشن المطلوب": "Target section",
+    "اسم سكشن جديد...": "New section name...",
+    "اضغط للاختيار، اسحب الملفات هنا، أو الصقها داخل الصفحة": "Click to choose, drag files here, or paste them into the page",
+    "يدعم الصور والفيديوهات": "Supports photos and videos",
+    "رفع مجلد": "Upload folder",
+    "جميع السكاشن": "All sections",
+    "رفع صور وفيديوهات": "Upload photos and videos",
+    "إضافة صور وفيديوهات": "Add photos and videos",
+    "رفع ملفات البورتفوليو": "Upload portfolio files",
+    "رفع ملفات": "Upload files",
+    "إنشاء": "Create",
+    "المعارض المحذوفة": "Deleted galleries",
+    "سلة المهملات": "Trash",
     "لا توجد معارض حتى الآن": "No galleries yet",
     "إضافة قسم": "Add section",
     "إضافة سكشن": "Add section",
@@ -550,6 +609,7 @@
     "Enter the gallery password to view photos.": "أدخل كلمة مرور المعرض لعرض الصور.",
     "Private album delivery": "تسليم ألبوم خاص",
     "PRIVATE ALBUM DELIVERY": "تسليم ألبوم خاص",
+    "Private gallery": "معرض خاص",
     "Client Album": "ألبوم العميل",
     "Enter the gallery password to view photos.": "أدخل كلمة مرور المعرض لعرض الصور.",
     "Open gallery": "فتح المعرض",
@@ -569,6 +629,37 @@
   });
 
   Object.assign(mapArEn, {
+    "إعدادات العرض": "Display preferences",
+    "التبديل إلى الإنجليزية": "Switch to English",
+    "التبديل إلى الوضع الفاتح": "Switch to light theme",
+    "التبديل إلى الوضع الداكن": "Switch to dark theme",
+    "القسم الرئيسي": "Main section",
+    "القسم المستهدف": "Target section",
+    "اسم قسم جديد...": "New section name...",
+    "لا توجد أقسام مخصصة بعد.": "No custom sections yet.",
+    "حذف القسم": "Delete section",
+    "لا توجد ملفات داخل هذا القسم بعد.": "There are no files in this section yet.",
+    "اكتب اسم القسم الجديد:": "Enter the new section name:",
+    "سيتم نقل ملفاته إلى القسم الرئيسي.": "Its files will be moved to the main section.",
+    "تم إنشاء القسم.": "Section created.",
+    "بيانات دخول العميل": "Client access details",
+    "بيانات التسليم": "Delivery details",
+    "العودة للمعارض": "Back to galleries",
+    "أنشئ معرضًا للعميل، ثم أضف الصور والفيديوهات من صفحة إدارته.": "Create a client gallery, then add photos and videos from its management page.",
+    "أدخل بيانات المناسبة لإنشاء رابط خاص بالعميل.": "Enter the event details to create a private link for the client.",
+    "ابحث عن معرض سابق وافتحه لإضافة الملفات أو مشاركة رابطه.": "Find a previous gallery to add files or share its link.",
+    "حدد القسم أولًا، ثم اختر الصور أو الفيديوهات التي تريد إضافتها.": "Choose a section first, then select the photos or videos to add.",
+    "راجع الملفات داخل كل قسم، وحمّل الملف أو احذفه عند الحاجة.": "Review the files in each section, then download or remove them as needed.",
+    "إدارة أقسام المعرض": "Manage gallery sections",
+    "أعد تسمية القسم أو احذفه. عند حذف قسم، تنتقل ملفاته إلى القسم الرئيسي.": "Rename or delete a section. Its files move to the main section if you delete it.",
+    "أضف الصور التي تظهر في معرض الأعمال العام، ثم راجع الملفات الحالية أسفل الصفحة.": "Add images to the public portfolio, then review the current files below.",
+    "اسحب الملفات إلى المساحة أو اخترها من جهازك.": "Drop files here or choose them from your device.",
+    "يمكنك مراجعة الأعمال المنشورة وإزالة الملفات التي لم تعد مطلوبة.": "Review published work and remove files that are no longer needed.",
+    "تابع المساحة المستخدمة والمتبقية لملفات المعارض والبورتفوليو.": "Track the storage used and remaining for galleries and portfolio files.",
+    "تُحدّث الأرقام عند تحميل الصفحة وبعد عمليات رفع الملفات.": "These figures refresh when the page loads and after uploads.",
+    "استرجع المعارض المحذوفة أو احذفها نهائيًا بعد مراجعتها.": "Restore deleted galleries or permanently remove them after review.",
+    "الحذف النهائي لا يمكن التراجع عنه، بينما يمكن استعادة المعرض من هذه القائمة.": "Permanent deletion cannot be undone. Galleries can be restored from this list.",
+    "سجّل الدخول لإدارة معارض العملاء ومحتوى الاستوديو.": "Sign in to manage client galleries and studio content.",
     "الباقة 1": "Package 1",
     "الباقة 2": "Package 2",
     "الباقة 3": "Package 3",
@@ -611,7 +702,24 @@
     "Wedding Booking": "حجز الزفاف",
     "Book Now": "احجز الآن",
     "Admin | Mina Onsy Studio": "الإدارة | Mina Onsy Studio",
-    "Mina Onsy Studio Photography": "تصوير Mina Onsy Studio"
+    "Mina Onsy Studio Photography": "تصوير Mina Onsy Studio",
+    "WEDDING & EVENT PHOTOGRAPHY": "تصوير الأفراح والمناسبات",
+    "Wedding stories,": "حكايات زفاف،",
+    "held forever.": "تبقى للأبد.",
+    "Honest moments, artfully told — photographs that bring you back to how it felt.": "لحظات صادقة نحكيها بفن؛ صور تعيدك إلى إحساسها من جديد.",
+    "Explore the work": "استكشف الأعمال",
+    "Reserve your date": "احجز موعدك",
+    "Selected wedding photographs": "صور مختارة من حفلات الزفاف",
+    "Bride and groom together by the sea": "عروسان معًا بجوار البحر",
+    "A quiet wedding portrait with a bouquet": "صورة زفاف هادئة مع باقة ورد",
+    "Newlyweds among palm trees": "عروسان بين أشجار النخيل",
+    "ALEXANDRIA · EGYPT": "الإسكندرية · مصر",
+    "A DAY THAT FEELS LIKE YOU": "يوم يشبه حكايتكما",
+    "Less posing.": "وضعيات أقل.",
+    "More being there.": "وحضور أكبر.",
+    "From the first details to the last dance, we make space for the moments that matter — and turn them into photographs you can return to.": "من أول التفاصيل حتى الرقصة الأخيرة، نترك مساحة للحظات الأهم ونحفظها في صور تعودان إليها دائمًا.",
+    "Meet the people behind the camera": "تعرّف على فريق التصوير",
+    "Studio approach": "نهج الاستوديو"
   });
 
   // Entries have accumulated in both Arabic→English and English→Arabic order.
@@ -658,6 +766,7 @@
       [/^تم الرفع مع فشل\s+(\d+)\s+ملف\.?$/, "Uploaded with $1 failed files."],
       [/^جاري نقل معرض\s+(.+)\s+إلى سلة المهملات\.\.\.$/, "Moving gallery $1 to trash..."],
       [/^هل تريد حذف سكشن\s+(.+)\؟ سيتم نقل ملفاته إلى السكشن الرئيسي\.$/, "Delete section $1? Its files will be moved to the main section."],
+      [/^هل تريد حذف قسم\s+(.+)\؟ سيتم نقل ملفاته إلى القسم الرئيسي\.$/, "Delete section $1? Its files will be moved to the main section."],
       [/^هل تريد حذف معرض\s+(.+)\s+نهائيًا\؟ لن يمكن استرجاعه\.$/, "Permanently delete gallery $1? It cannot be restored."],
       [/^هل تريد نقل معرض\s+(.+)\s+إلى سلة المهملات\؟ يمكن استرجاعه لاحقًا بنفس الرابط\.$/, "Move gallery $1 to trash? It can later be restored using the same link."],
       [/^(\d+)\s+ث$/, "$1 sec"],
@@ -696,6 +805,7 @@
   function translateTextNode(node) {
     if (!node || !node.parentElement || /^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE)$/.test(node.parentElement.tagName)) return;
     if (node.parentElement.closest && node.parentElement.closest("#siteLanguageToggle, #mobileMenuDrawer, #mobileMenuToggle, #mobileMenuBackdrop")) return;
+    if (node.parentElement.closest && node.parentElement.closest(".site-header .main-nav a[data-label-ar][data-label-en]")) return;
     const raw = nodeKeys.has(node) ? nodeKeys.get(node) : node.nodeValue;
     if (!raw || !splitWhitespace(raw).core) return;
     const key = canonicalKey(raw);
@@ -905,6 +1015,27 @@
   }
 
   function renderThemeButton() {
+    if (document.body?.classList.contains("admin-body")) {
+      const adminButton = document.querySelector("[data-admin-theme-toggle]");
+      if (adminButton) {
+        const target = currentTheme === "dark" ? "light" : "dark";
+        const labels = currentLanguage === "ar"
+          ? { light: "التبديل إلى الوضع الفاتح", dark: "التبديل إلى الوضع الداكن" }
+          : { light: "Switch to light theme", dark: "Switch to dark theme" };
+        if (adminButton.dataset.iconTheme !== target) {
+          adminButton.innerHTML = target === "light" ? '<i class="fas fa-sun" aria-hidden="true"></i>' : '<i class="fas fa-moon" aria-hidden="true"></i>';
+          adminButton.dataset.iconTheme = target;
+        }
+        adminButton.setAttribute("aria-label", target === "light" ? labels.light : labels.dark);
+        adminButton.title = target === "light" ? labels.light : labels.dark;
+        if (!adminButton.dataset.bound) {
+          adminButton.addEventListener("click", () => setTheme(currentTheme === "dark" ? "light" : "dark"));
+          adminButton.dataset.bound = "1";
+        }
+      }
+      removeAdminThemeControl();
+      return;
+    }
     if (isAdminThemeControlDisabled()) {
       removeAdminThemeControl();
       return;
@@ -954,6 +1085,20 @@
       if (button) button.remove();
       const controlsBar = document.querySelector("#siteDesktopControls");
       if (controlsBar && !controlsBar.children.length) controlsBar.remove();
+      const adminButton = document.querySelector("[data-admin-language-toggle]");
+      if (adminButton) {
+        const target = currentLanguage === "en" ? "ar" : "en";
+        const labels = currentLanguage === "ar"
+          ? { english: "التبديل إلى الإنجليزية" }
+          : { arabic: "Switch to Arabic" };
+        adminButton.textContent = target === "ar" ? "العربية" : "English";
+        adminButton.setAttribute("aria-label", target === "ar" ? labels.arabic : labels.english);
+        adminButton.title = target === "ar" ? labels.arabic : labels.english;
+        if (!adminButton.dataset.bound) {
+          adminButton.addEventListener("click", () => setLanguage(currentLanguage === "en" ? "ar" : "en"));
+          adminButton.dataset.bound = "1";
+        }
+      }
       return;
     }
     const drawer = ensureMobileMenu();
@@ -1033,20 +1178,25 @@
     translatePage();
     observer = new MutationObserver((mutations) => {
       if (translating) return;
-      for (const mutation of mutations) {
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === Node.TEXT_NODE) translateTextNode(node);
-          else if (node.nodeType === Node.ELEMENT_NODE) {
-            const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
-            const nodes = [];
-            while (walker.nextNode()) nodes.push(walker.currentNode);
-            nodes.forEach(translateTextNode);
-            translateAttributes(node);
-          }
-        });
+      observer.disconnect();
+      try {
+        for (const mutation of mutations) {
+          mutation.addedNodes.forEach((node) => {
+            if (node.nodeType === Node.TEXT_NODE) translateTextNode(node);
+            else if (node.nodeType === Node.ELEMENT_NODE) {
+              const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+              const nodes = [];
+              while (walker.nextNode()) nodes.push(walker.currentNode);
+              nodes.forEach(translateTextNode);
+              translateAttributes(node);
+            }
+          });
+        }
+        renderLanguageButton();
+        renderThemeButton();
+      } finally {
+        observer.observe(document.body, { childList: true, subtree: true, characterData: true });
       }
-      renderLanguageButton();
-      renderThemeButton();
     });
     observer.observe(document.body, { childList: true, subtree: true, characterData: true });
     window.addEventListener("resize", () => {

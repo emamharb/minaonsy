@@ -1,0 +1,10 @@
+TEST/
+firebase.json
+firestore.rules
+storage.rules
+cors.json
+.firebaserc
+.env
+.env.*
+service-account*.json
+*-service-account*.json

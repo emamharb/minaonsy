@@ -6,6 +6,7 @@
   const next = box?.querySelector(".next");
   const downloadButton = box?.querySelector(".lightbox-download");
   let index = 0;
+  let triggerElement = null;
 
   function syncDownloadButton() {
     if (!downloadButton) return;
@@ -23,16 +24,20 @@
   function show(nextIndex) {
     if (!items.length || !box || !image) return;
     index = (nextIndex + items.length) % items.length;
+    if (!box.classList.contains("is-open")) triggerElement = document.activeElement;
     image.src = items[index].url;
     image.alt = items[index].alt || "";
     box.classList.add("is-open");
     box.setAttribute("aria-hidden", "false");
     syncDownloadButton();
+    (close || box.querySelector("button"))?.focus();
   }
 
   function hide() {
     box?.classList.remove("is-open");
     box?.setAttribute("aria-hidden", "true");
+    triggerElement?.focus?.();
+    triggerElement = null;
   }
 
   close?.addEventListener("click", hide);
@@ -47,6 +52,14 @@
     if (event.key === "Escape") hide();
     if (event.key === "ArrowRight") show(index - 1);
     if (event.key === "ArrowLeft") show(index + 1);
+    if (event.key === "Tab" && box) {
+      const controls = [...box.querySelectorAll("button:not([disabled])")];
+      if (!controls.length) return;
+      const first = controls[0];
+      const last = controls.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }
   });
 
   return { show };

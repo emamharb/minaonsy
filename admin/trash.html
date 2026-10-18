@@ -1,14 +1,15 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>سلة المهملات | Mina Onsy Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="../assets/css/style.css?v=theme18">
+  <link rel="stylesheet" href="../assets/css/style.css?v=final2">
+  <link rel="stylesheet" href="../assets/css/admin-editorial.css?v=final2">
   <style>
     * {
       box-sizing: border-box;
@@ -459,12 +460,16 @@
         <span class="brand-mark">MO</span>
         <span>Mina Onsy</span>
       </div>
-      <button class="hamburger-btn" id="hamburgerBtn" aria-label="فتح القائمة"><i class="fas fa-bars"></i></button>
+      <div class="admin-preferences" aria-label="إعدادات العرض">
+        <button class="admin-language-toggle" type="button" data-admin-language-toggle aria-label="Switch to Arabic">العربية</button>
+        <button class="admin-theme-toggle" type="button" data-admin-theme-toggle aria-label="Switch to light theme"><i class="fas fa-sun" aria-hidden="true"></i></button>
+      </div>
+      <button class="hamburger-btn" id="hamburgerBtn" aria-controls="sidebarNav" aria-expanded="false" aria-label="فتح القائمة"><i class="fas fa-bars"></i></button>
       <nav id="sidebarNav">
         <a href="dashboard.html"><i class="fas fa-images"></i>المعارض</a>
         <a href="portfolio.html"><i class="fas fa-th"></i>البورتفوليو</a>
         <a href="storage.html"><i class="fas fa-database"></i>المساحة</a>
-        <a class="active" href="trash.html"><i class="fas fa-trash"></i>سلة المهملات</a>
+        <a class="active" aria-current="page" href="trash.html"><i class="fas fa-trash"></i>سلة المهملات</a>
         <button id="logoutBtn" type="button"><i class="fas fa-sign-out-alt"></i>خروج</button>
       </nav>
     </aside>
@@ -473,10 +478,14 @@
         <div>
           <p class="eyebrow">إدارة المعارض</p>
           <h1>سلة المهملات</h1>
+          <p class="admin-page-intro">استرجع المعارض المحذوفة أو احذفها نهائيًا بعد مراجعتها.</p>
         </div>
       </div>
       <section class="admin-card">
-        <h2><i class="fas fa-trash"></i> المعارض المحذوفة</h2>
+        <div class="admin-card-heading">
+          <span class="admin-step-number" aria-hidden="true"><i class="fas fa-trash"></i></span>
+          <div><h2><i class="fas fa-box-archive" aria-hidden="true"></i> المعارض المحذوفة</h2><p class="admin-card-intro">الحذف النهائي لا يمكن التراجع عنه، بينما يمكن استعادة المعرض من هذه القائمة.</p></div>
+        </div>
         <div id="trashList" class="trash-list">
           <p class="muted">جاري تحميل المعارض المحذوفة...</p>
         </div>
@@ -484,7 +493,7 @@
     </main>
   </div>
 
-  <script src="../assets/js/language.js?v=language9"></script>
+  <script src="../assets/js/language.js?v=final2"></script>
   <script>
     (function() {
       var hamburger = document.getElementById('hamburgerBtn');
@@ -513,6 +522,7 @@
     })();
   </script>
 
-  <script type="module" src="../assets/js/admin-trash.js"></script>
+  <script src="../assets/js/admin-shell.js?v=final2"></script>
+  <script type="module" src="../assets/js/admin-trash.js?v=final2"></script>
 </body>
 </html>

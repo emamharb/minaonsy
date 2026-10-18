@@ -1,14 +1,15 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>دخول المشرف | Mina Onsy Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="../assets/css/style.css?v=theme18">
+  <link rel="stylesheet" href="../assets/css/style.css?v=final2">
+  <link rel="stylesheet" href="../assets/css/admin-editorial.css?v=final2">
   <style>
     * {
       box-sizing: border-box;
@@ -173,11 +174,16 @@
     }
   </style>
 </head>
-<body>
+<body class="admin-body">
   <main class="auth-shell">
+    <div class="admin-preferences admin-login-preferences" aria-label="إعدادات العرض">
+      <button class="admin-language-toggle" type="button" data-admin-language-toggle aria-label="Switch to Arabic">العربية</button>
+      <button class="admin-theme-toggle" type="button" data-admin-theme-toggle><i class="fas fa-sun" aria-hidden="true"></i></button>
+    </div>
     <form id="loginForm" class="auth-card">
       <p class="eyebrow"><i class="fas fa-crown" style="margin-left:6px;"></i> Mina Onsy Studio</p>
       <h1>تسجيل الدخول</h1>
+      <p class="auth-description">سجّل الدخول لإدارة معارض العملاء ومحتوى الاستوديو.</p>
 
       <label>
         البريد الإلكتروني
@@ -203,13 +209,13 @@
     </form>
   </main>
 
-  <script src="../assets/js/language.js?v=language9"></script>
+  <script src="../assets/js/language.js?v=final2"></script>
   <script>
     (function() {
-      // لا نقوم بأي تعديل على منطق الدخول، نتركه كما هو في admin-auth.js
+      // لا نقوم بأي تعديل على منطق الدخول، نتركه كما هو في admin-auth.js?v=final2
     })();
   </script>
 
-  <script type="module" src="../assets/js/admin-auth.js"></script>
+  <script type="module" src="../assets/js/admin-auth.js?v=final2"></script>
 </body>
 </html>

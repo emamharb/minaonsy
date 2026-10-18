@@ -140,7 +140,7 @@ function fileType(file) {
 }
 
 function defaultSection() {
-  return { id: "default", name: "السكشن الرئيسي", order: 0, isDefault: true };
+  return { id: "default", name: "القسم الرئيسي", order: 0, isDefault: true };
 }
 
 function createSectionOption(section) {
@@ -211,27 +211,43 @@ function groupFilesBySection(items) {
   }, {});
 }
 
-function renderSectionsManage() {
+function renderSectionsManage(groupedFiles = null) {
   if (!sectionsManage) return;
   const editable = sections.filter((section) => !section.isDefault);
   if (!editable.length) {
-    sectionsManage.innerHTML = `<p class="muted">لا توجد سكاشن مخصصة بعد.</p>`;
+    sectionsManage.innerHTML = `<p class="muted">لا توجد أقسام مخصصة بعد.</p>`;
     return;
   }
   sectionsManage.innerHTML = "";
   editable.forEach((section) => {
+    const fileCount = groupedFiles
+      ? (groupedFiles[section.id] || []).length
+      : currentFiles.filter((file) => normalizeSectionId(file.sectionId) === section.id).length;
     const row = document.createElement("div");
     row.className = "trash-row";
-    row.style.gridTemplateColumns = "1fr auto";
-    row.innerHTML = `
-      <div>
-        <h3>${section.name}</h3>
-        <small>عدد الملفات: ${(currentFiles.filter((file) => normalizeSectionId(file.sectionId) === section.id)).length}</small>
-      </div>
-      <div class="trash-actions">
-        <button class="button secondary" type="button" data-section-edit data-section-id="${section.id}">تعديل الاسم</button>
-        <button class="button danger" type="button" data-section-delete data-section-id="${section.id}">حذف السكشن</button>
-      </div>`;
+    const details = document.createElement("div");
+    details.className = "section-details";
+    const heading = document.createElement("h3");
+    heading.textContent = section.name;
+    const count = document.createElement("small");
+    count.textContent = `${window.SITE_LANGUAGE === "ar" ? "عدد الملفات" : "Files"}: ${fileCount}`;
+    details.append(heading, count);
+    const actions = document.createElement("div");
+    actions.className = "trash-actions";
+    const rename = document.createElement("button");
+    rename.className = "button secondary";
+    rename.type = "button";
+    rename.dataset.sectionEdit = "";
+    rename.dataset.sectionId = section.id;
+    rename.textContent = window.SITE_LANGUAGE === "ar" ? "تعديل الاسم" : "Rename";
+    const remove = document.createElement("button");
+    remove.className = "button danger";
+    remove.type = "button";
+    remove.dataset.sectionDelete = "";
+    remove.dataset.sectionId = section.id;
+    remove.textContent = window.SITE_LANGUAGE === "ar" ? "حذف القسم" : "Delete section";
+    actions.append(rename, remove);
+    row.append(details, actions);
     sectionsManage.append(row);
   });
 }
@@ -319,6 +335,7 @@ async function loadFiles() {
     if (snap.empty) {
       currentFiles = [];
       grid.innerHTML = `<p class="muted">لا توجد ملفات في هذا المعرض بعد.</p>`;
+      renderSectionsManage();
       return;
     }
     currentFiles = snap.docs.map((fileDoc) => ({ id: fileDoc.id, ...fileDoc.data() }));
@@ -328,25 +345,58 @@ async function loadFiles() {
       acc[key].push(item);
       return acc;
     }, {});
+    renderSectionsManage(grouped);
     const sectionOrder = sections.length ? sections : [defaultSection()];
     sectionOrder.forEach((section) => {
       const items = grouped[section.id] || [];
       const block = document.createElement("div");
       block.className = "section-block";
-      block.innerHTML = `<h3>${section.name}</h3>`;
+      block.dataset.sectionId = section.id;
+      const heading = document.createElement("div");
+      heading.className = "section-heading";
+      const headingTitle = document.createElement("h3");
+      headingTitle.textContent = section.name;
+      const sectionCount = document.createElement("span");
+      sectionCount.className = "section-count";
+      const fileCountLabel = window.SITE_LANGUAGE === "ar"
+        ? (items.length === 1 ? "ملف" : "ملفات")
+        : (items.length === 1 ? "file" : "files");
+      sectionCount.textContent = `${items.length} ${fileCountLabel}`;
+      heading.append(headingTitle, sectionCount);
       const gridWrap = document.createElement("div");
       gridWrap.className = "thumb-grid";
       if (!items.length) {
-        gridWrap.innerHTML = `<p class="muted">لا توجد ملفات داخل هذا السكشن بعد.</p>`;
+        gridWrap.innerHTML = `<p class="muted">لا توجد ملفات داخل هذا القسم بعد.</p>`;
       }
       items.forEach((item) => {
       const card = document.createElement("div");
       card.className = "thumb-card";
-      card.innerHTML = `${item.type === "video" ? `<video src="${item.url}" controls></video>` : `<img src="${item.previewUrl || item.url}" alt="">`}
-        <div class="thumb-actions"><a class="button secondary" href="${item.url}" download>تحميل</a><button class="button danger" type="button">حذف</button></div>
-        <p class="card-status muted"></p>`;
-      const deleteButton = card.querySelector("button");
-      const cardStatus = card.querySelector(".card-status");
+      const media = document.createElement(item.type === "video" ? "video" : "img");
+      media.src = item.type === "video" ? item.url : (item.previewUrl || item.url);
+      if (item.type === "video") media.controls = true;
+      else media.alt = item.name || "صورة داخل المعرض";
+      media.className = "thumb-media";
+      const fileName = document.createElement("span");
+      fileName.className = "thumb-file-name";
+      fileName.title = item.name || "";
+      fileName.textContent = item.name || (item.type === "video" ? "فيديو" : "صورة");
+      const actions = document.createElement("div");
+      actions.className = "thumb-actions";
+      const download = document.createElement("a");
+      download.className = "button secondary";
+      download.href = item.url;
+      download.download = "";
+      download.textContent = "تحميل";
+      const remove = document.createElement("button");
+      remove.className = "button danger";
+      remove.type = "button";
+      remove.textContent = "حذف";
+      actions.append(download, remove);
+      const cardStatusNode = document.createElement("p");
+      cardStatusNode.className = "card-status muted";
+      card.append(media, fileName, actions, cardStatusNode);
+      const deleteButton = remove;
+      const cardStatus = cardStatusNode;
       deleteButton.addEventListener("click", async () => {
         if (!confirm("هل تريد حذف هذا الملف؟")) return;
         deleteButton.disabled = true;
@@ -369,12 +419,30 @@ async function loadFiles() {
       });
         gridWrap.append(card);
       });
-      block.append(gridWrap);
+      block.append(heading, gridWrap);
       grid.append(block);
     });
   } catch (error) {
     grid.innerHTML = `<p class="muted">${friendlyError(error)}</p>`;
   }
+}
+
+function updateGalleryLanguage() {
+  renderSectionSelect();
+  renderSectionsManage();
+  grid.querySelectorAll(".section-block").forEach((block) => {
+    const section = sectionMetaById(block.dataset.sectionId);
+    const count = currentFiles.filter((file) => normalizeSectionId(file.sectionId) === section.id).length;
+    const countLabel = window.SITE_LANGUAGE === "ar"
+      ? (count === 1 ? "ملف" : "ملفات")
+      : (count === 1 ? "file" : "files");
+    const countNode = block.querySelector(".section-count");
+    if (countNode) countNode.textContent = `${count} ${countLabel}`;
+    const emptyState = block.querySelector(".thumb-grid > .muted");
+    if (emptyState) emptyState.textContent = window.SITE_LANGUAGE === "ar"
+      ? "لا توجد ملفات داخل هذا القسم بعد."
+      : "There are no files in this section yet.";
+  });
 }
 
 function isAllowedFile(file) {
@@ -540,7 +608,7 @@ async function createSection() {
 async function renameSection(sectionId) {
   const section = sections.find((item) => item.id === sectionId);
   if (!section || section.isDefault) return;
-  const nextName = prompt("اكتب اسم السكشن الجديد:", section.name);
+  const nextName = prompt("اكتب اسم القسم الجديد:", section.name);
   if (!nextName || !nextName.trim() || nextName.trim() === section.name) return;
   await updateDoc(doc(db, "galleries", galleryId, "sections", sectionId), {
     name: nextName.trim(),
@@ -553,7 +621,7 @@ async function renameSection(sectionId) {
 async function deleteSection(sectionId) {
   const section = sections.find((item) => item.id === sectionId);
   if (!section || section.isDefault) return;
-  if (!confirm(`هل تريد حذف سكشن ${section.name}؟ سيتم نقل ملفاته إلى السكشن الرئيسي.`)) return;
+  if (!confirm(`هل تريد حذف قسم ${section.name}؟ سيتم نقل ملفاته إلى القسم الرئيسي.`)) return;
   const affected = currentFiles.filter((file) => normalizeSectionId(file.sectionId) === section.id);
   for (const file of affected) {
     await updateDoc(doc(db, "galleries", galleryId, "files", file.id), {
@@ -621,7 +689,7 @@ createSectionBtn?.addEventListener("click", async () => {
   try {
     createSectionBtn.disabled = true;
     await createSection();
-    showPageMessage("تم إنشاء السكشن.", "success");
+    showPageMessage("تم إنشاء القسم.", "success");
   } catch (error) {
     showPageMessage(friendlyError(error), "error");
   } finally {
@@ -641,4 +709,5 @@ sectionsManage?.addEventListener("click", async (event) => {
     await deleteSection(sectionId);
   }
 });
+window.addEventListener("site-language-change", updateGalleryLanguage);
 loadGallery();

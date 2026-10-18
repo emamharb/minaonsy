@@ -1,14 +1,14 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>لوحة التحكم | Mina Onsy Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="../assets/css/style.css?v=theme18">
+  <link rel="stylesheet" href="../assets/css/style.css?v=final2">
   <style>
     * {
       box-sizing: border-box;
@@ -459,27 +459,8 @@
       color: #0f172a !important;
       font-weight: 500;
     }
-    .table-list:empty::after {
-      color: #1e293b;
-      border-color: #cbd5e1;
-      background: #f8fafc;
-    }
     #gallerySearch::placeholder {
       color: #475569;
-    }
-
-    .table-list:empty::after {
-      content: "لا توجد معارض حتى الآن";
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #1e293b;
-      font-size: 0.95rem;
-      padding: 2rem 0;
-      border: 2px dashed #cbd5e1;
-      border-radius: 16px;
-      background: #f8fafc;
-      width: 100%;
     }
 
     #galleriesList .gallery-item {
@@ -826,6 +807,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="../assets/css/admin-editorial.css?v=final2">
 </head>
 <body class="admin-body">
   <div class="admin-layout">
@@ -834,9 +816,13 @@
         <span class="brand-mark">MO</span>
         <span>Mina Onsy</span>
       </div>
-      <button class="hamburger-btn" id="hamburgerBtn" aria-label="فتح القائمة"><i class="fas fa-bars"></i></button>
+      <div class="admin-preferences" aria-label="إعدادات العرض">
+        <button class="admin-language-toggle" type="button" data-admin-language-toggle aria-label="Switch to Arabic">العربية</button>
+        <button class="admin-theme-toggle" type="button" data-admin-theme-toggle aria-label="Switch to light theme"><i class="fas fa-sun" aria-hidden="true"></i></button>
+      </div>
+      <button class="hamburger-btn" id="hamburgerBtn" aria-controls="sidebarNav" aria-expanded="false" aria-label="فتح القائمة"><i class="fas fa-bars"></i></button>
       <nav id="sidebarNav">
-        <a class="active" href="dashboard.html"><i class="fas fa-images"></i>المعارض</a>
+        <a class="active" aria-current="page" href="dashboard.html"><i class="fas fa-images"></i>المعارض</a>
         <a href="portfolio.html"><i class="fas fa-th"></i>البورتفوليو</a>
         <a href="storage.html"><i class="fas fa-database"></i>المساحة</a>
         <a href="trash.html"><i class="fas fa-trash"></i>سلة المهملات</a>
@@ -848,11 +834,18 @@
         <div>
           <p class="eyebrow">لوحة التحكم</p>
           <h1>معارض العملاء</h1>
+          <p class="admin-page-intro">أنشئ معرضًا للعميل، ثم أضف الصور والفيديوهات من صفحة إدارته.</p>
         </div>
       </div>
       <div class="admin-grid">
         <section class="admin-card">
-          <h2><i class="fas fa-plus-circle"></i> معرض جديد</h2>
+          <div class="admin-card-heading">
+            <span class="admin-step-number" aria-hidden="true">01</span>
+            <div>
+              <h2><i class="fas fa-plus-circle" aria-hidden="true"></i> معرض جديد</h2>
+              <p class="admin-card-intro">أدخل بيانات المناسبة لإنشاء رابط خاص بالعميل.</p>
+            </div>
+          </div>
           <form id="createGalleryForm" class="form-grid">
             <label>
               اسم العميل / المناسبة
@@ -905,18 +898,25 @@
             </label>
             <button class="button primary full" type="submit"><i class="fas fa-plus"></i> إنشاء المعرض</button>
           </form>
-          <p id="createStatus" class="muted"></p>
+          <p id="createStatus" class="muted" role="status" aria-live="polite"></p>
         </section>
         <section class="admin-card">
-          <h2><i class="fas fa-list"></i> كل المعارض</h2>
-          <input id="gallerySearch" placeholder="بحث بالاسم أو التاريخ...">
+          <div class="admin-card-heading">
+            <span class="admin-step-number" aria-hidden="true">02</span>
+            <div>
+              <h2><i class="fas fa-list" aria-hidden="true"></i> كل المعارض</h2>
+              <p class="admin-card-intro">ابحث عن معرض سابق وافتحه لإضافة الملفات أو مشاركة رابطه.</p>
+            </div>
+          </div>
+          <label class="visually-hidden" for="gallerySearch">بحث بالاسم أو التاريخ...</label>
+          <input id="gallerySearch" type="search" placeholder="بحث بالاسم أو التاريخ..." aria-label="بحث بالاسم أو التاريخ...">
           <div id="galleriesList" class="table-list"></div>
         </section>
       </div>
     </main>
   </div>
 
-  <script src="../assets/js/language.js?v=language9"></script>
+  <script src="../assets/js/language.js?v=final2"></script>
   <script>
     (function() {
       var dateInput = document.getElementById('eventDate');
@@ -996,13 +996,22 @@
       if (hamburger && nav) {
         hamburger.addEventListener('click', function(e) {
           e.stopPropagation();
-          nav.classList.toggle('open');
+          var isOpen = nav.classList.toggle('open');
+          hamburger.setAttribute('aria-expanded', String(isOpen));
+          var icon = hamburger.querySelector('i');
+          if (icon) {
+            icon.classList.toggle('fa-bars', !isOpen);
+            icon.classList.toggle('fa-times', isOpen);
+          }
         });
         document.addEventListener('click', function(e) {
           if (window.innerWidth <= 768) {
             var sidebar = document.querySelector('.admin-sidebar');
             if (sidebar && !sidebar.contains(e.target)) {
               nav.classList.remove('open');
+              hamburger.setAttribute('aria-expanded', 'false');
+              var icon = hamburger.querySelector('i');
+              if (icon) { icon.classList.add('fa-bars'); icon.classList.remove('fa-times'); }
             }
           }
         });
@@ -1010,6 +1019,9 @@
           el.addEventListener('click', function() {
             if (window.innerWidth <= 768) {
               nav.classList.remove('open');
+              hamburger.setAttribute('aria-expanded', 'false');
+              var icon = hamburger.querySelector('i');
+              if (icon) { icon.classList.add('fa-bars'); icon.classList.remove('fa-times'); }
             }
           });
         });
@@ -1017,6 +1029,7 @@
     })();
   </script>
 
-  <script type="module" src="../assets/js/admin-galleries.js"></script>
+  <script src="../assets/js/admin-shell.js?v=final2"></script>
+  <script type="module" src="../assets/js/admin-galleries.js?v=final2"></script>
 </body>
 </html>
