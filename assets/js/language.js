@@ -833,7 +833,7 @@
   }
 
   function translateAttributes(root) {
-    root.querySelectorAll("[placeholder],[aria-label],[title],[alt],meta[name='description']").forEach((element) => {
+    root.querySelectorAll("[placeholder],[aria-label],[title],[alt],meta[name='description']:not([data-seo-en])").forEach((element) => {
       if (element.closest && element.closest("#siteLanguageToggle, #mobileMenuDrawer, #mobileMenuToggle, #mobileMenuBackdrop, #galleryGateLanguageToggle")) return;
       const keys = attrKeys.get(element) || {};
       ["placeholder", "aria-label", "title", "alt", ...(element.matches("meta[name='description']") ? ["content"] : [])].forEach((attribute) => {
@@ -1157,7 +1157,15 @@
     translating = true;
     document.documentElement.lang = currentLanguage;
     document.documentElement.dir = currentLanguage === "ar" ? "rtl" : "ltr";
-    if (document.title) document.title = translateValue(document.title);
+    const titleElement = document.head.querySelector("title[data-seo-en][data-seo-ar]");
+    if (titleElement) {
+      document.title = titleElement.dataset[currentLanguage === "ar" ? "seoAr" : "seoEn"];
+    } else if (document.title) {
+      document.title = translateValue(document.title);
+    }
+    document.head.querySelectorAll("meta[data-seo-en][data-seo-ar]").forEach((meta) => {
+      meta.setAttribute("content", meta.dataset[currentLanguage === "ar" ? "seoAr" : "seoEn"]);
+    });
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);

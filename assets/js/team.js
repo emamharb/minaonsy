@@ -106,7 +106,40 @@ const memberId = params.get("member");
 
 const selectedMember = teamMembers.find((item) => item.id === memberId);
 
+function updateMemberSeo(member) {
+  if (!member) return;
+  const englishTitle = `${member.name} | Wedding Photography Portfolio | Mina Onsy Studio`;
+  const arabicTitle = `أعمال ${member.name} | تصوير أفراح | استوديو مينا أنسي`;
+  const englishDescription = `Explore wedding photography by ${member.name}, part of the Mina Onsy Studio team in Alexandria, Egypt.`;
+  const arabicDescription = `شاهد أعمال تصوير الأفراح لـ${member.name}، أحد أعضاء فريق استوديو مينا أنسي في الإسكندرية، مصر.`;
+  const lang = window.SITE_LANGUAGE === "ar" ? "ar" : "en";
+  const title = document.head.querySelector("title");
+  if (title) {
+    title.dataset.seoEn = englishTitle;
+    title.dataset.seoAr = arabicTitle;
+    document.title = lang === "ar" ? arabicTitle : englishTitle;
+  }
+  document.head.querySelectorAll("meta[name='description'],meta[property='og:title'],meta[property='og:description'],meta[name='twitter:title'],meta[name='twitter:description']").forEach((meta) => {
+    const isTitle = meta.name === "twitter:title" || meta.getAttribute("property") === "og:title";
+    meta.dataset.seoEn = isTitle ? englishTitle : englishDescription;
+    meta.dataset.seoAr = isTitle ? arabicTitle : arabicDescription;
+    meta.content = lang === "ar" ? meta.dataset.seoAr : meta.dataset.seoEn;
+  });
+  const canonical = document.head.querySelector("link[rel='canonical']");
+  const memberUrl = `${location.origin}/team-member.html?member=${encodeURIComponent(member.id)}`;
+  if (canonical) canonical.href = memberUrl;
+  const ogUrl = document.head.querySelector("meta[property='og:url']");
+  if (ogUrl) ogUrl.content = memberUrl;
+  const imageUrl = new URL(member.cover, location.href).href;
+  ["meta[property='og:image']", "meta[name='twitter:image']"].forEach((selector) => {
+    const image = document.head.querySelector(selector);
+    if (image) image.content = imageUrl;
+  });
+}
+
 if (selectedMember) {
+  updateMemberSeo(selectedMember);
+  window.addEventListener("site-language-change", () => updateMemberSeo(selectedMember));
   renderGallery(selectedMember);
   galleryBack?.addEventListener("click", () => {
     window.location.href = "team.html";
