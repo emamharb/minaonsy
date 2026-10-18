@@ -1189,7 +1189,12 @@
   window.getSiteTheme = () => currentTheme;
 
   document.addEventListener("DOMContentLoaded", () => {
-    translatePage();
+    try {
+      translatePage();
+    } finally {
+      document.documentElement.classList.remove("locale-pending");
+      if (window.__localeRevealTimer) clearTimeout(window.__localeRevealTimer);
+    }
     observer = new MutationObserver((mutations) => {
       if (translating) return;
       observer.disconnect();

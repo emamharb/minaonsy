@@ -3,13 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    (() => {
+      const root = document.documentElement;
+      let language = 'en';
+      try { language = localStorage.getItem('mina-site-language') === 'ar' ? 'ar' : 'en'; } catch (_) {}
+      root.lang = language;
+      root.dir = language === 'ar' ? 'rtl' : 'ltr';
+    })();
+  </script>
+  <style>html.locale-pending { background: #0b0b0a; } html.locale-pending body { visibility: hidden !important; }</style>
   <title>دخول المشرف | Mina Onsy Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="../assets/css/style.css?v=final2">
-  <link rel="stylesheet" href="../assets/css/admin-editorial.css?v=final2">
+  <link rel="stylesheet" href="../assets/css/style.css?v=final3">
+  <link rel="stylesheet" href="../assets/css/admin-editorial.css?v=final3">
   <style>
     * {
       box-sizing: border-box;
@@ -209,7 +219,7 @@
     </form>
   </main>
 
-  <script src="../assets/js/language.js?v=final5"></script>
+  <script src="../assets/js/language.js?v=final7"></script>
   <script>
     (function() {
       // لا نقوم بأي تعديل على منطق الدخول، نتركه كما هو في admin-auth.js?v=final2

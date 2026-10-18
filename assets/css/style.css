@@ -28,7 +28,7 @@ body {
   font-family: "Cairo", Arial, sans-serif;
   color: var(--text);
   background: var(--mono-dark);
-  direction: rtl;
+  direction: inherit;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;

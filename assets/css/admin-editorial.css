@@ -955,6 +955,8 @@ html[data-theme="dark"] body.admin-body .auth-card input { background: #191815 !
 @media (max-width: 1020px) {
   .admin-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; }
   #galleriesList .gallery-row { grid-template-columns: 78px minmax(120px, 1fr) auto !important; }
+  #galleriesList .gallery-cover { width: 78px !important; max-width: 100%; }
+  #galleriesList .gallery-identity { min-width: 0; }
   #galleriesList .gallery-row-meta { grid-column: 2; grid-row: 2; display: flex; flex-wrap: wrap; gap: .35rem .8rem; }
   #galleriesList .thumb-actions { grid-column: 1 / -1; justify-content: flex-start !important; }
 }

@@ -3,6 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    (() => {
+      const root = document.documentElement;
+      let language = 'en';
+      try { language = localStorage.getItem('mina-site-language') === 'ar' ? 'ar' : 'en'; } catch (_) {}
+      root.lang = language;
+      root.dir = language === 'ar' ? 'rtl' : 'ltr';
+    })();
+  </script>
+  <style>html.locale-pending { background: #0b0b0a; } html.locale-pending body { visibility: hidden !important; }</style>
   <title>Client Gallery | Mina Onsy Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1939,7 +1949,7 @@
     })();
   </script>
 
-  <script src="assets/js/language.js?v=final6"></script>
+  <script src="assets/js/language.js?v=final7"></script>
   <!-- تم الاحتفاظ بملف gallery.js لتشغيل الوظائف (تحميل الصور، معرض الصور، تحميل الكل) -->
   <script type="module" src="assets/js/gallery.js?v=final11"></script>
 </body>
