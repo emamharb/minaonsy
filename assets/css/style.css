@@ -3036,3 +3036,12 @@ html[dir="rtl"] .team-card h2 { font-size: clamp(28px, 3vw, 38px); }
 @media (prefers-reduced-motion: reduce) {
   html[dir="rtl"] *, html[dir="rtl"] *::before, html[dir="rtl"] *::after { scroll-behavior: auto !important; }
 }
+
+/* Keep translated Arabic text blocks RTL even where the English layout sets LTR. */
+html[dir="rtl"] .hero h1,
+html[dir="rtl"] .hero p,
+html[dir="rtl"] .editorial-copy .editorial-kicker,
+html[dir="rtl"] .main-nav > a {
+  direction: rtl;
+  unicode-bidi: isolate;
+}
