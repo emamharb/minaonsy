@@ -2948,3 +2948,91 @@ html[dir="rtl"] .editorial-photo-note { direction: rtl; right: 5%; left: auto; }
   .editorial-photo, .editorial-photo img, .editorial-text-link, .pricing-new-card, .masonry-item img { transition: none !important; animation: none !important; }
   html { scroll-behavior: auto !important; }
 }
+
+/* Arabic editorial system: keep the same visual rhythm without oversized lines. */
+:root { --editorial-arabic-display: "Cairo", "Tajawal", sans-serif; }
+html[dir="rtl"] body:not(.admin-page):not(.admin-body) { font-family: var(--editorial-arabic-sans); }
+html[dir="rtl"] body:not(.admin-page):not(.admin-body) .site-header > .main-nav a {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.5;
+}
+html[dir="rtl"] .editorial-hero h1,
+html[dir="rtl"] .editorial-statement h2,
+html[dir="rtl"] .pricing-new-hero h1,
+html[dir="rtl"] .pricing-new-card h3,
+html[dir="rtl"] .pricing-new-detail h2,
+html[dir="rtl"] .team-hero h1,
+html[dir="rtl"] .team-card h2,
+html[dir="rtl"] .portfolio-title {
+  font-family: var(--editorial-arabic-display) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+html[dir="rtl"] .editorial-hero h1 { font-size: clamp(48px, 5vw, 66px); line-height: 1.3; }
+html[dir="rtl"] .editorial-hero h1 > span,
+html[dir="rtl"] .editorial-hero h1 > em { white-space: nowrap; }
+html[dir="rtl"] .editorial-hero h1 em,
+html[dir="rtl"] .editorial-statement h2 em { font-style: normal; }
+html[dir="rtl"] .editorial-description {
+  max-width: 390px;
+  font-size: clamp(16px, 1.25vw, 18px);
+  line-height: 1.85;
+}
+html[dir="rtl"] .editorial-statement { padding-block: clamp(62px, 8vw, 110px); }
+html[dir="rtl"] .editorial-statement h2 { font-size: clamp(44px, 5.5vw, 72px); line-height: 1.3; }
+html[dir="rtl"] .editorial-statement > p:not(.editorial-kicker) { max-width: 570px; font-size: 16px; line-height: 1.85; }
+html[dir="rtl"] .portfolio-title {
+  padding: clamp(52px, 7vw, 88px) 20px 28px;
+  font-size: clamp(40px, 5vw, 58px);
+}
+html[dir="rtl"] .pricing-new-hero h1 { font-size: clamp(48px, 6vw, 76px) !important; line-height: 1.25 !important; }
+html[dir="rtl"] .pricing-new-shell { padding-top: clamp(38px, 5vw, 68px); padding-bottom: 72px; }
+html[dir="rtl"] .pricing-new-hero { padding-bottom: clamp(42px, 5vw, 68px); }
+html[dir="rtl"] .pricing-new-cards { margin-top: clamp(36px, 5vw, 58px); }
+html[dir="rtl"] .pricing-new-kicker {
+  font-family: var(--editorial-arabic-sans);
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+html[dir="rtl"] .pricing-new-hero-copy strong {
+  direction: rtl;
+  font-family: var(--editorial-arabic-sans);
+  font-size: 14px;
+  letter-spacing: 0;
+}
+html[dir="rtl"] .pricing-new-badge { font-family: var(--editorial-arabic-sans); font-size: 13px; letter-spacing: 0; text-transform: none; }
+html[dir="rtl"] .pricing-new-card h3 { font-size: clamp(30px, 3vw, 40px); }
+html[dir="rtl"] .pricing-new-detail h2 { font-size: clamp(34px, 4vw, 48px); }
+html[dir="rtl"] .team-hero h1 { font-size: clamp(48px, 6vw, 72px); line-height: 1.25; }
+html[dir="rtl"] .team-page-shell { padding-block: clamp(40px, 6vw, 72px); }
+html[dir="rtl"] .team-hero-copy,
+html[dir="rtl"] .team-card p { font-size: 16px; line-height: 1.8; }
+html[dir="rtl"] .team-role { font-family: var(--editorial-arabic-sans); font-size: 14px; letter-spacing: 0; line-height: 1.6; text-transform: none; }
+html[dir="rtl"] .team-card h2 { font-size: clamp(28px, 3vw, 38px); }
+
+@media (min-width: 701px) and (max-width: 900px) {
+  html[dir="rtl"] .editorial-hero h1 { font-size: clamp(50px, 7vw, 64px); }
+}
+@media (max-width: 700px) {
+  html[dir="rtl"] body:not(.admin-page):not(.admin-body) .site-header > .main-nav a { font-size: 15px; }
+  html[dir="rtl"] .editorial-hero h1 { font-size: clamp(38px, 9vw, 54px); line-height: 1.35; }
+  html[dir="rtl"] .editorial-description { max-width: 34ch; font-size: 16px; line-height: 1.8; }
+  html[dir="rtl"] .editorial-statement { padding-block: 64px; }
+  html[dir="rtl"] .editorial-statement h2 { font-size: clamp(34px, 8.5vw, 48px); line-height: 1.35; }
+  html[dir="rtl"] .editorial-statement > p:not(.editorial-kicker) { font-size: 15px; }
+  html[dir="rtl"] .portfolio-title { padding: 54px 16px 26px; font-size: clamp(36px, 9vw, 48px); }
+  html[dir="rtl"] .pricing-new-hero h1 { font-size: clamp(40px, 11vw, 60px) !important; }
+  html[dir="rtl"] .pricing-new-shell { padding-top: 40px; }
+  html[dir="rtl"] .pricing-new-hero { padding-bottom: 42px; }
+  html[dir="rtl"] .pricing-new-cards { margin-top: 36px; }
+  html[dir="rtl"] .pricing-new-card h3 { font-size: clamp(29px, 8vw, 36px); }
+  html[dir="rtl"] .team-hero h1 { font-size: clamp(42px, 10vw, 58px); }
+  html[dir="rtl"] .team-card h2 { font-size: clamp(28px, 8vw, 34px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[dir="rtl"] *, html[dir="rtl"] *::before, html[dir="rtl"] *::after { scroll-behavior: auto !important; }
+}

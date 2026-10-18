@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bebas+Neue&family=Cairo:wght@300;400;600;700;800&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Tajawal:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=final5">
+  <link rel="stylesheet" href="assets/css/style.css?v=final7">
   <style>
     :root {
       color-scheme: dark;
@@ -192,18 +192,18 @@
         </div>
 
         <h2 class="booking-section-title" id="sec-packages">اختر الباقات المطلوبة</h2>
-        <p class="package-section-title" id="title-photo-sec">أولاً: باقات التصوير الأساسية (Photo):</p>
+        <p class="package-section-title" id="title-photo-sec">أولاً: باقات التصوير الأساسية:</p>
         <div class="packages-grid">
-          <button class="package-card photo-card" id="card-standard" type="button" data-photo="standard"><strong id="lbl-p1">الباقة 1</strong><span id="price-standard">-</span></button>
-          <button class="package-card photo-card" id="card-premium" type="button" data-photo="premium"><strong id="lbl-p2">الباقة 2</strong><span id="price-premium">-</span></button>
-          <button class="package-card photo-card" id="card-luxury" type="button" data-photo="luxury"><strong id="lbl-p3">الباقة 3</strong><span id="price-luxury">-</span></button>
-          <button class="package-card photo-card" id="card-vip" type="button" data-photo="vip"><em id="lbl-hot">الأكثر طلباً</em><strong id="lbl-pvip">الباقة VIP</strong><span id="price-vip">-</span></button>
+          <button class="package-card photo-card" id="card-standard" type="button" data-photo="standard"><strong id="lbl-p1">الباقة الأولى</strong><span id="price-standard">-</span></button>
+          <button class="package-card photo-card" id="card-premium" type="button" data-photo="premium"><strong id="lbl-p2">الباقة الثانية</strong><span id="price-premium">-</span></button>
+          <button class="package-card photo-card" id="card-luxury" type="button" data-photo="luxury"><strong id="lbl-p3">الباقة الثالثة</strong><span id="price-luxury">-</span></button>
+          <button class="package-card photo-card" id="card-vip" type="button" data-photo="vip"><em id="lbl-hot">الأكثر طلباً</em><strong id="lbl-pvip">باقة كبار الشخصيات</strong><span id="price-vip">-</span></button>
         </div>
 
-        <p class="package-section-title" id="title-promo-sec">ثانياً: عروض البرومو الإضافية (Promo):</p>
+        <p class="package-section-title" id="title-promo-sec">ثانياً: العروض الإضافية:</p>
         <div class="packages-grid promo-grid">
-          <button class="package-card promo-card" id="card-promo_standard" type="button" data-promo="promo_standard"><strong id="lbl-pr1">باكدج 1 (برومو)</strong><span id="price-promo-standard">-</span></button>
-          <button class="package-card promo-card" id="card-promo_premium" type="button" data-promo="promo_premium"><strong id="lbl-pr2">باكدج 2 (برومو)</strong><span id="price-promo-premium">-</span></button>
+          <button class="package-card promo-card" id="card-promo_standard" type="button" data-promo="promo_standard"><strong id="lbl-pr1">العرض الإضافي الأول</strong><span id="price-promo-standard">-</span></button>
+          <button class="package-card promo-card" id="card-promo_premium" type="button" data-promo="promo_premium"><strong id="lbl-pr2">العرض الإضافي الثاني</strong><span id="price-promo-premium">-</span></button>
         </div>
 
         <input type="hidden" id="selected-photo-package" value="">
@@ -230,8 +230,8 @@
 
         <div class="total-summary-for-customer">
           <h3 id="sum-title">الفاتورة وملخص الحساب المالي</h3>
-          <div class="customer-summary-item"><span id="sum-photo">سعر باقة التصوير (Photo)</span><strong id="photo-price-customer">0 ج.م</strong></div>
-          <div class="customer-summary-item"><span id="sum-promo">سعر باقة البرومو (Promo)</span><strong id="promo-price-customer">0 ج.م</strong></div>
+          <div class="customer-summary-item"><span id="sum-photo">سعر باقة التصوير</span><strong id="photo-price-customer">0 ج.م</strong></div>
+          <div class="customer-summary-item"><span id="sum-promo">سعر العروض الإضافية</span><strong id="promo-price-customer">0 ج.م</strong></div>
           <div class="customer-summary-item"><span id="sum-discount">قيمة الخصم الممنوح:</span><strong id="discount-amount-customer">0 ج.م</strong></div>
           <div class="customer-summary-item"><span id="sum-trans">رسوم ومصاريف الانتقال للمحافظة:</span><strong id="trans-price-customer">0 ج.م</strong></div>
           <div class="customer-summary-item"><span id="sum-down">المقدم المدفوع (العربون)</span><strong id="down-payment-customer">0 ج.م</strong></div>
@@ -264,7 +264,7 @@
     <img src="assets/photos/whatsapp.png?v=optimized" alt="WhatsApp">
   </a>
 
-  <script src="assets/js/language.js?v=final2"></script>
+  <script src="assets/js/language.js?v=final5"></script>
   <script>
     (function initDateDropdowns() {
       const daySelect = document.getElementById('event-day');
@@ -367,6 +367,6 @@
   </script>
 
   <script type="module" src="assets/js/scroll-effects.js?v=final2"></script>
-  <script src="assets/js/booking.js?v=final2"></script>
+  <script src="assets/js/booking.js?v=final3"></script>
 </body>
 </html>
