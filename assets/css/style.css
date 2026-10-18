@@ -52,9 +52,10 @@ button, input, select, textarea { font: inherit; }
 .brand { display: inline-grid; gap: 2px; align-items: center; font-weight: 700; color: var(--mono-muted); direction: ltr; line-height: 1; min-width: max-content; }
 .brand-logo {
   width: 164px;
-  height: auto;
+  aspect-ratio: 6.05;
   display: block;
-  object-fit: contain;
+  object-fit: cover;
+  object-position: top;
 }
 .brand small { color: var(--accent); font-family: var(--code); font-size: 9px; font-weight: 500; letter-spacing: .26em; white-space: nowrap; }
 .brand-mark {
