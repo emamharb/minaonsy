@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   
   <!-- Keep the client gallery's standalone visual theme. -->
-  <!-- تم الاحتفاظ فقط بملف gallery.js?v=final2 لتشغيل الوظائف -->
+  <!-- Client gallery behavior lives in assets/js/gallery.js. -->
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
 
   <style>
@@ -24,7 +24,7 @@
       font-family: "Cairo", Arial, sans-serif;
       background: #faf8f5;
       color: #2c2c2c;
-      direction: rtl;
+      direction: ltr;
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
@@ -33,6 +33,7 @@
 
     html[dir="rtl"] body {
       font-family: "Tajawal", "Cairo", Arial, sans-serif;
+      direction: rtl;
     }
 
     html[dir="rtl"] .client-album-hero h1 {
@@ -180,8 +181,6 @@
       box-shadow: 0 24px 70px rgba(0, 0, 0, 0.16);
     }
 
-    #galleryCover { position: absolute; inset: 0; z-index: -2; overflow: hidden; background: #1d1c1a; }
-    #galleryCover img { width: 100%; height: 100%; object-fit: cover; opacity: .72; transform: scale(1.01); }
     .client-album-hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(12,12,12,.82), rgba(12,12,12,.52) 55%, rgba(12,12,12,.18)); }
 
     .album-title-block {
@@ -1026,6 +1025,233 @@
       .client-card:hover, .client-card:hover img, .client-card:hover video { transform: none !important; }
     }
 
+    .client-album-hero.delivery-welcome {
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      grid-template-columns: 164px minmax(0, 1fr) minmax(184px, 220px);
+      align-items: center;
+      gap: clamp(22px, 4vw, 44px);
+      min-height: 0;
+      margin: clamp(22px, 4vw, 42px) 0 0;
+      padding: clamp(24px, 4vw, 48px);
+      overflow: hidden;
+      border: 1px solid rgba(184, 148, 62, .22);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(207, 179, 117, .18), transparent 34%),
+        linear-gradient(120deg, #fffdf9 0%, #f4efe5 100%);
+      box-shadow: 0 20px 56px rgba(43, 35, 22, .09);
+      animation: deliveryWelcomeIn .6s cubic-bezier(.2,.7,.2,1) both;
+    }
+
+    .client-album-hero.delivery-welcome::after { display: none; }
+    .client-album-hero.delivery-welcome.no-portrait { grid-template-columns: minmax(0, 1fr) minmax(184px, 220px); }
+
+    #deliveryPortraitFrame {
+      position: relative;
+      width: clamp(128px, 14vw, 164px);
+      aspect-ratio: 1;
+      justify-self: center;
+      margin: 0;
+      padding: 7px;
+      border: 1px solid rgba(255, 255, 255, .95);
+      border-radius: 50%;
+      background: linear-gradient(145deg, #ddc991, #9f7937);
+      box-shadow: 0 14px 36px rgba(119, 88, 34, .22), 0 0 0 7px rgba(184, 148, 62, .09);
+    }
+
+    #deliveryPortraitFrame[hidden] { display: none; }
+
+    #deliveryPortrait {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 38%;
+      border: 4px solid #fffdf9;
+      border-radius: 50%;
+      background: #e8e1d4;
+    }
+
+    .client-album-hero.delivery-welcome .album-title-block { z-index: auto; }
+
+    .client-album-hero.delivery-welcome .eyebrow {
+      margin: 0 0 8px;
+      color: #9a783e;
+      font: 700 13px "Archivo", "Tajawal", sans-serif;
+      letter-spacing: .12em;
+    }
+
+    .client-album-hero.delivery-welcome h1 {
+      min-height: 0;
+      display: block;
+      margin: 0;
+      color: #292721;
+      font-family: "Cormorant Garamond", "Cairo", serif;
+      font-size: clamp(36px, 5vw, 58px);
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+      unicode-bidi: plaintext;
+    }
+
+    html[dir="rtl"] .client-album-hero.delivery-welcome h1 {
+      font-family: "Noto Naskh Arabic", "Tajawal", serif;
+      font-size: clamp(32px, 4.2vw, 48px);
+      font-weight: 600;
+      line-height: 1.45;
+      text-align: right;
+    }
+
+    .delivery-welcome-message {
+      max-width: 650px;
+      margin: 12px 0 0;
+      color: #645f54;
+      font-size: clamp(15px, 1.5vw, 18px);
+      line-height: 1.9;
+    }
+
+    html[dir="rtl"] .delivery-welcome-message { font-size: clamp(16px, 1.6vw, 19px); }
+
+    .client-album-hero.delivery-welcome .gallery-event-date {
+      color: #8c6e38;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    .client-album-hero.delivery-welcome .album-meta {
+      gap: 8px;
+      margin-top: 16px;
+      color: #655e52;
+      font-family: "DM Sans", "Tajawal", sans-serif;
+    }
+
+    .client-album-hero.delivery-welcome .album-meta > span {
+      min-height: 34px;
+      padding: 5px 12px;
+      border: 1px solid rgba(133, 110, 64, .14);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .7);
+    }
+
+    .client-album-hero.delivery-welcome .album-meta i { color: #a18145; }
+
+    .client-album-hero.delivery-welcome .album-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .client-album-hero.delivery-welcome .album-actions .button {
+      width: 100%;
+      min-width: 0;
+      min-height: 48px;
+      padding: 12px 16px;
+      border-radius: 999px;
+      text-align: center;
+      white-space: normal;
+      letter-spacing: .01em;
+      text-transform: none;
+      box-shadow: 0 8px 20px rgba(43, 35, 22, .1);
+    }
+
+    .client-album-hero.delivery-welcome .album-actions .delivery-view-button {
+      border: 1px solid #a17e3d;
+      background: #a17e3d;
+      color: #fff;
+    }
+
+    .client-album-hero.delivery-welcome .album-actions .delivery-view-button:hover {
+      background: #896a33;
+      border-color: #896a33;
+    }
+
+    .client-album-hero.delivery-welcome .album-actions .button.secondary {
+      border: 1px solid rgba(116, 97, 60, .24);
+      background: rgba(255, 255, 255, .72);
+      color: #423c31;
+      box-shadow: none;
+    }
+
+    .client-album-hero.delivery-welcome .album-actions .button.secondary:hover {
+      border-color: #a17e3d;
+      background: #fff;
+      color: #2a251c;
+    }
+
+    .client-album-hero.delivery-welcome .album-actions .button:focus-visible,
+    .client-album-hero.delivery-welcome .album-actions a:focus-visible {
+      outline: 3px solid #c59d54;
+      outline-offset: 3px;
+    }
+
+    .gallery-gate .gallery-status:empty { display: none; }
+    .gallery-gate-card h2 {
+      font-family: "Cormorant Garamond", "Cairo", serif;
+      font-size: clamp(34px, 4vw, 44px);
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    html[dir="rtl"] .gallery-gate-card h2 {
+      font-family: "Noto Naskh Arabic", "Tajawal", serif;
+      font-size: 34px;
+      line-height: 1.35;
+    }
+
+    #clientGalleryGrid { scroll-margin-top: 104px; }
+
+    @keyframes deliveryWelcomeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .client-album-hero.delivery-welcome,
+      .client-album-hero.delivery-welcome.no-portrait {
+        grid-template-columns: 132px minmax(0, 1fr);
+        gap: 20px 24px;
+        padding: 28px;
+      }
+
+      #deliveryPortraitFrame { width: 128px; grid-row: 1; }
+      .client-album-hero.delivery-welcome .album-title-block { grid-column: 2; }
+      .client-album-hero.delivery-welcome .album-actions {
+        grid-column: 1 / -1;
+        flex-direction: row;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #clientGalleryGrid { scroll-margin-top: 88px; }
+    }
+
+    @media (max-width: 560px) {
+      .client-album-hero.delivery-welcome,
+      .client-album-hero.delivery-welcome.no-portrait {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+        margin-top: 18px;
+        padding: 24px 20px;
+        border-radius: 22px;
+        text-align: center;
+      }
+
+      #deliveryPortraitFrame { width: 132px; grid-row: auto; }
+      .client-album-hero.delivery-welcome .album-title-block { grid-column: 1; }
+      .client-album-hero.delivery-welcome .eyebrow { margin-bottom: 6px; font-size: 12px; }
+      .client-album-hero.delivery-welcome h1,
+      html[dir="rtl"] .client-album-hero.delivery-welcome h1 { text-align: center; }
+      .delivery-welcome-message { margin: 9px auto 0; font-size: 15px; line-height: 1.8; }
+      .client-album-hero.delivery-welcome .gallery-event-date { margin-top: 8px; }
+      .client-album-hero.delivery-welcome .album-meta { justify-content: center; margin-top: 12px; }
+      .client-album-hero.delivery-welcome .album-actions { grid-column: 1; flex-direction: column; width: 100%; }
+    }
+
     body.gallery-invalid-link .gallery-public {
       display: flex;
       min-height: calc(100svh - 88px);
@@ -1048,7 +1274,6 @@
       text-align: center;
     }
     body.gallery-invalid-link .client-album-hero::after,
-    body.gallery-invalid-link #galleryCover,
     body.gallery-invalid-link .gallery-event-date,
     body.gallery-invalid-link .album-meta,
     body.gallery-invalid-link .album-actions,
@@ -1061,6 +1286,7 @@
       letter-spacing: 0;
       text-transform: none;
     }
+    body.gallery-invalid-link .delivery-welcome-message { display: none; }
     body.gallery-invalid-link .client-album-hero h1 {
       min-height: 0;
       color: #1e293b;
@@ -1119,27 +1345,33 @@
   </header>
 
   <main class="section-inner gallery-public">
-    <section class="client-album-hero">
-      <div id="galleryCover" aria-hidden="true"></div>
+    <section class="client-album-hero" id="deliveryWelcome" aria-labelledby="galleryTitle">
+      <figure id="deliveryPortraitFrame" hidden>
+        <img id="deliveryPortrait" src="" alt="">
+      </figure>
       <div class="album-title-block">
-        <p class="eyebrow"><i class="fas fa-lock" aria-hidden="true"></i> PRIVATE ALBUM DELIVERY</p>
-        <h1 id="galleryTitle">
+        <p class="eyebrow" id="deliveryEyebrow">YOUR PRIVATE ALBUM</p>
+        <h1 id="galleryTitle" tabindex="-1">
           <span class="title-loader" id="titleLoader"></span>
         </h1>
+        <p class="delivery-welcome-message" id="deliveryWelcomeMessage"></p>
         <p id="galleryWeddingDate" class="gallery-event-date"></p>
         <div class="album-meta" aria-live="polite">
           <span id="galleryPhotoCount" hidden><i class="fas fa-images" aria-hidden="true"></i><span></span></span>
-          <span><i class="fas fa-shield-halved" aria-hidden="true"></i>Private gallery</span>
+          <span><i class="fas fa-shield-halved" aria-hidden="true"></i><span id="galleryPrivateLabel">Your private gallery</span></span>
         </div>
       </div>
       <div class="album-actions">
-        <button id="downloadAll" class="button primary" type="button" disabled>
-          <i class="fas fa-download" aria-hidden="true"></i> Download all
+        <a class="button primary delivery-view-button" id="exploreGallery" href="#clientGalleryGrid">
+          <i class="fas fa-images" aria-hidden="true"></i><span id="exploreGalleryLabel">View your photos</span>
+        </a>
+        <button id="downloadAll" class="button secondary" type="button" disabled>
+          <i class="fas fa-download" aria-hidden="true"></i><span id="downloadAllLabel">Download all photos</span>
         </button>
       </div>
     </section>
 
-    <div id="clientGalleryGrid" class="client-grid"></div>
+    <div id="clientGalleryGrid" class="client-grid" tabindex="-1"></div>
     <p id="galleryStatus" class="gallery-status" role="status" aria-live="polite"></p>
     <a id="galleryErrorHome" class="gallery-error-home" href="index.html" hidden>Back to home</a>
   </main>
@@ -1155,13 +1387,13 @@
   <div class="gallery-gate" id="galleryGate" role="dialog" aria-modal="true" aria-labelledby="galleryGateTitle" aria-hidden="true">
     <div class="gallery-gate-card">
       <button class="gallery-gate-language-toggle" id="galleryGateLanguageToggle" type="button" aria-label="Switch language to Arabic">العربية</button>
-      <p class="eyebrow">PRIVATE ALBUM DELIVERY</p>
+      <p class="eyebrow" id="galleryGateEyebrow">YOUR PRIVATE ALBUM</p>
       <h2 id="galleryGateTitle">Mina Onsy</h2>
-      <p>Enter the gallery password to view your photos.</p>
+      <p id="galleryGateMessage">Your private gallery is ready. Enter the password we shared with you to see your photos.</p>
       <form class="gallery-gate-form" id="galleryGateForm">
-        <label class="gallery-password-label" for="galleryGateInput">Gallery password</label>
+        <label class="gallery-password-label" id="galleryGatePasswordLabel" for="galleryGateInput">Gallery password</label>
         <input id="galleryGateInput" type="password" inputmode="numeric" maxlength="8" placeholder="••••••••" autocomplete="one-time-code" required aria-describedby="galleryGateStatus">
-        <button class="button primary" type="submit">Open gallery</button>
+        <button class="button primary" type="submit">Open your gallery</button>
         <p id="galleryGateStatus" class="gallery-status" role="status" aria-live="polite"></p>
       </form>
     </div>
@@ -1236,6 +1468,6 @@
 
   <script src="assets/js/language.js?v=final6"></script>
   <!-- تم الاحتفاظ بملف gallery.js لتشغيل الوظائف (تحميل الصور، معرض الصور، تحميل الكل) -->
-  <script type="module" src="assets/js/gallery.js?v=final5"></script>
+  <script type="module" src="assets/js/gallery.js?v=final6"></script>
 </body>
 </html>

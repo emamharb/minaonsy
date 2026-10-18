@@ -7,15 +7,27 @@ const params = new URLSearchParams(location.search);
 const galleryId = params.get("id");
 const title = document.getElementById("galleryTitle");
 const grid = document.getElementById("clientGalleryGrid");
+const galleryPublic = document.querySelector(".gallery-public");
 const status = document.getElementById("galleryStatus");
 const downloadAll = document.getElementById("downloadAll");
+const downloadAllLabel = document.getElementById("downloadAllLabel");
 const weddingDateEl = document.getElementById("galleryWeddingDate");
-const galleryCover = document.getElementById("galleryCover");
+const galleryHero = document.getElementById("deliveryWelcome");
+const deliveryPortraitFrame = document.getElementById("deliveryPortraitFrame");
+const deliveryPortrait = document.getElementById("deliveryPortrait");
+const deliveryEyebrow = document.getElementById("deliveryEyebrow");
+const deliveryMessage = document.getElementById("deliveryWelcomeMessage");
+const exploreGalleryLabel = document.getElementById("exploreGalleryLabel");
+const galleryPrivateLabel = document.getElementById("galleryPrivateLabel");
 const galleryPhotoCount = document.getElementById("galleryPhotoCount");
 const galleryGate = document.getElementById("galleryGate");
 const galleryGateForm = document.getElementById("galleryGateForm");
 const galleryGateInput = document.getElementById("galleryGateInput");
 const galleryGateStatus = document.getElementById("galleryGateStatus");
+const galleryGateTitle = document.getElementById("galleryGateTitle");
+const galleryGateEyebrow = document.getElementById("galleryGateEyebrow");
+const galleryGateMessage = document.getElementById("galleryGateMessage");
+const galleryGatePasswordLabel = document.getElementById("galleryGatePasswordLabel");
 const galleryErrorHome = document.getElementById("galleryErrorHome");
 const galleryGateLanguageToggle = document.getElementById("galleryGateLanguageToggle");
 const lightboxItems = [];
@@ -65,6 +77,53 @@ function updateWeddingDate() {
   weddingDateEl.textContent = currentGallery?.weddingDate ? `${dateLabel} ${formatDate(currentGallery.weddingDate)}` : "";
 }
 
+function clientDisplayName() {
+  return String(currentGallery?.clientName || "").trim().replace(/\s*&\s*/g, " & ");
+}
+
+function setDownloadAllText(text) {
+  if (downloadAllLabel) downloadAllLabel.textContent = text;
+  else if (downloadAll) downloadAll.textContent = text;
+}
+
+function syncDeliveryCopy() {
+  const arabic = window.SITE_LANGUAGE === "ar";
+  const name = clientDisplayName();
+  const isolatedName = name ? `\u2068${name}\u2069` : "";
+  const downloadText = arabic ? "تحميل كل الصور" : "Download all photos";
+
+  if (deliveryEyebrow) deliveryEyebrow.textContent = arabic ? "صوركم جاهزة" : "YOUR PHOTOS ARE READY";
+  if (title) title.textContent = name || (arabic ? "معرضكم الخاص" : "Your private gallery");
+  if (deliveryMessage) {
+    deliveryMessage.textContent = arabic
+      ? `${name ? `أهلًا ${isolatedName}، ` : "أهلًا بيكم، "}كل صورة بتحكي حكاية من يومكم. خذوا وقتكم، وعيشوا اللحظات الجميلة من جديد.`
+      : `${name ? `Hello ${isolatedName}, ` : "Welcome, "}every photo holds a little piece of your day. Take your time, relive each moment, and save the ones you love.`;
+  }
+  if (exploreGalleryLabel) exploreGalleryLabel.textContent = arabic ? "شاهدوا صوركم" : "View your photos";
+  if (galleryPrivateLabel) galleryPrivateLabel.textContent = arabic ? "معرض خاص وآمن" : "Your private gallery";
+  if (downloadAll && !downloadAll.dataset.progress) setDownloadAllText(downloadText);
+  if (deliveryPortrait) {
+    deliveryPortrait.alt = arabic
+      ? `صورة من معرض ${name || "صوركم"}`
+      : `A photo from ${name ? `${name}'s` : "your"} private gallery`;
+  }
+}
+
+function syncGalleryGateCopy() {
+  const arabic = window.SITE_LANGUAGE === "ar";
+  const name = clientDisplayName();
+  if (galleryGateEyebrow) galleryGateEyebrow.textContent = arabic ? "ألبومكم الخاص" : "YOUR PRIVATE ALBUM";
+  if (galleryGateTitle) galleryGateTitle.textContent = name || "Mina Onsy";
+  if (galleryGateMessage) {
+    galleryGateMessage.textContent = arabic
+      ? "معرضكم الخاص جاهز. أدخلوا كلمة المرور التي أرسلناها لكم لمشاهدة الصور."
+      : "Your private gallery is ready. Enter the password we shared with you to see your photos.";
+  }
+  if (galleryGatePasswordLabel) galleryGatePasswordLabel.textContent = arabic ? "كلمة مرور المعرض" : "Gallery password";
+  const gateButton = galleryGateForm?.querySelector("button[type='submit']");
+  if (gateButton) gateButton.textContent = arabic ? "افتحوا معرضكم" : "Open your gallery";
+}
+
 function updateAlbumDeliveryDetails() {
   if (galleryPhotoCount) {
     const label = galleryPhotoCount.querySelector("span");
@@ -76,17 +135,21 @@ function updateAlbumDeliveryDetails() {
   if (downloadAll) downloadAll.disabled = !files.length;
 }
 
-function renderGalleryCover() {
-  if (!galleryCover) return;
-  galleryCover.replaceChildren();
+function renderDeliveryPortrait() {
+  if (!deliveryPortraitFrame || !deliveryPortrait) return;
   const coverFile = files.find((file) => file.type !== "video" && (file.previewUrl || file.url));
-  if (!coverFile) return;
-  const image = document.createElement("img");
-  image.src = coverFile.previewUrl || coverFile.url;
-  image.alt = "";
-  image.loading = "eager";
-  image.fetchPriority = "high";
-  galleryCover.append(image);
+  if (!coverFile) {
+    deliveryPortrait.removeAttribute("src");
+    deliveryPortraitFrame.hidden = true;
+    galleryHero?.classList.add("no-portrait");
+    return;
+  }
+  deliveryPortrait.src = coverFile.previewUrl || coverFile.url;
+  deliveryPortrait.loading = "eager";
+  deliveryPortrait.fetchPriority = "high";
+  deliveryPortraitFrame.hidden = false;
+  galleryHero?.classList.remove("no-portrait");
+  syncDeliveryCopy();
 }
 
 function syncGalleryGateLanguageToggle() {
@@ -97,8 +160,7 @@ function syncGalleryGateLanguageToggle() {
 }
 
 function syncGalleryGatePasswordLabel() {
-  const gatePasswordLabel = galleryGateForm?.querySelector("label[for='galleryGateInput']");
-  if (gatePasswordLabel) gatePasswordLabel.textContent = window.SITE_LANGUAGE === "ar" ? "كلمة مرور المعرض" : "Gallery password";
+  if (galleryGatePasswordLabel) galleryGatePasswordLabel.textContent = window.SITE_LANGUAGE === "ar" ? "كلمة مرور المعرض" : "Gallery password";
 }
 
 galleryGateLanguageToggle?.addEventListener("click", () => {
@@ -110,6 +172,12 @@ syncGalleryGatePasswordLabel();
 window.addEventListener("site-language-change", () => {
   syncGalleryGateLanguageToggle();
   syncGalleryGatePasswordLabel();
+  if (document.body.classList.contains("gallery-locked")) {
+    syncGalleryGateCopy();
+    return;
+  }
+  syncDeliveryCopy();
+  syncGalleryGateCopy();
   updateWeddingDate();
   updateAlbumDeliveryDetails();
   if (status?.dataset.messageKey) setStatus(status.dataset.messageKey);
@@ -119,15 +187,12 @@ window.addEventListener("site-language-change", () => {
   grid?.querySelectorAll(".download-action").forEach((button) => { button.title = label; button.setAttribute("aria-label", label); });
   grid?.querySelectorAll(".empty-section-message").forEach((node) => { node.textContent = galleryMessage("noSectionFiles"); });
   grid?.querySelectorAll("[data-default-section='true']").forEach((node) => { node.textContent = window.SITE_LANGUAGE === "ar" ? "السكشن الرئيسي" : "Main section"; });
-  if (downloadAll && !downloadAll.dataset.progress) downloadAll.textContent = window.SITE_LANGUAGE === "ar" ? "تحميل الكل" : "Download all";
   if (document.body.classList.contains("gallery-invalid-link")) {
+    if (deliveryEyebrow) deliveryEyebrow.textContent = window.SITE_LANGUAGE === "ar" ? "رابط المعرض" : "GALLERY LINK";
+    if (deliveryMessage) deliveryMessage.textContent = "";
     if (title) title.textContent = galleryMessage("invalidLinkTitle");
     if (galleryErrorHome) galleryErrorHome.textContent = window.SITE_LANGUAGE === "ar" ? "العودة إلى الموقع" : "Back to the website";
   }
-  const gateButton = galleryGateForm?.querySelector("button[type='submit']");
-  if (gateButton) gateButton.textContent = window.SITE_LANGUAGE === "ar" ? "فتح المعرض" : "Open gallery";
-  const gateHint = document.querySelector(".gallery-gate-card > p:not(.eyebrow)");
-  if (gateHint) gateHint.textContent = window.SITE_LANGUAGE === "ar" ? "أدخل كلمة السر الخاصة بالمعرض لعرض الصور." : "Enter the gallery password to view your photos.";
 });
 
 function defaultSection() {
@@ -145,6 +210,11 @@ async function sha256(text) {
 
 function showGate(message = "") {
   if (!galleryGate) return;
+  if (galleryPublic) {
+    galleryPublic.inert = true;
+    galleryPublic.hidden = true;
+    galleryPublic.setAttribute("aria-hidden", "true");
+  }
   galleryGate.classList.add("is-open");
   galleryGate.setAttribute("aria-hidden", "false");
   if (galleryGateStatus) {
@@ -163,6 +233,11 @@ function hideGate() {
   if (!galleryGate) return;
   galleryGate.classList.remove("is-open");
   galleryGate.setAttribute("aria-hidden", "true");
+  if (galleryPublic) {
+    galleryPublic.inert = false;
+    galleryPublic.hidden = false;
+    galleryPublic.removeAttribute("aria-hidden");
+  }
   if (galleryGateStatus) { galleryGateStatus.textContent = ""; delete galleryGateStatus.dataset.messageKey; }
 }
 
@@ -195,7 +270,7 @@ function directDownload(file, index) {
 async function downloadFilesSeparately() {
   status.dataset.messageKey = "separateDownloads"; status.textContent = galleryMessage("separateDownloads");
   for (const [index, file] of files.entries()) {
-    downloadAll.dataset.progress = "true"; downloadAll.textContent = window.SITE_LANGUAGE === "ar" ? `تنزيل ${index + 1} من ${files.length}` : `Downloading ${index + 1} of ${files.length}`;
+    downloadAll.dataset.progress = "true"; setDownloadAllText(window.SITE_LANGUAGE === "ar" ? `تنزيل ${index + 1} من ${files.length}` : `Downloading ${index + 1} of ${files.length}`);
     directDownload(file, index);
     await new Promise((resolve) => window.setTimeout(resolve, 450));
   }
@@ -220,6 +295,8 @@ async function downloadFile(file, index, button) {
 async function loadGallery() {
   if (!galleryId) {
     document.body.classList.add("gallery-invalid-link");
+    if (deliveryEyebrow) deliveryEyebrow.textContent = window.SITE_LANGUAGE === "ar" ? "رابط المعرض" : "GALLERY LINK";
+    if (deliveryMessage) deliveryMessage.textContent = "";
     if (title) title.textContent = galleryMessage("invalidLinkTitle");
     if (galleryErrorHome) {
       galleryErrorHome.hidden = false;
@@ -244,26 +321,31 @@ async function loadGallery() {
     }
     const gallery = galleryDoc.data();
     currentGallery = gallery;
-    title.textContent = gallery.clientName || (window.SITE_LANGUAGE === "ar" ? "معرض العميل" : "Client gallery");
-    updateWeddingDate();
+    syncGalleryGateCopy();
     if (gallery.accessCodeHash) {
       const granted = sessionStorage.getItem(gateKey()) === "1";
       if (!granted) {
-        showGate(galleryMessage("protected"));
+        document.body.classList.add("gallery-locked");
+        showGate();
         status.textContent = "";
+        delete status.dataset.messageKey;
         return;
       }
       hideGate();
     } else {
       hideGate();
     }
+    document.body.classList.remove("gallery-locked");
+    galleryHero?.classList.add("delivery-welcome", "no-portrait");
+    syncDeliveryCopy();
+    updateWeddingDate();
     const [sectionsSnap, filesSnap] = await Promise.all([
       getDocs(collection(db, "galleries", galleryDoc.id, "sections")),
       getDocs(collection(db, "galleries", galleryDoc.id, "files"))
     ]);
     sections = [defaultSection(), ...sectionsSnap.docs.map((d) => ({ id: d.id, ...d.data() }))];
     files = filesSnap.docs.map((d) => d.data());
-    renderGalleryCover();
+    renderDeliveryPortrait();
     updateAlbumDeliveryDetails();
     renderFiles();
   } catch (error) {
@@ -323,19 +405,18 @@ function renderFiles() {
 downloadAll.addEventListener("click", async () => {
   if (!files.length || !window.JSZip) return;
   downloadAll.disabled = true;
-  const originalText = downloadAll.textContent;
   try {
     const zip = new JSZip();
     for (const [index, file] of files.entries()) {
-      downloadAll.dataset.progress = "true"; downloadAll.textContent = window.SITE_LANGUAGE === "ar" ? `تجهيز ${index + 1} من ${files.length}` : `Preparing ${index + 1} of ${files.length}`;
+      downloadAll.dataset.progress = "true"; setDownloadAllText(window.SITE_LANGUAGE === "ar" ? `تجهيز ${index + 1} من ${files.length}` : `Preparing ${index + 1} of ${files.length}`);
       const response = await fetch(file.url, { mode: "cors", credentials: "omit" });
       if (!response.ok) throw new Error("download failed");
       const blob = await response.blob();
       zip.file(file.name || `file-${index + 1}`, blob);
     }
-    downloadAll.textContent = galleryMessage("preparingZip");
+    setDownloadAllText(galleryMessage("preparingZip"));
     const content = await zip.generateAsync({ type: "blob" }, (metadata) => {
-      downloadAll.textContent = window.SITE_LANGUAGE === "ar" ? `ضغط الملفات ${Math.round(metadata.percent)}%` : `Compressing files ${Math.round(metadata.percent)}%`;
+      setDownloadAllText(window.SITE_LANGUAGE === "ar" ? `ضغط الملفات ${Math.round(metadata.percent)}%` : `Compressing files ${Math.round(metadata.percent)}%`);
     });
     const link = document.createElement("a");
     const objectUrl = URL.createObjectURL(content);
@@ -356,7 +437,7 @@ downloadAll.addEventListener("click", async () => {
   } finally {
     downloadAll.disabled = false;
     delete downloadAll.dataset.progress;
-    downloadAll.textContent = window.SITE_LANGUAGE === "ar" ? "تحميل الكل" : "Download all";
+    setDownloadAllText(window.SITE_LANGUAGE === "ar" ? "تحميل كل الصور" : "Download all photos");
   }
 });
 
@@ -380,7 +461,9 @@ galleryGateForm?.addEventListener("submit", async (event) => {
     }
     if (galleryId) sessionStorage.setItem(gateKey(), "1");
     hideGate();
+    document.body.classList.remove("gallery-locked");
     await loadGallery();
+    title?.focus({ preventScroll: true });
   } catch {
     if (galleryGateStatus) { galleryGateStatus.dataset.messageKey = "verifyFailed"; galleryGateStatus.textContent = galleryMessage("verifyFailed"); }
   }
