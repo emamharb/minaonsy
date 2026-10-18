@@ -2453,6 +2453,7 @@ html[data-theme="light"] .theme-switcher-icon {
   .booking-page .package-card span { line-height: 1.4; text-align: center; }
   .booking-page .submit-btn { width: 100%; min-height: 48px; line-height: 1.5; white-space: normal; }
   .booking-page .floating-whatsapp { display: none; }
+  .pricing-new-page .floating-whatsapp { display: none; }
   .site-footer { gap: 16px; padding: 24px 16px calc(84px + env(safe-area-inset-bottom)); }
   .footer-links { display: flex; flex-wrap: wrap; gap: 12px 18px; overflow-wrap: anywhere; }
   .floating-whatsapp { right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); width: 48px; height: 48px; }
@@ -3044,4 +3045,11 @@ html[dir="rtl"] .editorial-copy .editorial-kicker,
 html[dir="rtl"] .main-nav > a {
   direction: rtl;
   unicode-bidi: isolate;
+}
+
+@media (max-width: 700px) {
+  html[dir="rtl"] .floating-whatsapp {
+    right: auto;
+    left: 12px;
+  }
 }

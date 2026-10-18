@@ -181,28 +181,28 @@
       <button class="admin-theme-toggle" type="button" data-admin-theme-toggle><i class="fas fa-sun" aria-hidden="true"></i></button>
     </div>
     <form id="loginForm" class="auth-card">
-      <p class="eyebrow"><i class="fas fa-crown" style="margin-left:6px;"></i> Mina Onsy Studio</p>
+      <p class="eyebrow"><i class="fas fa-crown" style="margin-left:6px;" aria-hidden="true"></i> Mina Onsy Studio</p>
       <h1>تسجيل الدخول</h1>
       <p class="auth-description">سجّل الدخول لإدارة معارض العملاء ومحتوى الاستوديو.</p>
 
       <label>
         البريد الإلكتروني
         <div class="input-wrapper">
-          <input required type="email" name="email" placeholder="example@email.com">
-          <i class="fas fa-envelope"></i>
+          <input required type="email" name="email" placeholder="example@email.com" autocomplete="username">
+          <i class="fas fa-envelope" aria-hidden="true"></i>
         </div>
       </label>
 
       <label>
         كلمة المرور
         <div class="input-wrapper">
-          <input required type="password" name="password" placeholder="••••••••">
-          <i class="fas fa-lock"></i>
+          <input required type="password" name="password" placeholder="••••••••" autocomplete="current-password">
+          <i class="fas fa-lock" aria-hidden="true"></i>
         </div>
       </label>
 
       <button class="button primary" type="submit">
-        <i class="fas fa-sign-in-alt"></i> دخول
+        <i class="fas fa-sign-in-alt" aria-hidden="true"></i> دخول
       </button>
 
       <p id="loginError" class="muted"></p>

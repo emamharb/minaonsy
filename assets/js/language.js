@@ -818,7 +818,7 @@
 
   function translateTextNode(node) {
     if (!node || !node.parentElement || /^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE)$/.test(node.parentElement.tagName)) return;
-    if (node.parentElement.closest && node.parentElement.closest("#siteLanguageToggle, #mobileMenuDrawer, #mobileMenuToggle, #mobileMenuBackdrop")) return;
+    if (node.parentElement.closest && node.parentElement.closest("#siteLanguageToggle, #mobileMenuDrawer, #mobileMenuToggle, #mobileMenuBackdrop, #galleryGateLanguageToggle")) return;
     if (node.parentElement.closest && node.parentElement.closest(".site-header .main-nav a[data-label-ar][data-label-en]")) return;
     const raw = nodeKeys.has(node) ? nodeKeys.get(node) : node.nodeValue;
     if (!raw || !splitWhitespace(raw).core) return;
@@ -832,7 +832,7 @@
 
   function translateAttributes(root) {
     root.querySelectorAll("[placeholder],[aria-label],[title],[alt],meta[name='description']").forEach((element) => {
-      if (element.closest && element.closest("#siteLanguageToggle, #mobileMenuDrawer, #mobileMenuToggle, #mobileMenuBackdrop")) return;
+      if (element.closest && element.closest("#siteLanguageToggle, #mobileMenuDrawer, #mobileMenuToggle, #mobileMenuBackdrop, #galleryGateLanguageToggle")) return;
       const keys = attrKeys.get(element) || {};
       ["placeholder", "aria-label", "title", "alt", ...(element.matches("meta[name='description']") ? ["content"] : [])].forEach((attribute) => {
         if (!element.hasAttribute(attribute)) return;

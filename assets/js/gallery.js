@@ -16,6 +16,8 @@ const galleryGate = document.getElementById("galleryGate");
 const galleryGateForm = document.getElementById("galleryGateForm");
 const galleryGateInput = document.getElementById("galleryGateInput");
 const galleryGateStatus = document.getElementById("galleryGateStatus");
+const galleryErrorHome = document.getElementById("galleryErrorHome");
+const galleryGateLanguageToggle = document.getElementById("galleryGateLanguageToggle");
 const lightboxItems = [];
 const lightbox = createLightbox(lightboxItems, { onDownload: (item, index) => directDownload({ url: item.downloadUrl || item.url, name: item.downloadName || item.name }, index) }); // download-interaction-v1
 let files = [];
@@ -30,6 +32,7 @@ function friendlyError(error) {
 }
 
 const galleryMessages = {
+  invalidLinkTitle: ["رابط المعرض", "Gallery link"],
   invalidLink: ["رابط المعرض غير صحيح.", "Invalid gallery link."],
   loading: ["جاري تحميل المعرض...", "Loading gallery..."],
   deleted: ["هذا المعرض تم نقله إلى سلة المهملات ولم يعد متاحًا للعرض.", "This gallery was moved to the trash and is no longer available."],
@@ -86,7 +89,27 @@ function renderGalleryCover() {
   galleryCover.append(image);
 }
 
+function syncGalleryGateLanguageToggle() {
+  if (!galleryGateLanguageToggle) return;
+  const arabic = window.SITE_LANGUAGE === "ar";
+  galleryGateLanguageToggle.textContent = arabic ? "English" : "العربية";
+  galleryGateLanguageToggle.setAttribute("aria-label", arabic ? "التبديل إلى الإنجليزية" : "Switch language to Arabic");
+}
+
+function syncGalleryGatePasswordLabel() {
+  const gatePasswordLabel = galleryGateForm?.querySelector("label[for='galleryGateInput']");
+  if (gatePasswordLabel) gatePasswordLabel.textContent = window.SITE_LANGUAGE === "ar" ? "كلمة مرور المعرض" : "Gallery password";
+}
+
+galleryGateLanguageToggle?.addEventListener("click", () => {
+  window.setSiteLanguage?.(window.SITE_LANGUAGE === "ar" ? "en" : "ar");
+});
+syncGalleryGateLanguageToggle();
+syncGalleryGatePasswordLabel();
+
 window.addEventListener("site-language-change", () => {
+  syncGalleryGateLanguageToggle();
+  syncGalleryGatePasswordLabel();
   updateWeddingDate();
   updateAlbumDeliveryDetails();
   if (status?.dataset.messageKey) setStatus(status.dataset.messageKey);
@@ -97,6 +120,10 @@ window.addEventListener("site-language-change", () => {
   grid?.querySelectorAll(".empty-section-message").forEach((node) => { node.textContent = galleryMessage("noSectionFiles"); });
   grid?.querySelectorAll("[data-default-section='true']").forEach((node) => { node.textContent = window.SITE_LANGUAGE === "ar" ? "السكشن الرئيسي" : "Main section"; });
   if (downloadAll && !downloadAll.dataset.progress) downloadAll.textContent = window.SITE_LANGUAGE === "ar" ? "تحميل الكل" : "Download all";
+  if (document.body.classList.contains("gallery-invalid-link")) {
+    if (title) title.textContent = galleryMessage("invalidLinkTitle");
+    if (galleryErrorHome) galleryErrorHome.textContent = window.SITE_LANGUAGE === "ar" ? "العودة إلى الموقع" : "Back to the website";
+  }
   const gateButton = galleryGateForm?.querySelector("button[type='submit']");
   if (gateButton) gateButton.textContent = window.SITE_LANGUAGE === "ar" ? "فتح المعرض" : "Open gallery";
   const gateHint = document.querySelector(".gallery-gate-card > p:not(.eyebrow)");
@@ -192,6 +219,12 @@ async function downloadFile(file, index, button) {
 
 async function loadGallery() {
   if (!galleryId) {
+    document.body.classList.add("gallery-invalid-link");
+    if (title) title.textContent = galleryMessage("invalidLinkTitle");
+    if (galleryErrorHome) {
+      galleryErrorHome.hidden = false;
+      galleryErrorHome.textContent = window.SITE_LANGUAGE === "ar" ? "العودة إلى الموقع" : "Back to the website";
+    }
     setStatus("invalidLink");
     return;
   }

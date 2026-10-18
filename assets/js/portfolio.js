@@ -21,7 +21,32 @@ function syncFilterLanguage() {
     button.textContent = filterLabels[button.dataset.portfolioFilter]?.[language] || button.textContent;
   });
 }
-window.addEventListener("site-language-change", syncFilterLanguage);
+
+function portfolioImageLabel(item, index) {
+  const language = window.SITE_LANGUAGE === "ar" ? "ar" : "en";
+  const sourceLabel = item.alt?.trim();
+  const hasArabicText = sourceLabel && /[\u0600-\u06FF]/.test(sourceLabel);
+  const label = language === "ar"
+    ? (hasArabicText ? sourceLabel : "صورة من الأعمال المختارة")
+    : (sourceLabel || "Selected work image");
+  return `${label} (${index + 1})`;
+}
+
+function syncPortfolioImageLabels() {
+  grid?.querySelectorAll(".masonry-item").forEach((figure, index) => {
+    const item = filteredPortfolioItems[index];
+    if (!item) return;
+    const label = portfolioImageLabel(item, index);
+    figure.setAttribute("aria-label", label);
+    const image = figure.querySelector("img");
+    if (image) image.alt = label;
+  });
+}
+
+window.addEventListener("site-language-change", () => {
+  syncFilterLanguage();
+  syncPortfolioImageLabels();
+});
 syncFilterLanguage();
 
 function filterItems(items) {
@@ -117,11 +142,12 @@ function renderBatch(items, offset, eager) {
     const figure = document.createElement("button");
     figure.type = "button";
     figure.className = "masonry-item";
-    figure.setAttribute("aria-label", `${item.alt || "Wedding photograph"} (${index + 1})`);
+    const accessibleLabel = portfolioImageLabel(item, index);
+    figure.setAttribute("aria-label", accessibleLabel);
     figure.dataset.orientation = item.orientation || "unknown";
     const img = document.createElement("img");
     img.src = item.url;
-    img.alt = item.alt;
+    img.alt = accessibleLabel;
     if (item.width) img.width = item.width;
     if (item.height) img.height = item.height;
     img.loading = eager && index < 6 ? "eager" : "lazy";
