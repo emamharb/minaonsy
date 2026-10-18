@@ -1,6 +1,6 @@
 import app from "./firebase-config.js";
 import { createLightbox } from "./lightbox.js?v=final2";
-import { getFirestore, collection, getDocs, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { getFirestore, collection, getDocs, getDoc, doc, query, where, limit } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const db = getFirestore(app);
 const params = new URLSearchParams(location.search);
@@ -25,9 +25,12 @@ const galleryGateForm = document.getElementById("galleryGateForm");
 const galleryGateInput = document.getElementById("galleryGateInput");
 const galleryGateStatus = document.getElementById("galleryGateStatus");
 const galleryGateTitle = document.getElementById("galleryGateTitle");
+const galleryGateLanguageLabel = document.getElementById("galleryGateLanguageLabel");
 const galleryGateEyebrow = document.getElementById("galleryGateEyebrow");
 const galleryGateMessage = document.getElementById("galleryGateMessage");
 const galleryGateBrandCaption = document.getElementById("galleryGateBrandCaption");
+const galleryGateSeal = document.getElementById("galleryGateSeal");
+const galleryGateSealPhoto = document.getElementById("galleryGateSealPhoto");
 const galleryGatePasswordLabel = document.getElementById("galleryGatePasswordLabel");
 const galleryGateHint = document.getElementById("galleryGateHint");
 const galleryGatePrivacy = document.getElementById("galleryGatePrivacy");
@@ -38,6 +41,7 @@ const lightbox = createLightbox(lightboxItems, { onDownload: (item, index) => di
 let files = [];
 let sections = [];
 let currentGallery = null;
+let gateCoverGalleryId = "";
 
 function friendlyError(error) {
   const english = window.SITE_LANGUAGE !== "ar";
@@ -163,10 +167,32 @@ function renderDeliveryPortrait() {
   syncDeliveryCopy();
 }
 
+async function loadGalleryGateCover(galleryDocId) {
+  if (!galleryGateSeal || !galleryGateSealPhoto || gateCoverGalleryId === galleryDocId) return;
+  gateCoverGalleryId = galleryDocId;
+  try {
+    const coverSnap = await getDocs(query(
+      collection(db, "galleries", galleryDocId, "files"),
+      where("type", "==", "image"),
+      limit(1)
+    ));
+    const cover = coverSnap.docs[0]?.data();
+    const coverUrl = cover?.previewUrl || cover?.url;
+    if (!coverUrl) return;
+
+    galleryGateSealPhoto.addEventListener("load", () => galleryGateSeal.classList.add("has-client-photo"), { once: true });
+    galleryGateSealPhoto.loading = "eager";
+    galleryGateSealPhoto.decoding = "async";
+    galleryGateSealPhoto.src = coverUrl;
+  } catch {
+    // Keep the studio logo as the fallback if the cover cannot be loaded.
+  }
+}
+
 function syncGalleryGateLanguageToggle() {
   if (!galleryGateLanguageToggle) return;
   const arabic = window.SITE_LANGUAGE === "ar";
-  galleryGateLanguageToggle.textContent = arabic ? "English" : "العربية";
+  if (galleryGateLanguageLabel) galleryGateLanguageLabel.textContent = arabic ? "English" : "العربية";
   galleryGateLanguageToggle.setAttribute("aria-label", arabic ? "التبديل إلى الإنجليزية" : "Switch language to Arabic");
 }
 
@@ -333,6 +359,7 @@ async function loadGallery() {
     const gallery = galleryDoc.data();
     currentGallery = gallery;
     syncGalleryGateCopy();
+    loadGalleryGateCover(galleryDoc.id);
     if (gallery.accessCodeHash) {
       const granted = sessionStorage.getItem(gateKey()) === "1";
       if (!granted) {

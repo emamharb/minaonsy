@@ -1093,7 +1093,7 @@
       line-height: 1.15;
       letter-spacing: 0;
       overflow-wrap: anywhere;
-      unicode-bidi: plaintext;
+      text-align: left;
     }
 
     html[dir="rtl"] .client-album-hero.delivery-welcome h1 {
@@ -1326,6 +1326,7 @@
 
     .gallery-gate {
       overflow-y: auto;
+      scrollbar-gutter: stable both-edges;
       padding: clamp(14px, 3vw, 36px);
       background:
         radial-gradient(ellipse at 12% 10%, rgba(189, 153, 82, .15), transparent 34%),
@@ -1410,7 +1411,11 @@
       border-radius: 50%;
     }
 
-    .gallery-gate-seal img { width: 82%; height: auto; object-fit: contain; }
+    .gallery-gate-seal-logo { width: 82%; height: auto; object-fit: contain; }
+    .gallery-gate-seal-photo { display: none; }
+    .gallery-gate-seal.has-client-photo .gallery-gate-seal-inner { overflow: hidden; }
+    .gallery-gate-seal.has-client-photo .gallery-gate-seal-logo { display: none; }
+    .gallery-gate-seal.has-client-photo .gallery-gate-seal-photo { display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
 
     .gallery-gate-brand-caption {
       max-width: 300px;
@@ -1452,17 +1457,38 @@
       top: 22px;
       inset-inline-end: auto;
       right: 22px;
-      min-width: 82px;
-      min-height: 40px;
-      padding: 0 15px;
-      border-color: rgba(139, 113, 60, .32);
-      background: rgba(255, 255, 255, .52);
-      color: #4b412e;
-      font: 700 12px "DM Sans", "Tajawal", sans-serif;
-      transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+      display: inline-flex;
+      width: 122px;
+      min-height: 42px;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      padding: 5px 13px 5px 6px;
+      border: 1px solid rgba(207, 183, 124, .46);
+      border-radius: 999px;
+      background: #25231f;
+      color: #f8f5ed;
+      direction: ltr;
+      font: 700 11px "Archivo", "Tajawal", sans-serif;
+      letter-spacing: .035em;
+      text-align: left;
+      box-shadow: 0 5px 16px rgba(39, 33, 23, .12);
+      transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
     }
 
-    .gallery-gate-language-toggle:hover { border-color: #9e7d3f; background: #fff; color: #231f18; }
+    .gallery-gate-language-toggle:hover { border-color: #d5b56e; background: #111; color: #fff; transform: translateY(-1px); }
+    .gallery-gate-language-icon {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #ddc991, #9f7937);
+      color: #211f1a;
+      font-size: 12px;
+    }
+    .gallery-gate-language-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .gallery-gate-language-toggle:focus-visible,
     .gallery-gate-form input:focus-visible,
     .gallery-gate-form .button.primary:focus-visible {
@@ -1496,7 +1522,7 @@
       font: 600 clamp(35px, 4vw, 48px)/1.08 "Cormorant Garamond", serif;
       letter-spacing: -.015em;
       overflow-wrap: anywhere;
-      unicode-bidi: plaintext;
+      text-align: left;
     }
 
     html[dir="rtl"] .gallery-gate-card .eyebrow {
@@ -1508,6 +1534,7 @@
     html[dir="rtl"] .gallery-gate-card h2 {
       font: 600 clamp(31px, 3.6vw, 41px)/1.45 "Noto Naskh Arabic", "Tajawal", serif;
       letter-spacing: 0;
+      text-align: right;
     }
 
     .gallery-gate-card #galleryGateMessage {
@@ -1650,12 +1677,12 @@
       .gallery-gate-brand-kicker { font-size: 9px; }
       .gallery-gate-seal { width: 82px; margin: 0; border-width: 1px; box-shadow: 0 0 0 5px rgba(207, 183, 124, .035); }
       .gallery-gate-seal-inner { width: 82%; height: 82%; }
-      .gallery-gate-seal img { width: 84%; }
+      .gallery-gate-seal-logo { width: 84%; }
       .gallery-gate-brand-caption { max-width: 290px; font-size: 17px; line-height: 1.4; }
       html[dir="rtl"] .gallery-gate-brand-caption { font-size: 17px; }
 
       .gallery-gate-card { justify-content: center; padding: 46px clamp(22px, 7vw, 38px) 28px; }
-      .gallery-gate-language-toggle { top: 12px; right: 14px; min-height: 36px; min-width: 74px; }
+      .gallery-gate-language-toggle { top: 12px; right: 14px; width: 110px; min-height: 38px; padding: 4px 11px 4px 5px; gap: 8px; }
       .gallery-gate-lockmark { width: 42px; height: 42px; margin-bottom: 15px; }
       .gallery-gate-card .eyebrow { margin-bottom: 7px; }
       .gallery-gate-card h2 { font-size: clamp(34px, 9vw, 42px); }
@@ -1727,7 +1754,7 @@
       </figure>
       <div class="album-title-block">
         <p class="eyebrow" id="deliveryEyebrow">YOUR PRIVATE ALBUM</p>
-        <h1 id="galleryTitle" tabindex="-1">
+        <h1 id="galleryTitle" tabindex="-1" dir="auto">
           <span class="title-loader" id="titleLoader"></span>
         </h1>
         <p class="delivery-welcome-message" id="deliveryWelcomeMessage"></p>
@@ -1764,18 +1791,22 @@
     <div class="gallery-gate-shell">
       <section class="gallery-gate-brand" aria-label="Mina Onsy Studio">
         <p class="gallery-gate-brand-kicker">MINA ONSY STUDIO</p>
-        <div class="gallery-gate-seal" aria-hidden="true">
+        <div class="gallery-gate-seal" id="galleryGateSeal" aria-hidden="true">
           <div class="gallery-gate-seal-inner">
-            <img src="assets/photos/LW.png?v=optimized" alt="">
+            <img class="gallery-gate-seal-logo" src="assets/photos/LW.png?v=optimized" alt="">
+            <img class="gallery-gate-seal-photo" id="galleryGateSealPhoto" alt="">
           </div>
         </div>
         <p class="gallery-gate-brand-caption" id="galleryGateBrandCaption">Your story, held in every frame.</p>
       </section>
       <section class="gallery-gate-card">
-        <button class="gallery-gate-language-toggle" id="galleryGateLanguageToggle" type="button" aria-label="Switch language to Arabic">العربية</button>
+        <button class="gallery-gate-language-toggle" id="galleryGateLanguageToggle" type="button" aria-label="Switch language to Arabic">
+          <span class="gallery-gate-language-icon" aria-hidden="true"><i class="fas fa-globe"></i></span>
+          <span class="gallery-gate-language-label" id="galleryGateLanguageLabel">العربية</span>
+        </button>
         <div class="gallery-gate-lockmark" aria-hidden="true"><i class="fas fa-lock"></i></div>
         <p class="eyebrow" id="galleryGateEyebrow">YOUR PRIVATE ALBUM</p>
-        <h2 id="galleryGateTitle">Mina Onsy</h2>
+        <h2 id="galleryGateTitle" dir="auto">Mina Onsy</h2>
         <p id="galleryGateMessage">Your private gallery is ready. Enter the password we shared with you to see your photos.</p>
         <form class="gallery-gate-form" id="galleryGateForm">
           <label class="gallery-password-label" id="galleryGatePasswordLabel" for="galleryGateInput">Gallery password</label>
@@ -1861,6 +1892,6 @@
 
   <script src="assets/js/language.js?v=final6"></script>
   <!-- تم الاحتفاظ بملف gallery.js لتشغيل الوظائف (تحميل الصور، معرض الصور، تحميل الكل) -->
-  <script type="module" src="assets/js/gallery.js?v=final7"></script>
+  <script type="module" src="assets/js/gallery.js?v=final9"></script>
 </body>
 </html>
