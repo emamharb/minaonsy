@@ -27,7 +27,10 @@ const galleryGateStatus = document.getElementById("galleryGateStatus");
 const galleryGateTitle = document.getElementById("galleryGateTitle");
 const galleryGateEyebrow = document.getElementById("galleryGateEyebrow");
 const galleryGateMessage = document.getElementById("galleryGateMessage");
+const galleryGateBrandCaption = document.getElementById("galleryGateBrandCaption");
 const galleryGatePasswordLabel = document.getElementById("galleryGatePasswordLabel");
+const galleryGateHint = document.getElementById("galleryGateHint");
+const galleryGatePrivacy = document.getElementById("galleryGatePrivacy");
 const galleryErrorHome = document.getElementById("galleryErrorHome");
 const galleryGateLanguageToggle = document.getElementById("galleryGateLanguageToggle");
 const lightboxItems = [];
@@ -114,14 +117,22 @@ function syncGalleryGateCopy() {
   const name = clientDisplayName();
   if (galleryGateEyebrow) galleryGateEyebrow.textContent = arabic ? "ألبومكم الخاص" : "YOUR PRIVATE ALBUM";
   if (galleryGateTitle) galleryGateTitle.textContent = name || "Mina Onsy";
+  if (galleryGateBrandCaption) galleryGateBrandCaption.textContent = arabic ? "حكايتكم، محفوظة في كل صورة." : "Your story, held in every frame.";
   if (galleryGateMessage) {
     galleryGateMessage.textContent = arabic
-      ? "معرضكم الخاص جاهز. أدخلوا كلمة المرور التي أرسلناها لكم لمشاهدة الصور."
-      : "Your private gallery is ready. Enter the password we shared with you to see your photos.";
+      ? "صوركم في انتظاركم. أدخلوا كلمة المرور الخاصة لفتح المعرض واستعادة أجمل لحظاتكم."
+      : "Your photos are ready. Enter your private password to open the gallery and relive your favorite moments.";
   }
   if (galleryGatePasswordLabel) galleryGatePasswordLabel.textContent = arabic ? "كلمة مرور المعرض" : "Gallery password";
-  const gateButton = galleryGateForm?.querySelector("button[type='submit']");
+  if (galleryGateHint) galleryGateHint.textContent = arabic
+    ? "استخدموا كلمة المرور التي شاركها معكم الاستوديو."
+    : "Use the password shared with you by the studio.";
+  const gateButton = galleryGateForm?.querySelector("button[type='submit'] span");
   if (gateButton) gateButton.textContent = arabic ? "افتحوا معرضكم" : "Open your gallery";
+  const privacyCopy = galleryGatePrivacy?.querySelector("span");
+  if (privacyCopy) privacyCopy.textContent = arabic
+    ? "معرضكم خاص، ولا يمكن مشاهدة الصور إلا باستخدام كلمة المرور."
+    : "Your gallery is private. Only people with this password can view your photos.";
 }
 
 function updateAlbumDeliveryDetails() {

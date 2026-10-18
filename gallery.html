@@ -1321,6 +1321,382 @@
       outline: 3px solid #c89b3c;
       outline-offset: 3px;
     }
+    /* Private gallery access: a quiet, studio-led welcome before any photos load. */
+    body.gallery-locked { overflow: hidden; }
+
+    .gallery-gate {
+      overflow-y: auto;
+      padding: clamp(14px, 3vw, 36px);
+      background:
+        radial-gradient(ellipse at 12% 10%, rgba(189, 153, 82, .15), transparent 34%),
+        radial-gradient(ellipse at 92% 88%, rgba(189, 153, 82, .08), transparent 30%),
+        #171715;
+      backdrop-filter: none;
+    }
+
+    .gallery-gate-shell {
+      direction: ltr;
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+      width: min(1040px, 100%);
+      min-height: min(620px, calc(100svh - 72px));
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 28px;
+      background: #f7f4ee;
+      box-shadow: 0 32px 100px rgba(0, 0, 0, .4), 0 4px 24px rgba(0, 0, 0, .16);
+      animation: gateReveal .55s cubic-bezier(.2, .7, .2, 1) both;
+    }
+
+    .gallery-gate-brand {
+      position: relative;
+      isolation: isolate;
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+      padding: clamp(30px, 5vw, 54px) 28px;
+      color: #f8f5ed;
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 44%, rgba(182, 146, 72, .15), transparent 45%),
+        linear-gradient(150deg, #262521 0%, #1b1b19 68%, #171715 100%);
+    }
+
+    .gallery-gate-brand::before,
+    .gallery-gate-brand::after {
+      position: absolute;
+      z-index: -1;
+      width: 430px;
+      height: 430px;
+      border: 1px solid rgba(201, 171, 105, .1);
+      border-radius: 50%;
+      content: "";
+      pointer-events: none;
+    }
+
+    .gallery-gate-brand::before { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    .gallery-gate-brand::after { top: 50%; left: 50%; width: 350px; height: 350px; transform: translate(-50%, -50%); }
+
+    .gallery-gate-brand-kicker {
+      width: 100%;
+      color: #cfb77c;
+      font: 700 11px/1.4 "Archivo", sans-serif;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+
+    .gallery-gate-seal {
+      display: grid;
+      width: clamp(190px, 22vw, 250px);
+      aspect-ratio: 1;
+      flex: 0 0 auto;
+      place-items: center;
+      margin: auto 0;
+      border: 1px solid rgba(207, 183, 124, .5);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, .045), rgba(255, 255, 255, 0) 66%);
+      box-shadow: 0 0 0 9px rgba(207, 183, 124, .035), inset 0 0 35px rgba(207, 183, 124, .045);
+    }
+
+    .gallery-gate-seal-inner {
+      display: grid;
+      width: 78%;
+      height: 78%;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 50%;
+    }
+
+    .gallery-gate-seal img { width: 82%; height: auto; object-fit: contain; }
+
+    .gallery-gate-brand-caption {
+      max-width: 300px;
+      color: rgba(248, 245, 237, .84);
+      font: 500 clamp(20px, 2.4vw, 28px)/1.55 "Cormorant Garamond", "Noto Naskh Arabic", serif;
+      letter-spacing: .01em;
+    }
+
+    html[dir="rtl"] .gallery-gate-brand-kicker { font-family: "Tajawal", sans-serif; letter-spacing: 0; }
+    html[dir="rtl"] .gallery-gate-brand-caption {
+      font-family: "Noto Naskh Arabic", "Tajawal", serif;
+      font-size: clamp(19px, 2.2vw, 25px);
+      line-height: 1.7;
+      letter-spacing: 0;
+    }
+
+    .gallery-gate-card {
+      position: relative;
+      display: flex;
+      width: auto;
+      min-width: 0;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+      padding: clamp(34px, 5.5vw, 72px);
+      border: 0;
+      border-radius: 0;
+      background: #f7f4ee;
+      box-shadow: none;
+      text-align: start;
+      animation: none;
+    }
+
+    html[dir="rtl"] .gallery-gate-card { direction: rtl; }
+    html[dir="ltr"] .gallery-gate-card { direction: ltr; }
+
+    .gallery-gate-language-toggle {
+      position: absolute;
+      top: 22px;
+      inset-inline-end: auto;
+      right: 22px;
+      min-width: 82px;
+      min-height: 40px;
+      padding: 0 15px;
+      border-color: rgba(139, 113, 60, .32);
+      background: rgba(255, 255, 255, .52);
+      color: #4b412e;
+      font: 700 12px "DM Sans", "Tajawal", sans-serif;
+      transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+    }
+
+    .gallery-gate-language-toggle:hover { border-color: #9e7d3f; background: #fff; color: #231f18; }
+    .gallery-gate-language-toggle:focus-visible,
+    .gallery-gate-form input:focus-visible,
+    .gallery-gate-form .button.primary:focus-visible {
+      outline: 3px solid #b8943e;
+      outline-offset: 3px;
+    }
+
+    .gallery-gate-lockmark {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      place-items: center;
+      margin: 0 0 22px;
+      border: 1px solid rgba(174, 139, 69, .24);
+      border-radius: 50%;
+      background: #eee8da;
+      color: #8c6e38;
+      font-size: 16px;
+    }
+
+    .gallery-gate-card .eyebrow {
+      margin: 0 0 9px;
+      color: #91723a;
+      font: 700 11px/1.5 "Archivo", "Tajawal", sans-serif;
+      letter-spacing: .16em;
+    }
+
+    .gallery-gate-card h2 {
+      margin: 0 0 12px;
+      color: #24231f;
+      font: 600 clamp(35px, 4vw, 48px)/1.08 "Cormorant Garamond", serif;
+      letter-spacing: -.015em;
+      overflow-wrap: anywhere;
+      unicode-bidi: plaintext;
+    }
+
+    html[dir="rtl"] .gallery-gate-card .eyebrow {
+      font-family: "Tajawal", sans-serif;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    html[dir="rtl"] .gallery-gate-card h2 {
+      font: 600 clamp(31px, 3.6vw, 41px)/1.45 "Noto Naskh Arabic", "Tajawal", serif;
+      letter-spacing: 0;
+    }
+
+    .gallery-gate-card #galleryGateMessage {
+      max-width: 410px;
+      margin: 0 0 30px;
+      color: #6c685f;
+      font: 400 15px/1.85 "DM Sans", "Tajawal", sans-serif;
+    }
+
+    html[dir="rtl"] .gallery-gate-card #galleryGateMessage {
+      font-family: "Tajawal", sans-serif;
+      font-size: 16px;
+      line-height: 1.9;
+    }
+
+    .gallery-gate-form { display: grid; gap: 12px; }
+
+    .gallery-password-label {
+      margin-bottom: 1px;
+      color: #37352f;
+      font: 700 13px/1.5 "DM Sans", "Tajawal", sans-serif;
+      text-align: start;
+    }
+
+    html[dir="rtl"] .gallery-password-label { font-family: "Tajawal", sans-serif; font-size: 15px; }
+    .gallery-password-field { position: relative; }
+
+    .gallery-password-field > i {
+      position: absolute;
+      top: 50%;
+      left: 18px;
+      color: #9c875c;
+      font-size: 14px;
+      pointer-events: none;
+      transform: translateY(-50%);
+    }
+
+    .gallery-gate-form input {
+      width: 100%;
+      min-height: 58px;
+      padding: 13px 48px;
+      border: 1px solid #d9d2c5;
+      border-radius: 13px;
+      outline: none;
+      background: rgba(255, 255, 255, .74);
+      color: #282720;
+      direction: ltr;
+      font: 600 20px/1 "DM Sans", "Cairo", sans-serif;
+      letter-spacing: .32em;
+      text-align: center;
+      box-shadow: inset 0 1px 2px rgba(39, 33, 23, .035);
+      transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease;
+    }
+
+    .gallery-gate-form input::placeholder { color: #9c968a; opacity: .8; }
+    .gallery-gate-form input:focus { border-color: #a9884a; background: #fff; box-shadow: 0 0 0 4px rgba(184, 148, 62, .13); }
+
+    .gallery-gate-hint {
+      margin: 0 0 5px;
+      color: #817b6e;
+      font: 400 12px/1.6 "DM Sans", "Tajawal", sans-serif;
+    }
+
+    html[dir="rtl"] .gallery-gate-hint { font-family: "Tajawal", sans-serif; font-size: 13px; }
+
+    .gallery-gate-form .button.primary {
+      display: inline-flex;
+      width: 100%;
+      min-height: 56px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 4px;
+      border: 1px solid #27251f;
+      border-radius: 12px;
+      background: #24231f;
+      color: #f8f5ee;
+      font: 700 13px/1.2 "DM Sans", "Tajawal", sans-serif;
+      letter-spacing: .08em;
+      box-shadow: 0 8px 18px rgba(37, 34, 28, .15);
+      transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .gallery-gate-form .button.primary:hover { border-color: #98763a; background: #3a3427; box-shadow: 0 10px 24px rgba(37, 34, 28, .2); }
+    .gallery-gate-form .button.primary:active { transform: translateY(1px); }
+    html[dir="rtl"] .gallery-gate-form .button.primary { font-family: "Tajawal", sans-serif; font-size: 15px; letter-spacing: 0; }
+
+    .gallery-gate-card .gallery-status {
+      margin: 4px 0 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      color: #a0443b;
+      font: 600 13px/1.6 "DM Sans", "Tajawal", sans-serif;
+      text-align: start;
+    }
+
+    html[dir="rtl"] .gallery-gate-card .gallery-status { font-family: "Tajawal", sans-serif; font-size: 14px; }
+    .gallery-gate-card .gallery-status:empty { display: none; }
+
+    .gallery-gate-privacy {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin: 24px 0 0;
+      padding-top: 18px;
+      border-top: 1px solid rgba(99, 84, 56, .13);
+      color: #777164;
+      font: 400 12px/1.65 "DM Sans", "Tajawal", sans-serif;
+    }
+
+    .gallery-gate-privacy i { flex: 0 0 auto; margin-top: 2px; color: #9b7a3d; }
+    html[dir="rtl"] .gallery-gate-privacy { font-family: "Tajawal", sans-serif; font-size: 13px; }
+
+    @keyframes gateReveal {
+      from { opacity: 0; transform: translateY(10px) scale(.992); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (max-width: 760px) {
+      .gallery-gate { align-items: flex-start; padding: 12px; }
+      .gallery-gate-shell {
+        width: min(520px, 100%);
+        min-height: calc(100svh - 24px);
+        margin: auto;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr);
+        border-radius: 22px;
+      }
+
+      .gallery-gate-brand {
+        min-height: 178px;
+        justify-content: center;
+        gap: 12px;
+        padding: 18px 24px 16px;
+      }
+
+      .gallery-gate-brand-kicker { font-size: 9px; }
+      .gallery-gate-seal { width: 82px; margin: 0; border-width: 1px; box-shadow: 0 0 0 5px rgba(207, 183, 124, .035); }
+      .gallery-gate-seal-inner { width: 82%; height: 82%; }
+      .gallery-gate-seal img { width: 84%; }
+      .gallery-gate-brand-caption { max-width: 290px; font-size: 17px; line-height: 1.4; }
+      html[dir="rtl"] .gallery-gate-brand-caption { font-size: 17px; }
+
+      .gallery-gate-card { justify-content: center; padding: 46px clamp(22px, 7vw, 38px) 28px; }
+      .gallery-gate-language-toggle { top: 12px; right: 14px; min-height: 36px; min-width: 74px; }
+      .gallery-gate-lockmark { width: 42px; height: 42px; margin-bottom: 15px; }
+      .gallery-gate-card .eyebrow { margin-bottom: 7px; }
+      .gallery-gate-card h2 { font-size: clamp(34px, 9vw, 42px); }
+      html[dir="rtl"] .gallery-gate-card h2 { font-size: clamp(30px, 8vw, 36px); }
+      .gallery-gate-card #galleryGateMessage { margin-bottom: 22px; font-size: 14px; }
+      html[dir="rtl"] .gallery-gate-card #galleryGateMessage { font-size: 15px; }
+      .gallery-gate-form input { min-height: 56px; }
+      .gallery-gate-privacy { margin-top: 20px; padding-top: 14px; }
+    }
+
+    @media (max-width: 380px) {
+      .gallery-gate { padding: 8px; }
+      .gallery-gate-shell { min-height: calc(100svh - 16px); border-radius: 18px; }
+      .gallery-gate-brand { min-height: 156px; gap: 8px; padding-block: 13px; }
+      .gallery-gate-seal { width: 68px; }
+      .gallery-gate-brand-caption { font-size: 15px; }
+      html[dir="rtl"] .gallery-gate-brand-caption { font-size: 15px; }
+      .gallery-gate-card { padding: 40px 19px 18px; }
+      .gallery-gate-lockmark { width: 38px; height: 38px; margin-bottom: 10px; }
+      .gallery-gate-card h2 { margin-bottom: 8px; }
+      .gallery-gate-card #galleryGateMessage { margin-bottom: 16px; line-height: 1.75; }
+      .gallery-gate-form { gap: 10px; }
+      .gallery-gate-privacy { margin-top: 10px; padding-top: 8px; font-size: 11px; }
+    }
+
+    @media (max-height: 700px) and (min-width: 761px) {
+      .gallery-gate-shell { min-height: 0; }
+      .gallery-gate-brand { padding-block: 28px; }
+      .gallery-gate-seal { width: min(190px, 26vh); }
+      .gallery-gate-card { padding-block: 48px; }
+      .gallery-gate-lockmark { margin-bottom: 14px; }
+      .gallery-gate-card #galleryGateMessage { margin-bottom: 18px; }
+      .gallery-gate-privacy { margin-top: 16px; padding-top: 12px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .gallery-gate-shell { animation: none; }
+      .gallery-gate-language-toggle,
+      .gallery-gate-form input,
+      .gallery-gate-form .button.primary { transition: none; }
+    }
   </style>
 </head>
 <body class="client-album-page">
@@ -1385,17 +1761,34 @@
   </div>
 
   <div class="gallery-gate" id="galleryGate" role="dialog" aria-modal="true" aria-labelledby="galleryGateTitle" aria-hidden="true">
-    <div class="gallery-gate-card">
-      <button class="gallery-gate-language-toggle" id="galleryGateLanguageToggle" type="button" aria-label="Switch language to Arabic">العربية</button>
-      <p class="eyebrow" id="galleryGateEyebrow">YOUR PRIVATE ALBUM</p>
-      <h2 id="galleryGateTitle">Mina Onsy</h2>
-      <p id="galleryGateMessage">Your private gallery is ready. Enter the password we shared with you to see your photos.</p>
-      <form class="gallery-gate-form" id="galleryGateForm">
-        <label class="gallery-password-label" id="galleryGatePasswordLabel" for="galleryGateInput">Gallery password</label>
-        <input id="galleryGateInput" type="password" inputmode="numeric" maxlength="8" placeholder="••••••••" autocomplete="one-time-code" required aria-describedby="galleryGateStatus">
-        <button class="button primary" type="submit">Open your gallery</button>
-        <p id="galleryGateStatus" class="gallery-status" role="status" aria-live="polite"></p>
-      </form>
+    <div class="gallery-gate-shell">
+      <section class="gallery-gate-brand" aria-label="Mina Onsy Studio">
+        <p class="gallery-gate-brand-kicker">MINA ONSY STUDIO</p>
+        <div class="gallery-gate-seal" aria-hidden="true">
+          <div class="gallery-gate-seal-inner">
+            <img src="assets/photos/LW.png?v=optimized" alt="">
+          </div>
+        </div>
+        <p class="gallery-gate-brand-caption" id="galleryGateBrandCaption">Your story, held in every frame.</p>
+      </section>
+      <section class="gallery-gate-card">
+        <button class="gallery-gate-language-toggle" id="galleryGateLanguageToggle" type="button" aria-label="Switch language to Arabic">العربية</button>
+        <div class="gallery-gate-lockmark" aria-hidden="true"><i class="fas fa-lock"></i></div>
+        <p class="eyebrow" id="galleryGateEyebrow">YOUR PRIVATE ALBUM</p>
+        <h2 id="galleryGateTitle">Mina Onsy</h2>
+        <p id="galleryGateMessage">Your private gallery is ready. Enter the password we shared with you to see your photos.</p>
+        <form class="gallery-gate-form" id="galleryGateForm">
+          <label class="gallery-password-label" id="galleryGatePasswordLabel" for="galleryGateInput">Gallery password</label>
+          <div class="gallery-password-field">
+            <i class="fas fa-key" aria-hidden="true"></i>
+            <input id="galleryGateInput" type="password" inputmode="numeric" maxlength="8" placeholder="••••••••" autocomplete="one-time-code" required aria-describedby="galleryGateHint galleryGateStatus">
+          </div>
+          <p class="gallery-gate-hint" id="galleryGateHint">Use the password shared with you by the studio.</p>
+          <button class="button primary" type="submit"><span>Open your gallery</span><i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+          <p id="galleryGateStatus" class="gallery-status" role="status" aria-live="polite"></p>
+        </form>
+        <p class="gallery-gate-privacy" id="galleryGatePrivacy"><i class="fas fa-shield-halved" aria-hidden="true"></i><span>Your gallery is private. Only people with this password can view your photos.</span></p>
+      </section>
     </div>
   </div>
 
