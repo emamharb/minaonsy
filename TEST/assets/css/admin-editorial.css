@@ -475,6 +475,9 @@ body.admin-body .admin-card { margin-bottom: 1.25rem !important; }
 body.admin-body .section-toolbar { gap: .65rem !important; margin-bottom: .8rem; }
 body.admin-body .dropzone { min-height: 112px !important; padding: 1.1rem 1.3rem !important; }
 body.admin-body #filesGrid > .muted { padding: 2rem; border: 1px dashed #d8d0c4; border-radius: 9px; text-align: center; background: rgba(255,255,255,.45); }
+#filesGrid { display: flex !important; flex-direction: column !important; gap: 1.4rem !important; }
+#filesGrid > .section-block { width: 100%; margin: 0 !important; }
+#filesGrid > .section-block > .thumb-grid { display: grid !important; width: 100%; }
 .section-heading h3 { font-size: clamp(1.05rem, 2vw, 1.3rem) !important; }
 .thumb-card .thumb-file-name { max-width: calc(100% - 20px); }
 .thumb-card .card-status:empty { display: none !important; }
@@ -650,7 +653,7 @@ body.admin-body .hamburger-btn:hover { background: rgba(198,164,92,.12); }
   body.admin-body .admin-layout:has(#manageTitle) .section-panel .section-row select { grid-column: 1 / -1; width: 100% !important; }
   body.admin-body .admin-layout:has(#manageTitle) .section-panel .section-row input { grid-column: 1; width: 100% !important; min-width: 0 !important; }
   body.admin-body .admin-layout:has(#manageTitle) .section-panel .section-row .button { grid-column: 2; width: 100% !important; min-height: 46px; padding-inline: .45rem !important; }
-  body.admin-body .admin-layout:has(#manageTitle) .section-toolbar { display: flex; justify-content: flex-start; }
+  body.admin-body .admin-layout:has(#manageTitle) .section-toolbar { display: flex; flex-direction: row !important; justify-content: flex-start; }
   body.admin-body .admin-layout:has(#manageTitle) .section-toolbar .button { width: auto !important; min-height: 42px; padding-inline: .85rem !important; }
 }
 @media (max-width: 440px) {
